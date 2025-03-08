@@ -49,7 +49,7 @@ def modifier_agence():
     id_agence = input("Entrez l'ID de l'agence à modifier : ")
 
     # Vérification si l'agence existe
-    agence = gestion.get_agence_par_id(id_agence)
+    agence = gestion.get_agence_par_id(id_agence)  # 🔹 CHANGER ICI
     if not agence:
         print("Aucune agence trouvée avec cet ID.")
         return
