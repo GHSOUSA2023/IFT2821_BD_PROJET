@@ -30,6 +30,23 @@ def ajouter_agence(nom, adresse, ville, telephone, email):
             database.fermer_connexion(connexion)
 
 
+# Récupérer une agence par ID
+def get_agence_par_id(id_agence):
+    """Récupère les informations d'une agence spécifique."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queries.GET_AGENCE_PAR_ID, (id_agence,))
+            agence = curseur.fetchone()
+            return agence  # 🔹 RETOURNE L'AGENCE ICI
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération de l'agence : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+    return None
+
+
 # Modifier une agence
 def modifier_agence(id_agence, nom, adresse, ville, telephone, email):
     """Modifie une agence existante avec des valeurs en majuscules."""
@@ -37,6 +54,18 @@ def modifier_agence(id_agence, nom, adresse, ville, telephone, email):
     if connexion:
         try:
             curseur = connexion.cursor()
+            # Vérifier si l'agence existe avant modification
+            agence = get_agence_par_id(id_agence)  # 🔹 UTILISER LA FONCTION
+            if not agence:
+                print("Aucune agence trouvée avec cet ID.")
+                return
+
+            # Afficher les informations avant changement
+            print("\nDétails de l'agence sélectionnée :")
+            print(f"ID : {agence.ID_AGE}")
+            print(f"Nom : {agence.NOM_AGE}")
+            print(f"Ville : {agence.VILLE}")
+
             curseur.execute(
                 queriesupdate.MODIFIER_AGENCE,
                 (
@@ -54,11 +83,6 @@ def modifier_agence(id_agence, nom, adresse, ville, telephone, email):
             print(f"Erreur lors de la modification de l'agence : {erreur}")
         finally:
             database.fermer_connexion(connexion)
-
-
-# Supprimer une agence
-import database
-import queries  # ✅ Import des requêtes SQL
 
 
 # Supprimer une agence
@@ -84,7 +108,11 @@ def supprimer_agence(id_agence):
             print(f"Ville : {agence.VILLE}")
 
             # Demander confirmation
-            confirmation = input(f"Confirmez-vous la suppression de '{agence.NOM_AGE}' ? (O/N) : ").strip().upper()
+            confirmation = (
+                input(f"Confirmez-vous la suppression de '{agence.NOM_AGE}' ? (O/N) : ")
+                .strip()
+                .upper()
+            )
             if confirmation != "O":
                 print("Suppression annulée.")
                 return
@@ -97,6 +125,7 @@ def supprimer_agence(id_agence):
             print(f"Erreur lors de la suppression de l'agence : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
 
 # Lister toutes les agences
 def lister_tout_agences():
@@ -113,16 +142,21 @@ def lister_tout_agences():
                 return
 
             print("\nListe des agences :")
-            print(f"{'ID':<5} {'Nom':<20} {'Ville':<15} {'Adresse':<25} {'Téléphone':<15} {'Email'}")
+            print(
+                f"{'ID':<5} {'Nom':<27} {'Ville':<20} {'Adresse':<30} {'Téléphone':<15} {'Email'}"
+            )
             print("-" * 90)
 
             for agence in agences:
-                print(f"{agence.ID_AGE:<5} {agence.NOM_AGE:<20} {agence.VILLE:<15} {agence.ADRESSE:<25} {agence.TELEPHONE:<15} {agence.EMAIL}")
+                print(
+                    f"{agence.ID_AGE:<5} {agence.NOM_AGE:<27} {agence.VILLE:<20} {agence.ADRESSE:<30} {agence.TELEPHONE:<15} {agence.EMAIL}"
+                )
 
         except Exception as erreur:
             print(f"Erreur lors de la récupération des agences : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
 
 # Rechercher une agence par nom, ville ou adresse
 def rechercher_agence(terme_recherche):
@@ -140,11 +174,15 @@ def rechercher_agence(terme_recherche):
                 return
 
             print("\nRésultats de la recherche :")
-            print(f"{'ID':<5} {'Nom':<20} {'Ville':<15} {'Adresse':<25} {'Téléphone':<15} {'Email'}")
+            print(
+                f"{'ID':<5} {'Nom':<20} {'Ville':<15} {'Adresse':<25} {'Téléphone':<15} {'Email'}"
+            )
             print("-" * 90)
 
             for agence in agences:
-                print(f"{agence.ID_AGE:<5} {agence.NOM_AGE:<20} {agence.VILLE:<15} {agence.ADRESSE:<25} {agence.TELEPHONE:<15} {agence.EMAIL}")
+                print(
+                    f"{agence.ID_AGE:<5} {agence.NOM_AGE:<20} {agence.VILLE:<15} {agence.ADRESSE:<25} {agence.TELEPHONE:<15} {agence.EMAIL}"
+                )
 
         except Exception as erreur:
             print(f"Erreur lors de la recherche d'agence : {erreur}")
@@ -160,7 +198,8 @@ def ajouter_employe(nas, nom, prenom, salaire, poste, id_age):
         try:
             curseur = connexion.cursor()
             curseur.execute(
-                queriesinputs.AJOUTER_EMPLOYE, (nas, nom, prenom, salaire, poste, id_age)
+                queriesinputs.AJOUTER_EMPLOYE,
+                (nas, nom, prenom, salaire, poste, id_age),
             )
             connexion.commit()
             print("Employé ajouté avec succès !")
@@ -178,7 +217,8 @@ def modifier_employe(id_emp, nas, nom, prenom, salaire, poste, id_age):
         try:
             curseur = connexion.cursor()
             curseur.execute(
-                queriesupdate.MODIFIER_EMPLOYE, (nas, nom, prenom, salaire, poste, id_age, id_emp)
+                queriesupdate.MODIFIER_EMPLOYE,
+                (nas, nom, prenom, salaire, poste, id_age, id_emp),
             )
             connexion.commit()
             print("Employé modifié avec succès !")
@@ -219,11 +259,15 @@ def lister_employes():
                 return
 
             print("\nListe des employés :")
-            print(f"{'ID':<5} {'NAS':<15} {'Nom':<15} {'Prénom':<15} {'Salaire':<10} {'Poste':<20} {'ID Agence'}")
+            print(
+                f"{'ID':<5} {'NAS':<15} {'Nom':<15} {'Prénom':<15} {'Salaire':<10} {'Poste':<20} {'ID Agence'}"
+            )
             print("-" * 90)
 
             for employe in employes:
-                print(f"{employe.ID_EMP:<5} {employe.NAS:<15} {employe.NOM:<15} {employe.PRENOM:<15} {employe.SALAIRE:<10} {employe.POSTE:<20} {employe.ID_AGE}")
+                print(
+                    f"{employe.ID_EMP:<5} {employe.NAS:<15} {employe.NOM:<15} {employe.PRENOM:<15} {employe.SALAIRE:<10} {employe.POSTE:<20} {employe.ID_AGE}"
+                )
 
         except Exception as erreur:
             print(f"Erreur lors de la récupération des employés : {erreur}")
@@ -238,7 +282,7 @@ def rechercher_employe(terme_recherche):
     if connexion:
         try:
             curseur = connexion.cursor()
-            terme = f"%{terme_recherche}%"  
+            terme = f"%{terme_recherche}%"
             curseur.execute(queries.RECHERCHER_EMPLOYE, (terme, terme))
             employes = curseur.fetchall()
 
@@ -247,14 +291,17 @@ def rechercher_employe(terme_recherche):
                 return
 
             print("\nRésultats de la recherche :")
-            print(f"{'ID':<5} {'NAS':<15} {'Nom':<15} {'Prénom':<15} {'Salaire':<10} {'Poste':<20} {'ID Agence'}")
+            print(
+                f"{'ID':<5} {'NAS':<15} {'Nom':<15} {'Prénom':<15} {'Salaire':<10} {'Poste':<20} {'ID Agence'}"
+            )
             print("-" * 90)
 
             for employe in employes:
-                print(f"{employe.ID_EMP:<5} {employe.NAS:<15} {employe.NOM:<15} {employe.PRENOM:<15} {employe.SALAIRE:<10} {employe.POSTE:<20} {employe.ID_AGE}")
+                print(
+                    f"{employe.ID_EMP:<5} {employe.NAS:<15} {employe.NOM:<15} {employe.PRENOM:<15} {employe.SALAIRE:<10} {employe.POSTE:<20} {employe.ID_AGE}"
+                )
 
         except Exception as erreur:
             print(f"Erreur lors de la recherche d'employé : {erreur}")
         finally:
             database.fermer_connexion(connexion)
-
