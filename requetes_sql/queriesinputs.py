@@ -30,10 +30,9 @@ VALUES (?);
 
 # Requête pour ajouter un véhicule
 AJOUTER_VEHICULE = """
-INSERT INTO FLOTTE (ID_MARQ, ID_MOD, ID_TP_VEHIC, ANNEE_FAB, COULEUR, IMMATRICULATION, STATUS, KM)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO FLOTTE (ID_MARQ, ID_MOD, ID_TP_VEHIC, ANNEE_FAB, COULEUR, IMMATRICULATION, STATUS, KM, TYPE_CARBUR)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 """
-
 
 # Requête pour ajouter un optionnel
 AJOUTER_OPTIONNEL = """
@@ -45,7 +44,6 @@ AJOUTER_MAINTENANCE = """
 INSERT INTO MAINTENANCE (ID_VEHIC, ID_EMP, TYPE_MAINTEN, DATE_MAINTEN, DESC_MAINTEN, STATUS_MAINT)
 VALUES (?, ?, ?, ?, ?, ?);
 """
-
 
 # Requête pour ajouter une assurance
 AJOUTER_ASSURANCE = """

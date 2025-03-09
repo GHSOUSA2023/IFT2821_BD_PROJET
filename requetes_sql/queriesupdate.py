@@ -39,7 +39,16 @@ WHERE ID_MAINTEN = ?;
 # Requête pour modifier un véhicule existant
 MODIFIER_VEHICULE = """
 UPDATE FLOTTE
-SET ID_MARQ = ?, ID_MOD = ?, ID_TP_VEHIC = ?, ANNEE_FAB = ?, COULEUR = ?, IMMATRICULATION = ?, STATUS = ?, KM = ?
+SET TYPE_CARBUR = ?, ID_MARQ = ?, ID_MOD = ?, ID_TP_VEHIC = ?, ANNEE_FAB = ?, COULEUR = ?, IMMATRICULATION = ?, STATUS = ?, KM = ?
 WHERE ID_VEHIC = ?;
 """
+
+# Requête pour modifier une assurance
+MODIFIER_ASSURANCE = """
+UPDATE ASSURANCE 
+SET TYPE_ASSURANCE = ?, PRIX_JOUR = ? 
+WHERE ID_ASSURANCE = ?;
+"""
+
+
 

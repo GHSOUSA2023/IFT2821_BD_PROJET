@@ -1,4 +1,4 @@
-import gestion
+from fonctions_gestion import agences, assurances, employes, flotte
 
 
 # ----------------------------- MENU PRINCIPAL -----------------------------
@@ -265,7 +265,7 @@ def menu_flotte():
         print("5 - Rechercher un véhicule")
         print("6 - Retour au menu véhicules")
 
-        choix = input("👉 Choisissez une option : ").strip()
+        choix = input("Choisissez une option : ").strip()
 
         if choix == "1":
             ajouter_vehicule()
@@ -294,9 +294,10 @@ def menu_assurances():
         print("2 - Modifier une assurance")
         print("3 - Supprimer une assurance")
         print("4 - Lister toutes les assurances")
-        print("5 - Retour au menu véhicules")
+        print("5 - Rechercher une assurance")
+        print("6 - Retour au menu véhicules")
 
-        choix = input("👉 Choisissez une option : ").strip()
+        choix = input("Choisissez une option : ").strip()
 
         if choix == "1":
             ajouter_assurance()
@@ -307,7 +308,9 @@ def menu_assurances():
         elif choix == "4":
             lister_assurances()
         elif choix == "5":
-            return  # ✅ Retourne correctement au menu véhicules
+            rechercher_assurance()
+        elif choix == "6":
+            return
         else:
             print("Option invalide. Essayez à nouveau.")
 
@@ -324,7 +327,7 @@ def ajouter_agence():
     telephone = input("Entrez le numéro de téléphone : ")
     email = input("Entrez l'adresse e-mail : ").lower()
 
-    gestion.ajouter_agence(nom, adresse, ville, telephone, email)
+    agences.ajouter_agence(nom, adresse, ville, telephone, email)
 
 
 def modifier_agence():
@@ -333,7 +336,7 @@ def modifier_agence():
     id_agence = input("Entrez l'ID de l'agence à modifier : ")
 
     # Vérification si l'agence existe
-    agence = gestion.get_agence_par_id(id_agence)  # 🔹 CHANGER ICI
+    agence = agences.get_agence_par_id(id_agence)  # 🔹 CHANGER ICI
     if not agence:
         print("Aucune agence trouvée avec cet ID.")
         return
@@ -345,7 +348,7 @@ def modifier_agence():
     telephone = input(f"Nouveau téléphone ({agence.TELEPHONE}) : ") or agence.TELEPHONE
     email = input(f"Nouvel e-mail ({agence.EMAIL}) : ") or agence.EMAIL
 
-    gestion.modifier_agence(
+    agences.modifier_agence(
         id_agence, nom.upper(), adresse.upper(), ville.upper(), telephone, email.lower()
     )
 
@@ -354,11 +357,11 @@ def supprimer_agence():
     """Demande l'ID de l'agence à supprimer et exécute la suppression."""
     print("\nSuppression d'une agence")
     id_agence = input("Entrez l'ID de l'agence à supprimer : ").strip()
-    gestion.supprimer_agence(id_agence)
+    agences.supprimer_agence(id_agence)
 
 
 def lister_agences():
-    gestion.lister_tout_agences()
+    agences.lister_tout_agences()
 
 
 def rechercher_agence():
@@ -366,7 +369,7 @@ def rechercher_agence():
     terme = input(
         "Entrez le nom, la ville ou l'adresse de l'agence à rechercher : "
     ).strip()
-    gestion.rechercher_agence(terme)
+    agences.rechercher_agence(terme)
 
 
 # ----------------------------- FONCTIONS POUR EMPLOYÉS -----------------------------
@@ -381,7 +384,7 @@ def ajouter_employe():
     poste = input("Entrez le poste : ").upper()
     id_age = input("Entrez l'ID de l'agence : ")
 
-    gestion.ajouter_employe(nas, nom, prenom, salaire, poste, id_age)
+    employes.ajouter_employe(nas, nom, prenom, salaire, poste, id_age)
 
 
 def modifier_employe():
@@ -389,7 +392,7 @@ def modifier_employe():
     id_emp = input("Entrez l'ID de l'employé à modifier : ")
 
     # Vérification si l'employé existe
-    employe = gestion.get_employe_par_id(id_emp)  # ✅ Stocker le retour
+    employe = employes.get_employe_par_id(id_emp)
     if not employe:
         print("Aucun employé trouvé avec cet ID.")
         return
@@ -403,7 +406,7 @@ def modifier_employe():
     id_age = input(f"ID Agence actuelle ({employe.ID_AGE}): ") or employe.ID_AGE
 
     # ✅ Passer tous les paramètres
-    gestion.modifier_employe(
+    employes.modifier_employe(
         id_emp, nas, nom.upper(), prenom.upper(), float(salaire), poste.upper(), id_age
     )
 
@@ -411,18 +414,18 @@ def modifier_employe():
 def supprimer_employe():
     """Supprime un employé après confirmation."""
     id_emp = input("Entrez l'ID de l'employé à supprimer : ").strip()
-    gestion.supprimer_employe(id_emp)
+    employes.supprimer_employe(id_emp)
 
 
 def lister_employes():
     """Liste tous les employés enregistrés."""
-    gestion.lister_employes()
+    employes.lister_employes()
 
 
 def rechercher_employe():
     """Recherche un employé par NAS ou Nom."""
     terme = input("Entrez le NAS ou le nom de l'employé : ").strip()
-    gestion.rechercher_employe(terme)
+    employes.rechercher_employe(terme)
 
 
 # ----------------------------- FONCTIONS POUR VEHICULES-MARQUES -----------------------------
@@ -431,7 +434,7 @@ def rechercher_employe():
 def ajouter_marque():
     """Ajoute une marque après saisie des informations utilisateur."""
     nom = input("Entrez le nom de la marque : ").strip().upper()
-    gestion.ajouter_marque(nom)
+    flotte.ajouter_marque(nom)
 
 
 def modifier_marque():
@@ -439,7 +442,7 @@ def modifier_marque():
     id_marque = input("Entrez l'ID de la marque à modifier : ").strip()
 
     # Vérifier si la marque existe
-    marque = gestion.get_marque_par_id(id_marque)
+    marque = flotte.get_marque_par_id(id_marque)
     if not marque:
         print("Aucune marque trouvée avec cet ID.")
         return
@@ -452,24 +455,24 @@ def modifier_marque():
     # Demander un nouveau nom, conserver l'ancien si l'utilisateur ne saisit rien
     nouveau_nom = input(f"Nouveau nom ({marque.MARQUE}) : ").strip() or marque.MARQUE
 
-    gestion.modifier_marque(id_marque, nouveau_nom.upper())
+    flotte.modifier_marque(id_marque, nouveau_nom.upper())
 
 
 def supprimer_marque():
     """Demande l'ID de la marque à supprimer et exécute la suppression."""
     id_marque = input("Entrez l'ID de la marque à supprimer : ").strip()
-    gestion.supprimer_marque(id_marque)
+    flotte.supprimer_marque(id_marque)
 
 
 def lister_marques():
     """Liste toutes les marques enregistrées."""
-    gestion.lister_marques()
+    flotte.lister_marques()
 
 
 def rechercher_marque():
     """Recherche une marque par nom."""
     nom_marque = input("Entrez le nom (ou partie du nom) de la marque : ").strip()
-    gestion.rechercher_marque(nom_marque)
+    flotte.rechercher_marque(nom_marque)
 
 
 # ----------------------------- FONCTIONS POUR VEHICULES-MODELES -----------------------------
@@ -478,7 +481,7 @@ def rechercher_marque():
 def ajouter_modele():
     """Ajoute un modèle après saisie des informations utilisateur."""
     nom_modele = input("Entrez le nom du modèle : ").strip().upper()
-    gestion.ajouter_modele(nom_modele)
+    flotte.ajouter_modele(nom_modele)
 
 
 def modifier_modele():
@@ -486,7 +489,7 @@ def modifier_modele():
     id_modele = input("Entrez l'ID du modèle à modifier : ").strip()
 
     # Vérification si le modèle existe
-    modele = gestion.get_modele_par_id(id_modele)
+    modele = flotte.get_modele_par_id(id_modele)
     if not modele:
         print("Aucun modèle trouvé avec cet ID.")
         return
@@ -496,22 +499,22 @@ def modifier_modele():
     print(f"Nom : {modele.MODELE}")
 
     nouveau_nom = input(f"Nouveau nom ({modele.MODELE}) : ").strip() or modele.MODELE
-    gestion.modifier_modele(id_modele, nouveau_nom.upper())
+    flotte.modifier_modele(id_modele, nouveau_nom.upper())
 
 
 def supprimer_modele():
     """Demande l'ID du modèle à supprimer et exécute la suppression."""
     id_modele = input("Entrez l'ID du modèle à supprimer : ").strip()
-    gestion.supprimer_modele(id_modele)
+    flotte.supprimer_modele(id_modele)
 
 
 def lister_modeles():
-    gestion.lister_tout_modeles()
+    flotte.lister_tout_modeles()
 
 
 def rechercher_modele():
     terme = input("Entrez le nom du modèle à rechercher : ").strip()
-    gestion.rechercher_modele(terme)
+    flotte.rechercher_modele(terme)
 
 
 # ----------------------------- FONCTIONS POUR VEHICULES-OPTIONNELS -----------------------------
@@ -522,7 +525,7 @@ def ajouter_optionnel():
     nom_optionnel = input("Entrez le nom de l'optionnel : ").strip().upper()
     prix_jour = float(input("Entrez le prix par jour : ").strip())
 
-    gestion.ajouter_optionnel(nom_optionnel, prix_jour)
+    flotte.ajouter_optionnel(nom_optionnel, prix_jour)
 
 
 def modifier_optionnel():
@@ -530,7 +533,7 @@ def modifier_optionnel():
     id_optionnel = input("Entrez l'ID de l'optionnel à modifier : ").strip()
 
     # Vérification si l'optionnel existe
-    optionnel = gestion.get_optionnel_par_id(id_optionnel)
+    optionnel = flotte.get_optionnel_par_id(id_optionnel)
     if not optionnel:
         print("Aucun optionnel trouvé avec cet ID.")
         return
@@ -548,7 +551,7 @@ def modifier_optionnel():
         or optionnel.PRIX_OPTIO_JOUR
     )
 
-    gestion.modifier_optionnel(id_optionnel, nouveau_nom.upper(), float(nouveau_prix))
+    flotte.modifier_optionnel(id_optionnel, nouveau_nom.upper(), float(nouveau_prix))
 
 
 def supprimer_optionnel():
@@ -556,7 +559,7 @@ def supprimer_optionnel():
     id_optionnel = input("Entrez l'ID de l'optionnel à supprimer : ").strip()
 
     # Vérification si l'optionnel existe
-    optionnel = gestion.get_optionnel_par_id(id_optionnel)
+    optionnel = flotte.get_optionnel_par_id(id_optionnel)
     if not optionnel:
         print("Aucun optionnel trouvé avec cet ID.")
         return
@@ -567,20 +570,20 @@ def supprimer_optionnel():
         .upper()
     )
     if confirmation == "O":
-        gestion.supprimer_optionnel(id_optionnel)
+        flotte.supprimer_optionnel(id_optionnel)
     else:
         print("Annulation de la suppression.")
 
 
 def lister_optionnels():
     """Liste tous les optionnels enregistrés."""
-    gestion.lister_tout_optionnels()
+    flotte.lister_tout_optionnels()
 
 
 def rechercher_optionnel():
     """Recherche un optionnel par nom."""
     terme = input("Entrez le nom de l'optionnel à rechercher : ").strip()
-    gestion.rechercher_optionnel(terme)
+    flotte.rechercher_optionnel(terme)
 
 
 # ----------------------------- FONCTIONS POUR VEHICULES-MAINTENANCE -----------------------------
@@ -597,7 +600,7 @@ def ajouter_maintenance():
     description = input("Description : ").strip()
     status = input("Statut (EN MAINTENANCE / TERMINEE) : ").strip().upper()
 
-    gestion.ajouter_maintenance(
+    flotte.ajouter_maintenance(
         id_vehic, id_emp, type_maintenance, date_maintenance, description, status
     )
 
@@ -607,7 +610,7 @@ def modifier_maintenance():
     id_maintenance = input("Entrez l'ID de la maintenance à modifier : ").strip()
 
     # Vérification si la maintenance existe
-    maintenance = gestion.get_maintenance_par_id(id_maintenance)
+    maintenance = flotte.get_maintenance_par_id(id_maintenance)
     if not maintenance:
         print("Aucune maintenance trouvée avec cet ID.")
         return
@@ -615,7 +618,7 @@ def modifier_maintenance():
     print("\nDétails de la maintenance sélectionnée :")
     print(f"ID : {maintenance.ID_MAINTEN}")
     print(f"Type : {maintenance.TYPE_MAINTEN}")
-    #print(f"Date début : {maintenance.DATE_MAINTEN}")
+    # print(f"Date début : {maintenance.DATE_MAINTEN}")
     print(f"Date fin maintenance : {maintenance.DATE_MAINTEN_FIN}")
     print(f"Description : {maintenance.DESC_MAINTEN}")
     print(f"Statut : {maintenance.STATUS_MAINT}")
@@ -637,26 +640,194 @@ def modifier_maintenance():
         or maintenance.STATUS_MAINT
     )
 
-    gestion.modifier_maintenance(
-        id_maintenance, type_maintenance.upper(), date_fin_maintenance, description, status
+    flotte.modifier_maintenance(
+        id_maintenance,
+        type_maintenance.upper(),
+        date_fin_maintenance,
+        description,
+        status,
     )
 
 
 def supprimer_maintenance():
     """Demande l'ID de la maintenance à supprimer et exécute la suppression."""
     id_maintenance = input("Entrez l'ID de la maintenance à supprimer : ").strip()
-    gestion.supprimer_maintenance(id_maintenance)
+    flotte.supprimer_maintenance(id_maintenance)
 
 
 def lister_maintenances():
     """Liste toutes les maintenances enregistrées."""
-    gestion.lister_maintenances()
+    flotte.lister_maintenances()
 
 
 def rechercher_maintenance():
     """Recherche une maintenance par type ou ID du véhicule."""
     terme = input("Entrez le type de maintenance ou l'ID du véhicule : ").strip()
-    gestion.rechercher_maintenance(terme)
+    flotte.rechercher_maintenance(terme)
+
+
+# ----------------------------- FONCTIONS POUR VEHICULES-FLOTTE -----------------------------
+
+
+def ajouter_vehicule():
+    """Ajoute un véhicule après saisie des informations utilisateur."""
+    id_marque = input("Entrez l'ID de la marque : ").strip()
+    id_modele = input("Entrez l'ID du modèle : ").strip()
+    id_type = input("Entrez l'ID du type de véhicule : ").strip()
+    annee_fab = input("Entrez l'année de fabrication : ").strip()
+    couleur = input("Entrez la couleur : ").strip().upper()
+    immatriculation = input("Entrez l'immatriculation : ").strip().upper()
+    status = input("Entrez le statut (DISPONIBLE / EN MAINTENANCE) : ").strip().upper()
+    km = input("Entrez le kilométrage : ").strip()
+    type_carbur = input("Entrez le type de carburant : ").strip().upper()
+
+    flotte.ajouter_vehicule(
+        id_marque,
+        id_modele,
+        id_type,
+        annee_fab,
+        couleur,
+        immatriculation,
+        status,
+        km,
+        type_carbur,
+    )
+
+
+def modifier_vehicule():
+    """Modifie un véhicule après sélection de son ID."""
+    id_vehicule = input("Entrez l'ID du véhicule à modifier : ").strip()
+
+    # Vérification si le véhicule existe
+    vehicule = flotte.get_vehicule_par_id(id_vehicule)
+    if not vehicule:
+        print("Aucun véhicule trouvé avec cet ID.")
+        return
+
+    # Affichage des informations avant modification
+    print("\nDétails du véhicule sélectionné :")
+    print(f"ID : {vehicule[0]}")  # ID_VEHIC
+    print(f"Type de carburant : {vehicule[1]}")  # TYPE_CARBUR
+    print(f"Année de fabrication : {vehicule[2]}")  # ANNEE_FAB
+    print(f"Couleur : {vehicule[3]}")  # COULEUR
+    print(f"Immatriculation : {vehicule[4]}")  # IMMATRICULATION
+    print(f"Statut : {vehicule[5]}")  # STATUS
+    print(f"Kilométrage : {vehicule[6]}")  # KM
+    print(f"Marque (ID) : {vehicule[7]}")  # ID_MARQ
+    print(f"Modèle (ID) : {vehicule[8]}")  # ID_MOD
+    print(f"Type de véhicule (ID) : {vehicule[9]}")  # ID_TP_VEHIC
+
+    # Demander les nouvelles valeurs, conserver les anciennes si vide
+    type_carbur = (
+        input(f"Nouveau type de carburant ({vehicule[1]}) : ").strip().upper()
+        or vehicule[1]
+    )
+    annee_fab = (
+        input(f"Nouvelle année de fabrication ({vehicule[2]}) : ").strip()
+        or vehicule[2]
+    )
+    couleur = (
+        input(f"Nouvelle couleur ({vehicule[3]}) : ").strip().upper() or vehicule[3]
+    )
+    immatriculation = (
+        input(f"Nouvelle immatriculation ({vehicule[4]}) : ").strip().upper()
+        or vehicule[4]
+    )
+    status = input(f"Nouveau statut ({vehicule[5]}) : ").strip().upper() or vehicule[5]
+    km = input(f"Kilométrage actuel ({vehicule[6]}) : ").strip() or vehicule[6]
+    id_marque = (
+        input(f"Nouvelle marque (ID actuel: {vehicule[7]}) : ").strip() or vehicule[7]
+    )
+    id_modele = (
+        input(f"Nouveau modèle (ID actuel: {vehicule[8]}) : ").strip() or vehicule[8]
+    )
+    id_type = (
+        input(f"Nouveau type de véhicule (ID actuel: {vehicule[9]}) : ").strip()
+        or vehicule[9]
+    )
+
+    flotte.modifier_vehicule(
+        id_vehicule,
+        type_carbur,
+        annee_fab,
+        couleur,
+        immatriculation,
+        status,
+        km,
+        id_marque,
+        id_modele,
+        id_type,
+    )
+
+
+def supprimer_vehicule():
+    """Demande l'ID du véhicule à supprimer et exécute la suppression."""
+    id_vehicule = input("Entrez l'ID du véhicule à supprimer : ").strip()
+    flotte.supprimer_vehicule(id_vehicule)
+
+
+def lister_vehicules():
+    """Liste tous les véhicules enregistrés."""
+    flotte.lister_tous_vehicules()
+
+
+def rechercher_vehicule():
+    """Recherche un véhicule par immatriculation ou modèle."""
+    terme = input("Entrez l'immatriculation ou le modèle du véhicule : ").strip()
+    flotte.rechercher_vehicule(terme)
+
+
+# ----------------------------- FONCTIONS POUR VEHICULES-ASSURANCE -----------------------------
+
+
+def ajouter_assurance():
+    """Ajoute une assurance après saisie des informations utilisateur."""
+    type_assurance = input("Entrez le type d'assurance : ").strip().upper()
+    prix_jour = input("Entrez le prix par jour : ").strip()
+
+    assurances.ajouter_assurance(type_assurance, prix_jour)
+
+
+def modifier_assurance():
+    """Modifie une assurance après sélection de son ID."""
+    id_assurance = input("Entrez l'ID de l'assurance à modifier : ").strip()
+
+    # Vérification si l'assurance existe
+    assurance = assurances.get_assurance_par_id(id_assurance)
+    if not assurance:
+        print("Aucune assurance trouvée avec cet ID.")
+        return
+
+    # Affichage des informations avant modification
+    print("\nDétails de l'assurance sélectionnée :")
+    print(f"ID : {assurance[0]}")  # ID_ASSURANCE
+    print(f"Type : {assurance[1]}")  # TYPE_ASSURANCE
+    print(f"Prix par jour : {assurance[2]}")  # PRIX_JOUR
+
+    # Demander les nouvelles valeurs, conserver les anciennes si vide
+    type_assurance = (
+        input(f"Nouveau type ({assurance[1]}) : ").strip().upper() or assurance[1]
+    )
+    prix_jour = input(f"Nouveau prix/jour ({assurance[2]}) : ").strip() or assurance[2]
+
+    assurances.modifier_assurance(id_assurance, type_assurance, prix_jour)
+
+
+def supprimer_assurance():
+    """Supprime une assurance après confirmation."""
+    id_assurance = input("Entrez l'ID de l'assurance à supprimer : ").strip()
+    assurances.supprimer_assurance(id_assurance)
+
+
+def lister_assurances():
+    """Liste toutes les assurances enregistrées."""
+    assurances.lister_toutes_assurances()
+
+
+def rechercher_assurance():
+    """Recherche une assurance par type."""
+    terme = input("Entrez le type d'assurance à rechercher : ").strip()
+    assurances.rechercher_assurance(terme)
 
 
 # ----------------------------- LANCEMENT DU PROGRAMME -----------------------------
