@@ -212,22 +212,6 @@ def ajouter_employe(nas, nom, prenom, salaire, poste, id_age):
             database.fermer_connexion(connexion)
 
 
-# Récupérer un employé par ID
-def get_employe_par_id(id_emp):
-    """Récupère les informations d'un employé spécifique."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-            curseur.execute(queries.GET_EMPLOYE_PAR_ID, (id_emp,))
-            employe = curseur.fetchone()
-            return employe  # ✅ RETOURNER L'EMPLOYÉ
-        except Exception as erreur:
-            print(f"Erreur lors de la récupération de l'employé : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-    return None
-
 # Modifier un employé
 def modifier_employe(id_emp, nas, nom, prenom, salaire, poste, id_age):
     """Modifie les informations d'un employé existant."""
@@ -235,26 +219,9 @@ def modifier_employe(id_emp, nas, nom, prenom, salaire, poste, id_age):
     if connexion:
         try:
             curseur = connexion.cursor()
-            employe = get_employe_par_id(id_emp)  # ✅ Vérification avant modification
-            if not employe:
-                print("Aucun employé trouvé avec cet ID.")
-                return
-
-            # Afficher les informations avant changement
-            print("\nDétails de l'employé sélectionné :")
-            print(f"ID : {employe.ID_EMP}")
-            print(f"Nom : {employe.NOM}")
-            print(f"ID AGENCE : {employe.ID_AGE}")
-
             curseur.execute(
                 queriesupdate.MODIFIER_EMPLOYE,
-                (nas, 
-                 nom.upper(), 
-                 prenom.upper(), 
-                 salaire,
-                 poste.upper(), 
-                 id_age, 
-                 id_emp),
+                (nas, nom, prenom, salaire, poste, id_age, id_emp),
             )
             connexion.commit()
             print("Employé modifié avec succès !")
@@ -262,7 +229,6 @@ def modifier_employe(id_emp, nas, nom, prenom, salaire, poste, id_age):
             print(f"Erreur lors de la modification de l'employé : {erreur}")
         finally:
             database.fermer_connexion(connexion)
-
 
 
 # Supprimer un employé

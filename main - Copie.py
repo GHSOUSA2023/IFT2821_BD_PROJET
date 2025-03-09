@@ -52,7 +52,8 @@ def menu_agences():
         elif choix == "5":
             rechercher_agence()
         elif choix == "6":
-            return
+            print("Fin du programme.")
+            break
         else:
             print("Option invalide. Essayez à nouveau.")
 
@@ -82,7 +83,7 @@ def menu_employes():
         elif choix == "5":
             rechercher_employe()
         elif choix == "6":
-            return
+            break
         else:
             print("Option invalide. Essayez à nouveau.")
 
@@ -112,7 +113,7 @@ def menu_vehicules():
         elif choix == "5":
             rechercher_vehicule()
         elif choix == "6":
-            return
+            break
         else:
             print("Option invalide. Essayez à nouveau.")
 
@@ -189,28 +190,7 @@ def ajouter_employe():
 def modifier_employe():
     """Modifie un employé après sélection de son ID."""
     id_emp = input("Entrez l'ID de l'employé à modifier : ")
-
-    # Vérification si l'employé existe
-    employe = gestion.get_employe_par_id(id_emp)  # ✅ Stocker le retour
-    if not employe:
-        print("Aucun employé trouvé avec cet ID.")
-        return
-    
-    print("\nLaissez vide un champ pour conserver l'ancienne valeur.")
-    nas = input(f"NAS actuel ({employe.NAS}): ") or employe.NAS
-    nom = input(f"Nouveau nom ({employe.NOM}): ") or employe.NOM
-    prenom = input(f"Nouveau prénom ({employe.PRENOM}): ") or employe.PRENOM
-    salaire = input(f"Salaire actuel ({employe.SALAIRE}): ") or employe.SALAIRE
-    poste = input(f"Poste actuel ({employe.POSTE}): ") or employe.POSTE
-    id_age = input(f"ID Agence actuelle ({employe.ID_AGE}): ") or employe.ID_AGE
-
-    # ✅ Passer tous les paramètres
-    gestion.modifier_employe(
-        id_emp, nas, nom.upper(), prenom.upper(), float(salaire), poste.upper(), id_age
-    )
-
-
-
+    gestion.modifier_employe(id_emp)
 
 def supprimer_employe():
     """Supprime un employé après confirmation."""
