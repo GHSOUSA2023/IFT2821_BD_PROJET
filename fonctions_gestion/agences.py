@@ -144,7 +144,7 @@ def lister_tout_agences():
             print(
                 f"{'ID':<5} {'Nom':<27} {'Ville':<20} {'Adresse':<30} {'Téléphone':<15} {'Email'}"
             )
-            print("-" * 90)
+            #print("-" * 90)
 
             for agence in agences:
                 print(

@@ -1,60 +1,112 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
-from PyQt5.QtCore import QPropertyAnimation, QRect
-from interface_utilisateur.agences.ui_agences import AgenceWindow
-from interface_utilisateur.clients.ui_clients import ClientWindow
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget, QStackedWidget
+)
+from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
+from PyQt5.QtGui import QFont
+
+# Interface principale "ui_agences" (accueil Agences)
+from interface_utilisateur.agences.ui_agences import AgencesUI
+# Interface "ui_clients" (accueil Clients)
+from interface_utilisateur.clients.ui_clients import ClientsUI
+# Interface avancée de gestion d'Agences
+from interface_utilisateur.agences.ui_gestion_agences import GestionAgencesUI
 
 class MainWindow(QMainWindow):
+    """
+    Fenêtre principale utilisant un QStackedWidget pour naviguer
+    entre le menu principal, l'accueil agences, la gestion avancée
+    et l'accueil clients.
+    """
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("GN Location - Gestion")
+        self.setGeometry(50, 50, 1000, 600)
+        # Activer le mode plein écran
+        #self.showFullScreen()
+        self.setStyleSheet("background-color: #f4f4f4;")
 
-        self.setWindowTitle("Logiciel de Gestion de Location")
-        self.setGeometry(100, 100, 800, 500)  # Largura x Altura
+        # QStackedWidget pour la navigation interne
+        self.central_widget = QStackedWidget()
+        self.setCentralWidget(self.central_widget)
 
-        # Layout principal
+        self.initUI()
+        self.show_animation()
+
+    def initUI(self):
+        """Crée et affiche le menu principal dans le QStackedWidget."""
+        self.menu_principal = QWidget()
         layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignCenter)
 
-        # Botão para abrir a interface de Agências
-        self.btn_agences = QPushButton("Gérer les Agences")
-        self.btn_agences.setStyleSheet("font-size: 16px; padding: 10px;")
-        self.btn_agences.clicked.connect(self.ouvrir_agences)
+        # Titre principal
+        label_title = QLabel("GN LOCATION")
+        label_title.setFont(QFont("Arial", 24, QFont.Bold))
+        label_title.setAlignment(Qt.AlignCenter)
 
-        # Botão para abrir a interface de Clientes
-        self.btn_clients = QPushButton("Gérer les Clients")
-        self.btn_clients.setStyleSheet("font-size: 16px; padding: 10px;")
-        self.btn_clients.clicked.connect(self.ouvrir_clients)
+        # Boutons de navigation (Agences / Clients)
+        btn_agences = QPushButton("🏢 Gérer les Agences")
+        btn_clients = QPushButton("👤 Gérer les Clients")
 
-        # Adicionando os botões ao layout
-        layout.addWidget(self.btn_agences)
-        layout.addWidget(self.btn_clients)
+        btn_agences.setFont(QFont("Arial", 14))
+        btn_clients.setFont(QFont("Arial", 14))
 
-        # Configuração do widget central
-        central_widget = QWidget()
-        central_widget.setLayout(layout)
-        self.setCentralWidget(central_widget)
+        btn_agences.setStyleSheet(
+            "padding: 10px; background-color: #007BFF; color: white; border-radius: 5px;"
+        )
+        btn_clients.setStyleSheet(
+            "padding: 10px; background-color: #28A745; color: white; border-radius: 5px;"
+        )
 
-        # Iniciar animação na abertura
-        self.animer_ouverture()
+        # Connexion des boutons aux écrans respectifs
+        btn_agences.clicked.connect(lambda: self.afficher_interface(self.ui_agences))
+        btn_clients.clicked.connect(lambda: self.afficher_interface(self.ui_clients))
 
-    def animer_ouverture(self):
-        """Animação da janela ao abrir."""
-        self.animacao = QPropertyAnimation(self, b"geometry")
-        self.animacao.setDuration(1000)  # 1 segundo
-        self.animacao.setStartValue(QRect(self.x(), self.y() - 100, self.width(), self.height()))
-        self.animacao.setEndValue(QRect(self.x(), self.y(), self.width(), self.height()))
-        self.animacao.start()
+        layout.addWidget(label_title)
+        layout.addSpacing(20)
+        layout.addWidget(btn_agences)
+        layout.addWidget(btn_clients)
 
-    def ouvrir_agences(self):
-        """Abre a interface de Agências."""
-        self.fenetre_agences = AgenceWindow()
-        self.fenetre_agences.show()
+        self.menu_principal.setLayout(layout)
 
-    def ouvrir_clients(self):
-        """Abre a interface de Clientes."""
-        self.fenetre_clients = ClientWindow()
-        self.fenetre_clients.show()
+        # Instanciation des écrans :
+        # 1) Accueil "ui_agences"
+        self.ui_agences = AgencesUI(self)
+        # 2) Gestion avancée "ui_gestion_agences"
+        self.ui_gestion_agences = GestionAgencesUI(self)
+        # 3) Accueil "ui_clients"
+        self.ui_clients = ClientsUI(self)
+
+        # Ajout des écrans au QStackedWidget
+        self.central_widget.addWidget(self.menu_principal)      # index 0
+        self.central_widget.addWidget(self.ui_agences)          # index 1
+        self.central_widget.addWidget(self.ui_gestion_agences)  # index 2
+        self.central_widget.addWidget(self.ui_clients)          # index 3
+
+        # Afficher le menu principal au démarrage
+        self.central_widget.setCurrentWidget(self.menu_principal)
+
+    def show_animation(self):
+        """Effet d'apparition en fondu sur toute la fenêtre."""
+        self.animation = QPropertyAnimation(self, b"windowOpacity")
+        self.animation.setDuration(800)
+        self.animation.setStartValue(0)
+        self.animation.setEndValue(1)
+        self.animation.setEasingCurve(QEasingCurve.OutCubic)
+        self.animation.start()
+
+    def afficher_interface(self, interface):
+        """
+        Affiche une interface spécifique dans la fenêtre principale (QStackedWidget).
+        """
+        self.central_widget.setCurrentWidget(interface)
+
+    def revenir_menu_principal(self):
+        """Retour au menu principal."""
+        self.central_widget.setCurrentWidget(self.menu_principal)
+
 
 if __name__ == "__main__":
     app = QApplication([])
-    fenetre = MainWindow()
-    fenetre.show()
+    window = MainWindow()
+    window.show()
     app.exec_()
