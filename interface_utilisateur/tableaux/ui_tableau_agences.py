@@ -34,12 +34,14 @@ class TableauAgencesUI(QWidget):
         self.setLayout(layout)
 
     def charger_donnees(self, donnees):
-        """Charge les données dans le tableau."""
+        """Charge correctement les données dans le tableau."""
         self.table_widget.setRowCount(len(donnees))
         for row, ligne in enumerate(donnees):
             for col, valeur in enumerate(ligne):
-                item = QTableWidgetItem(str(valeur))
-                self.table_widget.setItem(row, col, item)
+                self.table_widget.setItem(row, col, QTableWidgetItem(str(valeur)))
+                self.table_widget.resizeColumnsToContents()  # Ajuste automatique des colonnes
+
+
 
     def retourner(self):
         """

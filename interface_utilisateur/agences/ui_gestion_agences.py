@@ -6,6 +6,8 @@ from fonctions_gestion.agences import (
     lister_tout_agences, rechercher_agence
 )
 from interface_utilisateur.tableaux.ui_tableau_agences import TableauAgencesUI
+from interface_utilisateur.agences.ui_formulaire_agence import FormulaireAgenceUI
+
 
 import io
 import sys
@@ -81,33 +83,19 @@ class GestionAgencesUI(QWidget):
 
     def afficher_liste_agences(self):
         """
-        Capture la sortie de lister_tout_agences() et
-        l'affiche dans TableauAgencesUI au lieu de l'affichage terminal.
+        Récupère toutes les agences et les affiche dans le tableau TableauAgencesUI.
         """
         colonnes = ["ID", "Nom", "Ville", "Adresse", "Téléphone", "Email"]
-        agences = []
+        
+        # 🔹 Récupération propre des données
+        agences = lister_tout_agences()
 
-        buffer = io.StringIO()
-        ancien_stdout = sys.stdout
-        sys.stdout = buffer
-
-        lister_tout_agences()
-
-        sys.stdout = ancien_stdout
-
-        # Traiter lignes
-        lignes = buffer.getvalue().split("\n")[3:]
-        for ligne in lignes:
-            if ligne.strip():
-                valeurs = ligne.split(maxsplit=5)
-                if len(valeurs) == 6:
-                    agences.append(valeurs)
-
-        # Affichage dans TableauAgencesUI
+        # 🔹 Vérification des données avant affichage
         if agences:
             self.tableau_agences = TableauAgencesUI("Liste des Agences", colonnes, agences, self.main_window)
             self.main_window.central_widget.addWidget(self.tableau_agences)
             self.main_window.central_widget.setCurrentWidget(self.tableau_agences)
+
 
     def rechercher_agence(self):
         """Recherche une agence."""

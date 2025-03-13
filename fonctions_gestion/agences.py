@@ -127,34 +127,36 @@ def supprimer_agence(id_agence):
 
 
 # Lister toutes les agences
-def lister_tout_agences():
-    """Récupère et affiche toutes les agences enregistrées."""
+def lister_tout_agences(direct=True):
+    """Récupère toutes les agences et les retourne sous forme de liste de tuples."""
     connexion = database.connecter()
+    agences = []
+
     if connexion:
         try:
             curseur = connexion.cursor()
             curseur.execute(queries.LISTER_AGENCES)
-            agences = curseur.fetchall()
+            resultats = curseur.fetchall()
 
-            if not agences:
-                print("Aucune agence enregistrée.")
-                return
-
-            print("\nListe des agences :")
-            print(
-                f"{'ID':<5} {'Nom':<27} {'Ville':<20} {'Adresse':<30} {'Téléphone':<15} {'Email'}"
-            )
-            #print("-" * 90)
-
-            for agence in agences:
-                print(
-                    f"{agence.ID_AGE:<5} {agence.NOM_AGE:<27} {agence.VILLE:<20} {agence.ADRESSE:<30} {agence.TELEPHONE:<15} {agence.EMAIL}"
-                )
+            if direct:
+                for agence in resultats:
+                    agences.append((
+                        agence.ID_AGE,   # ID
+                        agence.NOM_AGE,  # Nom
+                        agence.VILLE,    # Ville
+                        agence.ADRESSE,  # Adresse
+                        agence.TELEPHONE, # Téléphone
+                        agence.EMAIL     # Email
+                    ))
+                return agences
 
         except Exception as erreur:
             print(f"Erreur lors de la récupération des agences : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
+    return []
+
 
 
 # Rechercher une agence par nom, ville ou adresse
