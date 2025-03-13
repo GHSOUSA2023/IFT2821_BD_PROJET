@@ -160,6 +160,8 @@ class GestionAgencesUI(QWidget):
             # Retornar à tela principal
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_agences)
 
+            
+
     def afficher_liste_agences(self):
         """
         Récupère toutes les agences et les affiche dans le tableau TableauAgencesUI.
