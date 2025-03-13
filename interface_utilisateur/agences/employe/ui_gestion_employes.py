@@ -51,7 +51,7 @@ class GestionEmployesUI(QWidget):
         btn_ajouter.clicked.connect(self.ouvrir_formulaire_ajouter)
         btn_modifier.clicked.connect(self.afficher_liste_employes_modifier)
         btn_supprimer.clicked.connect(self.afficher_liste_employes_supprimer)
-        btn_lister.clicked.connect(self.lister_employes)
+        btn_lister.clicked.connect(self.afficher_liste_employes)
         btn_rechercher.clicked.connect(self.rechercher_employe)
         btn_retour.clicked.connect(lambda: self.main_window.afficher_interface(self.main_window.ui_agences))
 
@@ -149,8 +149,42 @@ class GestionEmployesUI(QWidget):
             # Retourner à la liste des employés
             self.tableau_employes_supprimer.table_widget.removeRow(row)
 
-    def lister_employes(self):
-        pass  # Sera implémenté dans le prochain pas
+    def afficher_liste_employes(self):
+        """
+        Récupère tous les employés et les affiche dans le tableau `TableauEmployesUI` avec un filtre de recherche.
+        """
+        colonnes = ["ID", "NAS", "Nom", "Prénom", "Salaire", "Poste", "Agence"]  # 🔹 Correction ici
+        employes = lister_employes()  # 🔹 Récupération correcte
+
+        if employes:
+            self.tableau_employes = TableauEmployesUI("Liste des Employés", colonnes, employes, self.main_window)
+            self.main_window.central_widget.addWidget(self.tableau_employes)
+            self.main_window.central_widget.setCurrentWidget(self.tableau_employes)
+
+
+
 
     def rechercher_employe(self):
-        pass  # Sera implémenté dans le prochain pas
+        """
+        Affiche un champ de recherche et affiche les résultats dans le tableau.
+        """
+        from PyQt5.QtWidgets import QInputDialog, QMessageBox
+        from fonctions_gestion.employes import rechercher_employe
+        from interface_utilisateur.tableaux.ui_tableau_employes import TableauEmployesUI
+
+        # Demande à l'utilisateur de saisir un terme de recherche
+        terme, ok = QInputDialog.getText(self, "Recherche d'Employé", "Entrez un NAS ou un Nom:")
+
+        if ok and terme.strip():
+            # Récupérer les résultats
+            colonnes, employes = rechercher_employe(terme.strip())
+
+            if employes:
+                self.tableau_resultats_recherche = TableauEmployesUI(
+                    "Résultats de la Recherche", colonnes, employes, self.main_window
+                )
+                self.main_window.central_widget.addWidget(self.tableau_resultats_recherche)
+                self.main_window.central_widget.setCurrentWidget(self.tableau_resultats_recherche)
+            else:
+                QMessageBox.information(self, "Résultat", "Aucun employé trouvé.")
+

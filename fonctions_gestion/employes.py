@@ -194,47 +194,62 @@ def supprimer_employe(id_emp):
 
 # Lister tous les employés
 def lister_employes():
-    """Retourne la liste de tous les employés enregistrés."""
+    """Retourne une liste de tous les employés avec le NOM de l'agence au lieu de son ID."""
     connexion = database.connecter()
+    employes = []
+
     if connexion:
         try:
             curseur = connexion.cursor()
-            curseur.execute(queries.LISTER_EMPLOYES)
-            employes = curseur.fetchall()
+            # 🔹 Jointure entre employés et agences pour obtenir le NOM au lieu de l'ID
+            curseur.execute("""
+                SELECT e.ID_EMP, e.NAS, e.NOM, e.PRENOM, e.SALAIRE, e.POSTE, a.NOM_AGE
+                FROM EMPLOYES e
+                JOIN AGENCES a ON e.ID_AGE = a.ID_AGE
+            """)
+            resultats = curseur.fetchall()
 
-            if not employes:
-                print("Aucun employé enregistré.")
-                return
-
-            print("\nListe des employés :")
-            print(
-                f"{'ID':<5} {'NAS':<15} {'Nom':<15} {'Prénom':<15} {'Salaire':<10} {'Poste':<20} {'ID Agence'}"
-            )
-            print("-" * 90)
-
-            for employe in employes:
-                print(
-                    f"{employe.ID_EMP:<5} {employe.NAS:<15} {employe.NOM:<15} {employe.PRENOM:<15} {employe.SALAIRE:<10} {employe.POSTE:<20} {employe.ID_AGE}"
-                )
+            for employe in resultats:
+                employes.append((
+                    employe.ID_EMP,
+                    employe.NAS,
+                    employe.NOM,
+                    employe.PRENOM,
+                    employe.SALAIRE,
+                    employe.POSTE,
+                    employe.NOM_AGE  # 🔹 Afficher le NOM de l'agence au lieu de l'ID
+                ))
 
         except Exception as erreur:
             print(f"Erreur lors de la récupération des employés : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
+    return employes  # 🔹 Retourne la liste mise à jour
+
+
 
 # Rechercher un employé par NAS ou Nom
 def rechercher_employe(terme_recherche):
-    """Recherche un employé par NAS ou Nom et retourne les résultats sous forme de tableau."""
+    """Recherche un employé par NAS, Nom ou Prénom et retourne les résultats sous forme de tableau."""
     connexion = database.connecter()
-    colonnes = ["ID", "NAS", "Nom", "Prénom", "Salaire", "Poste", "ID Agence"]
+    colonnes = ["ID", "NAS", "Nom", "Prénom", "Salaire", "Poste", "Agence"]
     employes = []
 
     if connexion:
         try:
             curseur = connexion.cursor()
-            terme = f"%{terme_recherche}%"  # Ajouter les wildcards pour la recherche
-            curseur.execute(queries.RECHERCHER_EMPLOYE, (terme, terme))
+            terme = f"%{terme_recherche}%"  # 🔹 Ajoute les wildcards pour la recherche
+
+            # 🔹 Ajout des marqueurs `?` ou `%s` selon le SGBD utilisé
+            requete = """
+                SELECT e.ID_EMP, e.NAS, e.NOM, e.PRENOM, e.SALAIRE, e.POSTE, a.NOM_AGE
+                FROM EMPLOYES e
+                JOIN AGENCES a ON e.ID_AGE = a.ID_AGE
+                WHERE e.NAS LIKE ? OR e.NOM LIKE ? OR e.PRENOM LIKE ?
+            """
+
+            curseur.execute(requete, (terme, terme, terme))  # 🔹 Ajout correct des paramètres
             resultats = curseur.fetchall()
 
             for employe in resultats:
@@ -245,7 +260,7 @@ def rechercher_employe(terme_recherche):
                     employe.PRENOM,
                     employe.SALAIRE,
                     employe.POSTE,
-                    employe.ID_AGE
+                    employe.NOM_AGE  # 🔹 Affiche bien le NOM de l'agence
                 ])
 
         except Exception as erreur:
@@ -253,4 +268,6 @@ def rechercher_employe(terme_recherche):
         finally:
             database.fermer_connexion(connexion)
 
-    return colonnes, employes  # Retourne toujours une tupla, même si `employes` est vide
+    return colonnes, employes  # 🔹 Retourne une liste même si vide
+
+
