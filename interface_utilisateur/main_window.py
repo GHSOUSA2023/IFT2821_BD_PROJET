@@ -4,26 +4,23 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QFont
 
-# Interface principale "ui_agences" (accueil Agences)
-from interface_utilisateur.agences.ui_agences import AgencesUI
+# Interface principale "ui_agences_mere" (accueil général Agences)
+from interface_utilisateur.agences.ui_agences_mere import AgenceMereUI
 # Interface "ui_clients" (accueil Clients)
 from interface_utilisateur.clients.ui_clients import ClientsUI
-# Interface avancée de gestion d'Agences
+# Interface avancée de gestion des agences et employés
 from interface_utilisateur.agences.agence.ui_gestion_agences import GestionAgencesUI
 from interface_utilisateur.agences.employe.ui_gestion_employes import GestionEmployesUI
 
 class MainWindow(QMainWindow):
     """
     Fenêtre principale utilisant un QStackedWidget pour naviguer
-    entre le menu principal, l'accueil agences, la gestion avancée
-    et l'accueil clients.
+    entre le menu principal, la gestion des agences, clients, et d'autres modules.
     """
     def __init__(self):
         super().__init__()
         self.setWindowTitle("GN Location - Gestion")
         self.setGeometry(50, 50, 1000, 600)
-        # Activer le mode plein écran
-        #self.showFullScreen()
         self.setStyleSheet("background-color: #f4f4f4;")
 
         # QStackedWidget pour la navigation interne
@@ -59,7 +56,7 @@ class MainWindow(QMainWindow):
         )
 
         # Connexion des boutons aux écrans respectifs
-        btn_agences.clicked.connect(lambda: self.afficher_interface(self.ui_agences))
+        btn_agences.clicked.connect(lambda: self.afficher_interface(self.ui_agences_mere))
         btn_clients.clicked.connect(lambda: self.afficher_interface(self.ui_clients))
 
         layout.addWidget(label_title)
@@ -70,18 +67,21 @@ class MainWindow(QMainWindow):
         self.menu_principal.setLayout(layout)
 
         # Instanciation des écrans :
-        # 1) Accueil "ui_agences"
-        self.ui_agences = AgencesUI(self)
+        # 1) Interface mère "ui_agences_mere"
+        self.ui_agences_mere = AgenceMereUI(self)
         # 2) Gestion avancée "ui_gestion_agences"
         self.ui_gestion_agences = GestionAgencesUI(self)
-        # 3) Accueil "ui_clients"
+        # 3) Gestion avancée "ui_gestion_employes"
+        self.ui_gestion_employes = GestionEmployesUI(self)
+        # 4) Accueil "ui_clients"
         self.ui_clients = ClientsUI(self)
 
         # Ajout des écrans au QStackedWidget
-        self.central_widget.addWidget(self.menu_principal)      # index 0
-        self.central_widget.addWidget(self.ui_agences)          # index 1
-        self.central_widget.addWidget(self.ui_gestion_agences)  # index 2
-        self.central_widget.addWidget(self.ui_clients)          # index 3
+        self.central_widget.addWidget(self.menu_principal)       # index 0
+        self.central_widget.addWidget(self.ui_agences_mere)      # index 1
+        self.central_widget.addWidget(self.ui_gestion_agences)   # index 2
+        self.central_widget.addWidget(self.ui_gestion_employes)  # index 3
+        self.central_widget.addWidget(self.ui_clients)           # index 4
 
         # Afficher le menu principal au démarrage
         self.central_widget.setCurrentWidget(self.menu_principal)
