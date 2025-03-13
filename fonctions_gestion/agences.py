@@ -1,5 +1,8 @@
 from base_donnees import database
 from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete
+import io
+import sys
+
 
 
 # ----------------------------- FONCTIONS POUR AGENCES -----------------------------
@@ -45,6 +48,42 @@ def get_agence_par_id(id_agence):
             database.fermer_connexion(connexion)
     return None
 
+# Modifier une agence lister touts
+
+def afficher_liste_agences_modifier():
+    """
+    Récupère la liste des agences sous forme de tableau de données.
+    """
+    colonnes = ["ID", "Nom", "Ville", "Adresse", "Téléphone", "Email"]
+    agences = []
+
+    # Connexion à la base de données
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queries.LISTER_AGENCES)
+            agences_bd = curseur.fetchall()
+
+            # Ajouter les données à la liste
+            for agence in agences_bd:
+                agences.append([
+                    str(agence.ID_AGE),  # ID doit être une chaîne pour PyQt
+                    agence.NOM_AGE,
+                    agence.VILLE,
+                    agence.ADRESSE,
+                    agence.TELEPHONE,
+                    agence.EMAIL
+                ])
+
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération des agences : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+
+    return colonnes, agences
+
+
 
 # Modifier une agence
 def modifier_agence(id_agence, nom, adresse, ville, telephone, email):
@@ -84,6 +123,36 @@ def modifier_agence(id_agence, nom, adresse, ville, telephone, email):
             database.fermer_connexion(connexion)
 
 
+def afficher_liste_agences_supprimer():
+    """
+    Récupère la liste des agences sous forme de tableau de données pour suppression.
+    """
+    colonnes = ["ID", "Nom", "Ville", "Adresse", "Téléphone", "Email"]
+    agences = lister_tout_agences()
+
+    return colonnes, agences
+
+
+def confirmer_suppression(self, row, column):
+    """
+    Demande confirmation avant suppression d'une agence.
+    """
+    from PyQt5.QtWidgets import QMessageBox
+
+    id_agence = self.tableau_agences_supprimer.table_widget.item(row, 0).text()  # ID de l'agence
+    nom_agence = self.tableau_agences_supprimer.table_widget.item(row, 1).text()  # Nom de l'agence
+
+    # Boîte de confirmation
+    reponse = QMessageBox.question(self, "Confirmation", 
+                                   f"Voulez-vous vraiment supprimer l'agence '{nom_agence}' ?",
+                                   QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+    if reponse == QMessageBox.Yes:
+        supprimer_agence(id_agence)  # Appeler la fonction de suppression
+        QMessageBox.information(self, "Succès", "L'agence a été supprimée avec succès.")
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_agences)  # Retour
+
+
 # Supprimer une agence
 def supprimer_agence(id_agence):
     """Supprime une agence par son ID après vérification de son existence."""
@@ -92,7 +161,7 @@ def supprimer_agence(id_agence):
         try:
             curseur = connexion.cursor()
 
-            # Vérifier si l'agence existe avant de la supprimer
+            # Verificar se a agencia existe
             curseur.execute(queries.GET_AGENCE_PAR_ID, (id_agence,))
             agence = curseur.fetchone()
 
@@ -100,23 +169,16 @@ def supprimer_agence(id_agence):
                 print("Aucune agence trouvée avec cet ID.")
                 return
 
-            # Afficher les informations avant suppression
+            # Apenas imprime no console como debug:
             print("\nDétails de l'agence sélectionnée :")
             print(f"ID : {agence.ID_AGE}")
             print(f"Nom : {agence.NOM_AGE}")
             print(f"Ville : {agence.VILLE}")
 
-            # Demander confirmation
-            confirmation = (
-                input(f"Confirmez-vous la suppression de '{agence.NOM_AGE}' ? (O/N) : ")
-                .strip()
-                .upper()
-            )
-            if confirmation != "O":
-                print("Suppression annulée.")
-                return
+            # Remove a chamada de input(...) – usamos a confirmação da UI
+            # if confirmation != "O": ... etc
 
-            # Supprimer l'agence
+            # Executa a remoção
             curseur.execute(queriesdelete.SUPPRIMER_AGENCE, (id_agence,))
             connexion.commit()
             print("Agence supprimée avec succès !")
@@ -124,6 +186,7 @@ def supprimer_agence(id_agence):
             print(f"Erreur lors de la suppression de l'agence : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
 
 
 # Lister toutes les agences
@@ -161,31 +224,33 @@ def lister_tout_agences(direct=True):
 
 # Rechercher une agence par nom, ville ou adresse
 def rechercher_agence(terme_recherche):
-    """Recherche les agences correspondant au terme donné."""
+    """
+    Recherche les agences correspondant au terme donné et retourne les résultats sous forme de tableau.
+    """
     connexion = database.connecter()
+    colonnes = ["ID", "Nom", "Ville", "Adresse", "Téléphone", "Email"]
+    agences = []
+
     if connexion:
         try:
             curseur = connexion.cursor()
             terme = f"%{terme_recherche}%"  # Ajoute les wildcards pour la recherche
             curseur.execute(queries.RECHERCHER_AGENCE, (terme, terme, terme))
-            agences = curseur.fetchall()
+            resultats = curseur.fetchall()
 
-            if not agences:
-                print("Aucune agence trouvée.")
-                return
-
-            print("\nRésultats de la recherche :")
-            print(
-                f"{'ID':<5} {'Nom':<20} {'Ville':<15} {'Adresse':<25} {'Téléphone':<15} {'Email'}"
-            )
-            print("-" * 90)
-
-            for agence in agences:
-                print(
-                    f"{agence.ID_AGE:<5} {agence.NOM_AGE:<20} {agence.VILLE:<15} {agence.ADRESSE:<25} {agence.TELEPHONE:<15} {agence.EMAIL}"
-                )
+            for agence in resultats:
+                agences.append((
+                    agence.ID_AGE,
+                    agence.NOM_AGE,
+                    agence.VILLE,
+                    agence.ADRESSE,
+                    agence.TELEPHONE,
+                    agence.EMAIL
+                ))
 
         except Exception as erreur:
             print(f"Erreur lors de la recherche d'agence : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
+    return colonnes, agences

@@ -13,7 +13,12 @@ def ajouter_employe(nas, nom, prenom, salaire, poste, id_age):
             curseur = connexion.cursor()
             curseur.execute(
                 queriesinputs.AJOUTER_EMPLOYE,
-                (nas, nom, prenom, salaire, poste, id_age),
+                (nas, 
+                nom.upper(), 
+                prenom.upper(), 
+                salaire, 
+                poste, 
+                id_age),
             )
             connexion.commit()
             print("Employé ajouté avec succès !")

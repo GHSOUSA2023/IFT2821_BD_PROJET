@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QFrame
 from PyQt5.QtCore import Qt
 from interface_utilisateur.agences.ui_styles_agences import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
-from interface_utilisateur.agences.ui_gestion_agences import GestionAgencesUI
+from interface_utilisateur.agences.agence.ui_gestion_agences import GestionAgencesUI
+from interface_utilisateur.agences.employe.ui_gestion_employes import GestionEmployesUI
 
 class AgencesUI(QWidget):
     """
@@ -85,6 +86,13 @@ class AgencesUI(QWidget):
         """
         Méthode placeholder: A relier avec l'interface de gestion des employés.
         """
+                # Vérifier si l'attribut existe dans MainWindow
+        if not hasattr(self.main_window, "ui_gestion_employes"):
+            self.main_window.ui_gestion_employes = GestionEmployesUI(self.main_window)
+            self.main_window.central_widget.addWidget(self.main_window.ui_gestion_employes)
+
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_employes)
+
         print("Ouverture de la gestion des employés (non implémenté).")
 
     def ouvrir_gestion_vehicules(self):

@@ -9,7 +9,8 @@ from interface_utilisateur.agences.ui_agences import AgencesUI
 # Interface "ui_clients" (accueil Clients)
 from interface_utilisateur.clients.ui_clients import ClientsUI
 # Interface avancée de gestion d'Agences
-from interface_utilisateur.agences.ui_gestion_agences import GestionAgencesUI
+from interface_utilisateur.agences.agence.ui_gestion_agences import GestionAgencesUI
+from interface_utilisateur.agences.employe.ui_gestion_employes import GestionEmployesUI
 
 class MainWindow(QMainWindow):
     """
