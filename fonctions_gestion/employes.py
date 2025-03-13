@@ -127,12 +127,62 @@ def modifier_employe(id_emp, nas, nom, prenom, salaire, poste, id_age):
 
 
 # Supprimer un employé
-def supprimer_employe(id_emp):
-    """Supprime un employé par son ID."""
+def afficher_liste_employes_supprimer():
+    """
+    Récupère la liste des employés sous forme de tableau de données pour suppression.
+    """
+    colonnes = ["ID", "NAS", "Nom", "Prénom", "Salaire", "Poste", "ID Agence"]
+    employes = []
+
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
+            curseur.execute(queries.LISTER_EMPLOYES)
+            employes_bd = curseur.fetchall()
+
+            # Ajouter les employés dans le tableau
+            for employe in employes_bd:
+                employes.append([
+                    str(employe.ID_EMP),  # ID en chaîne pour PyQt
+                    employe.NAS,
+                    employe.NOM,
+                    employe.PRENOM,
+                    employe.SALAIRE,
+                    employe.POSTE,
+                    employe.ID_AGE
+                ])
+
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération des employés : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+
+    return colonnes, employes
+
+
+def supprimer_employe(id_emp):
+    """Supprime un employé par son ID après vérification de son existence."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+
+            # Vérifier si l'employé existe avant suppression
+            curseur.execute(queries.GET_EMPLOYE_PAR_ID, (id_emp,))
+            employe = curseur.fetchone()
+
+            if not employe:
+                print("Aucun employé trouvé avec cet ID.")
+                return
+
+            # Afficher les informations avant suppression (debug)
+            print("\nDétails de l'employé sélectionné :")
+            print(f"ID : {employe.ID_EMP}")
+            print(f"Nom : {employe.NOM}")
+            print(f"Prénom : {employe.PRENOM}")
+
+            # Supprimer l'employé
             curseur.execute(queriesdelete.SUPPRIMER_EMPLOYE, (id_emp,))
             connexion.commit()
             print("Employé supprimé avec succès !")
