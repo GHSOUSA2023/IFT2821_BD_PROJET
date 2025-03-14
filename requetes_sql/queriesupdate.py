@@ -50,5 +50,30 @@ SET TYPE_ASSURANCE = ?, PRIX_JOUR = ?
 WHERE ID_ASSURANCE = ?;
 """
 
+# Requête pour modifier une reservation
+MODIFIER_RESERVATION = """
+UPDATE RESERVATIONS
+SET DATE_DEBUT = ?, DATE_FIN = ?, STATUS_RESER = ?, ID_VEHIC = ?, ID_TARIF = ?, ID_ASSURANCE = ?, ID_OPTIO = ?, 
+WHERE ID_RESERV = ?
+"""
 
+# Modifier un client
+MODIFIER_CLIENT = """
+UPDATE CLIENTS
+SET NOM = ?, PRENOM = ?, ADRESSE = ?, PERMIS_COND = ?, HIST_ACCIDENTS = ?, EMAIL = ?, TELEPHONE = ?, CARTE_CRED = ?
+WHERE ID_CLIENT = ?;
+"""
 
+#Modifier un véhicule
+MODIFIER_VEHICULE = """
+UPDATE VEHICULES
+SET IMMATRICULATION = ?, TYPE_CARBUR = ?, ANNEE_FAB = ?, COULEUR = ?, STATUS = ?, KM = ?, ID_MARQ = ?, ID_MOD = ?, ID_TP_VEHIC = ?
+WHERE ID_VEHIC = ?;
+"""
+
+# Modifier une tarification existante
+MODIFIER_TARIFICATION = """
+    UPDATE TARIFICATIONS
+    SET KM_JOUR = ?, PRIX_LOCAT_JOUR = ?, ID_TP_VEHIC = ?
+    WHERE ID_TARIF = ?
+"""

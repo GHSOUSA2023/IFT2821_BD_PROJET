@@ -11,6 +11,9 @@ from interface_utilisateur.clients.ui_clients import ClientsUI
 # Interface avancée de gestion des agences et employés
 from interface_utilisateur.agences.agence.ui_gestion_agences import GestionAgencesUI
 from interface_utilisateur.agences.employe.ui_gestion_employes import GestionEmployesUI
+from interface_utilisateur.agences.operations.ui_gestion_operations import GestionOperationsUI
+from interface_utilisateur.agences.operations.rapports.ui_gestion_rapports import GestionRapportsUI
+
 
 class MainWindow(QMainWindow):
     """
@@ -75,6 +78,10 @@ class MainWindow(QMainWindow):
         self.ui_gestion_employes = GestionEmployesUI(self)
         # 4) Accueil "ui_clients"
         self.ui_clients = ClientsUI(self)
+        # 5) Gestion operations "ui_gestion_operations"
+        self.ui_gestion_operations = GestionOperationsUI(self)
+        # 6) Gestion rapports "ui_gestion_rapports"
+        self.ui_gestion_rapports = GestionRapportsUI(self)
 
         # Ajout des écrans au QStackedWidget
         self.central_widget.addWidget(self.menu_principal)       # index 0
@@ -82,6 +89,8 @@ class MainWindow(QMainWindow):
         self.central_widget.addWidget(self.ui_gestion_agences)   # index 2
         self.central_widget.addWidget(self.ui_gestion_employes)  # index 3
         self.central_widget.addWidget(self.ui_clients)           # index 4
+        self.central_widget.addWidget(self.ui_gestion_operations) # index 5
+        self.central_widget.addWidget(self.ui_gestion_rapports)  # index 6
 
         # Afficher le menu principal au démarrage
         self.central_widget.setCurrentWidget(self.menu_principal)

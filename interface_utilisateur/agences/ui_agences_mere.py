@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QFrame
 from PyQt5.QtCore import Qt
 from interface_utilisateur.agences.ui_styles_agences import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
 from interface_utilisateur.agences.ui_agences import AgencesUI
+from interface_utilisateur.agences.operations.ui_gestion_operations import GestionOperationsUI
+
 
 class AgenceMereUI(QWidget):
     """
@@ -36,21 +38,19 @@ class AgenceMereUI(QWidget):
         # Boutons principaux
         btn_cadastres = QPushButton("📂 Cadastres")
         btn_operations = QPushButton("⚙️ Opérations")
-        btn_rapports = QPushButton("📊 Rapports")
         btn_retour = QPushButton("⬅ Retour")
 
         # Appliquer les styles
-        for btn in [btn_cadastres, btn_operations, btn_rapports, btn_retour]:
+        for btn in [btn_cadastres, btn_operations, btn_retour]:
             btn.setStyleSheet(BUTTON_STYLE)
 
         # Connexions des boutons
         btn_cadastres.clicked.connect(self.ouvrir_cadastres)
         btn_operations.clicked.connect(self.ouvrir_operations)
-        btn_rapports.clicked.connect(self.ouvrir_rapports)
         btn_retour.clicked.connect(self.main_window.revenir_menu_principal)
 
         # Ajout des boutons au layout du frame
-        for btn in [btn_cadastres, btn_operations, btn_rapports, btn_retour]:
+        for btn in [btn_cadastres, btn_operations, btn_retour]:
             frame_layout.addWidget(btn)
 
         frame.setLayout(frame_layout)
@@ -78,10 +78,8 @@ class AgenceMereUI(QWidget):
         """
         Affiche le module des opérations (réservations, contrats, gestion de flotte...).
         """
-        print("Ouverture du module Opérations (non implémenté).")
+        if not hasattr(self.main_window, "ui_gestion_operations"):
+            self.main_window.ui_gestion_operations = GestionOperationsUI(self.main_window)
+            self.main_window.central_widget.addWidget(self.main_window.ui_gestion_operations)
 
-    def ouvrir_rapports(self):
-        """
-        Affiche le module des rapports et statistiques.
-        """
-        print("Ouverture du module Rapports (non implémenté).")
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_operations)
