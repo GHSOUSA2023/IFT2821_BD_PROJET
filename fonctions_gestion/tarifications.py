@@ -74,7 +74,7 @@ def lister_toutes_tarifications():
                     tarif.ID_TARIF,
                     tarif.KM_JOUR,
                     tarif.PRIX_LOCAT_JOUR,
-                    tarif.TYPE_VEHICULE  # Remplace ID par le nom du type de véhicule
+                    tarif.TYPE_VEHIC  # Remplace ID par le nom du type de véhicule
                 ])
 
         except Exception as erreur:
@@ -104,7 +104,7 @@ def rechercher_tarification(terme_recherche):
                     tarif.ID_TARIF,
                     tarif.KM_JOUR,
                     tarif.PRIX_LOCAT_JOUR,
-                    tarif.TYPE_VEHICULE
+                    tarif.TYPE_VEHIC
                 ])
 
         except Exception as erreur:
