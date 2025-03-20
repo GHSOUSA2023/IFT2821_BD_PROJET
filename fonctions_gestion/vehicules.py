@@ -81,9 +81,9 @@ def lister_tous_vehicules():
                     vehicule.COULEUR,
                     vehicule.STATUS,
                     vehicule.KM,
-                    vehicule.NOM_MARQUE,
-                    vehicule.NOM_MODELE,
-                    vehicule.TYPE_VEHICULE,
+                    vehicule.MARQUE,
+                    vehicule.MODELE,
+                    vehicule.TYPE_VEHIC,
                 ))
 
         except Exception as erreur:
@@ -92,6 +92,39 @@ def lister_tous_vehicules():
             database.fermer_connexion(connexion)
 
     return vehicules
+
+
+# Lister les véhicules disponibles depuis la vue
+def lister_vehicules_disponibles():
+    """Retourne la liste des véhicules disponibles depuis la vue."""
+    connexion = database.connecter()
+    vehicules = []
+
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queries.LISTER_VEHICULES_DISPONIBLES)
+            resultats = curseur.fetchall()
+
+            for vehicule in resultats:
+                vehicules.append((
+                    vehicule.ID_VEHIC,
+                    vehicule.MARQUE,
+                    vehicule.MODELE,
+                    vehicule.COULEUR,
+                    vehicule.TYPE_CARBUR,
+                    vehicule.TYPE_VEHIC,
+                    vehicule.ANNEE_FAB,
+                    vehicule.IMMATRICULATION,
+                    vehicule.DISPON_STOCK                
+                ))
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération des véhicules disponibles : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+
+    return vehicules
+
 
 # 🔹 Rechercher un véhicule par immatriculation ou modèle
 def rechercher_vehicule(terme_recherche):
@@ -110,15 +143,15 @@ def rechercher_vehicule(terme_recherche):
             for vehicule in resultats:
                 vehicules.append([
                     vehicule.ID_VEHIC,
-                    vehicule.IMMATRICULATION,
-                    vehicule.TYPE_CARBUR,
-                    vehicule.ANNEE_FAB,
+                    vehicule.MARQUE,
+                    vehicule.MODELE,
                     vehicule.COULEUR,
+                    vehicule.TYPE_CARBUR,
+                    vehicule.TYPE_VEHIC,
+                    vehicule.IMMATRICULATION,
+                    vehicule.ANNEE_FAB,
                     vehicule.STATUS,
-                    vehicule.KM,
-                    vehicule.NOM_MARQUE,
-                    vehicule.NOM_MODELE,
-                    vehicule.TYPE_VEHICULE
+                    vehicule.KM
                 ])
 
         except Exception as erreur:

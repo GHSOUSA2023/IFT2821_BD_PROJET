@@ -101,28 +101,30 @@ def supprimer_assurance(id_assurance):
 
 # Lister toutes les assurances
 def lister_toutes_assurances():
-    """Affiche toutes les assurances enregistrées."""
+    """Retourne toutes les assurances enregistrées sous forme de liste."""
     connexion = database.connecter()
+    assurances = []
+
     if connexion:
         try:
             curseur = connexion.cursor()
             curseur.execute(queries.LISTER_ASSURANCES)
-            assurances = curseur.fetchall()
+            resultats = curseur.fetchall()
 
-            if not assurances:
-                print("Aucune assurance trouvée.")
-                return
-
-            print("\nListe des assurances enregistrées :")
-            for assurance in assurances:
-                print(
-                    f"ID: {assurance.ID_ASSURANCE} | Type: {assurance.TYPE_ASSURANCE} | Prix/jour: {assurance.PRIX_JOUR}"
-                )
+            for assurance in resultats:
+                assurances.append((
+                    assurance.ID_ASSURANCE,
+                    assurance.TYPE_ASSURANCE,
+                    assurance.PRIX_JOUR
+                ))
 
         except Exception as erreur:
             print(f"Erreur lors de la récupération des assurances : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
+    return assurances
+
 
 
 # Rechercher une assurance par type

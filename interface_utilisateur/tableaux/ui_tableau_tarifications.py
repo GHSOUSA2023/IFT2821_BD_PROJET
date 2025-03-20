@@ -6,10 +6,11 @@ class TableauTarificationsUI(QWidget):
     """
     Interface générique pour afficher les tarifications avec un champ de recherche.
     """
-    def __init__(self, titre, colonnes, donnees, main_window):
+    def __init__(self, titre, colonnes, donnees, main_window, retour_widget):
         super().__init__()
-        self.setWindowTitle(titre)
         self.main_window = main_window  # Référence au MainWindow
+        self.retour_widget = retour_widget  # Widget de retour
+        self.setWindowTitle(titre)
         self.colonnes = colonnes
         self.donnees = donnees
         self.initUI()
@@ -22,10 +23,13 @@ class TableauTarificationsUI(QWidget):
         self.search_input.setPlaceholderText("🔍 Rechercher par Prix ou Type de Véhicule...")
         self.search_input.textChanged.connect(self.filtrer_tableau)
 
+
         # Tableau
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(len(self.colonnes))
         self.table_widget.setHorizontalHeaderLabels(self.colonnes)
+        self.table_widget.cellDoubleClicked.connect(self.selectionner_ligne)
+
 
         self.charger_donnees(self.donnees)
 
@@ -59,6 +63,22 @@ class TableauTarificationsUI(QWidget):
         colonnes, tarifications_filtres = rechercher_tarification(terme)
         self.charger_donnees(tarifications_filtres)
 
+    def selectionner_ligne(self, row, column):
+        id_tarif = int(self.table_widget.item(row, 0).text())
+        km_jour = self.table_widget.item(row, 1).text()
+        prix_jour = self.table_widget.item(row, 2).text()
+        type_vehic = self.table_widget.item(row, 3).text()
+        self.retour_widget.calculer_total()
+
+
+        # Retourner au formulaire et mettre à jour
+        self.retour_widget.id_tarif = id_tarif
+        self.retour_widget.tarif_label.setText(
+            f"Tarif sélectionné : {km_jour} km/jour, {prix_jour}$ /jour ({type_vehic})"
+        )
+        self.main_window.central_widget.setCurrentWidget(self.retour_widget)
+
+
     def retourner(self):
         """Retourne à l'écran de gestion des tarifications."""
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_tarifications)
+        self.main_window.central_widget.setCurrentWidget(self.retour_widget)
