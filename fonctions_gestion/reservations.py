@@ -1,7 +1,65 @@
 from base_donnees import database
-from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete
+from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete, procedure
 
 # ----------------------------- FONCTIONS POUR RÉSERVATIONS -----------------------------
+# Ajouter une réservation via procédure stockée
+def ajouter_reservation_via_procedure(id_client, id_vehic, date_debut, date_fin, id_tarif, id_assurance, id_optio=None):
+    """
+    Exécute la procédure AjouterNouvelleReservation et retourne l'ID_RESERV créé.
+    La commande SQL est stockée dans procedure.PROCEDURE_CREE_RESERVATION.
+    """
+    connexion = database.connecter()
+    id_reserv = None
+
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(
+                procedure.PROCEDURE_CREE_RESERVATION,
+                (
+                    id_client,
+                    id_vehic,
+                    date_debut,
+                    date_fin,
+                    id_tarif,
+                    id_assurance,
+                    id_optio
+                )
+            )
+
+            result = curseur.fetchone()
+            if result:
+                id_reserv = result[0]
+
+            connexion.commit()
+            print(f"Réservation ajoutée via procédure avec ID {id_reserv}.")
+
+        except Exception as erreur:
+            print(f"Erreur lors de l'ajout via procédure : {erreur}")
+
+        finally:
+            database.fermer_connexion(connexion)
+
+    return id_reserv
+
+
+# Confirmer une réservation (mettre à jour le statut à 'CONFIRMEE')
+def confirmer_reservation(id_reservation):
+    """Met à jour le statut d'une réservation en 'CONFIRMEE'."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(
+                "UPDATE RESERVATIONS SET STATUS_RESER = 'CONFIRMEE' WHERE ID_RESERV = ?",
+                (id_reservation,)
+            )
+            connexion.commit()
+            print(f"Réservation {id_reservation} confirmée.")
+        except Exception as erreur:
+            print(f"Erreur lors de la confirmation de la réservation : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
 
 # Ajouter une réservation
 def ajouter_reservation(date_debut, date_fin, status_reser, id_client, id_vehic, id_tarif, id_assurance, id_optio, prix_total):
