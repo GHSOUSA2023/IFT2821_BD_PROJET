@@ -1,15 +1,15 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QLineEdit, QLabel
 from PyQt5.QtCore import Qt
-from fonctions_gestion.vehicules import rechercher_vehicule  # Ajout de la fonction de recherche
+from fonctions_gestion.optionnels import rechercher_optionnel, lister_tout_optionnels
 
-class TableauVehiculesUI(QWidget):
+class TableauOptionnelsUI(QWidget):
     """
-    Interface générique pour afficher les véhicules avec un champ de recherche.
+    Interface générique pour afficher les optionnels avec un champ de recherche.
     """
     def __init__(self, titre, colonnes, donnees, main_window, retour_widget):
         super().__init__()
-        self.main_window = main_window
-        self.retour_widget = retour_widget
+        self.main_window = main_window  # Référence au MainWindow
+        self.retour_widget = retour_widget  # Widget de retour
         self.setWindowTitle(titre)
         self.colonnes = colonnes
         self.donnees = donnees
@@ -18,12 +18,10 @@ class TableauVehiculesUI(QWidget):
     def initUI(self):
         layout = QVBoxLayout()
 
-        # ✅ Champ de recherche
         self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("🔍 Rechercher par immatriculation ou modèle...")
+        self.search_input.setPlaceholderText("🔍 Rechercher par nom d'optionnel...")
         self.search_input.textChanged.connect(self.filtrer_tableau)
 
-        # ✅ Tableau des véhicules
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(len(self.colonnes))
         self.table_widget.setHorizontalHeaderLabels(self.colonnes)
@@ -32,52 +30,46 @@ class TableauVehiculesUI(QWidget):
 
         self.charger_donnees(self.donnees)
 
-        # ✅ Bouton retour
         self.btn_retour = QPushButton("⬅ Retour")
         self.btn_retour.clicked.connect(self.retourner)
 
-        # ✅ Ajout au layout
-        layout.addWidget(QLabel("Recherche Véhicule:"))
+        layout.addWidget(QLabel("Recherche Optionnel:"))
         layout.addWidget(self.search_input)
         layout.addWidget(self.table_widget)
         layout.addWidget(self.btn_retour)
         self.setLayout(layout)
 
     def charger_donnees(self, donnees):
-        """Charge les données dans le tableau."""
         self.table_widget.setRowCount(len(donnees))
         for row, ligne in enumerate(donnees):
             for col, valeur in enumerate(ligne):
                 self.table_widget.setItem(row, col, QTableWidgetItem(str(valeur)))
-                self.table_widget.resizeColumnsToContents()
+        self.table_widget.resizeColumnsToContents()
 
     def filtrer_tableau(self):
-        """Filtre le tableau selon la recherche."""
         terme = self.search_input.text().strip().lower()
-        
         if not terme:
-            self.charger_donnees(self.donnees)  # Réinitialiser si champ vide
+            self.charger_donnees(self.donnees)
             return
-        
-        colonnes, vehicules_filtres = rechercher_vehicule(terme)
-        self.charger_donnees(vehicules_filtres)
+
+        optionnels = lister_tout_optionnels()
+        optionnels_filtrees = [opt for opt in optionnels if terme in opt[1].lower()]
+        self.charger_donnees(optionnels_filtrees)
 
     def selectionner_ligne(self, row, column):
-        id_selectionne = int(self.table_widget.item(row, 0).text())
-        marque = self.table_widget.item(row, 1).text()
-        modele = self.table_widget.item(row, 2).text()
-        couleur = self.table_widget.item(row, 3).text()
-        typecarbur = self.table_widget.item(row, 4).text()
-        typev = self.table_widget.item(row, 5).text()
+        id_optionnel = int(self.table_widget.item(row, 0).text())
+        nom_optionnel = self.table_widget.item(row, 1).text()
+        prix_jour = self.table_widget.item(row, 2).text()
 
-        # Passer au formulaire et mettre à jour
-        self.retour_widget.id_vehic = id_selectionne
-        self.retour_widget.vehicule_label.setText(f"Véhicule sélectionné : {marque}, {modele}, {couleur}, {typecarbur},{typev}")
+        # Retour au formulaire et mise à jour
+        self.retour_widget.id_optio = id_optionnel
+        self.retour_widget.optionnel_label.setText(
+            f"Optionnel : {nom_optionnel}, {prix_jour}$ / jour"
+        )
         self.main_window.central_widget.setCurrentWidget(self.retour_widget)
         self.retour_widget.calculer_total()
 
 
 
     def retourner(self):
-        """Retourne à l'écran de gestion des véhicules."""
         self.main_window.central_widget.setCurrentWidget(self.retour_widget)

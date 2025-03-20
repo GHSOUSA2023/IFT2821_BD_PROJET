@@ -100,28 +100,30 @@ def supprimer_optionnel(id_optionnel):
 
 # Lister tous les optionnels
 def lister_tout_optionnels():
-    """Affiche tous les optionnels enregistrés."""
+    """Retourne la liste de tous les optionnels enregistrés."""
     connexion = database.connecter()
+    optionnels = []
+
     if connexion:
         try:
             curseur = connexion.cursor()
             curseur.execute(queries.LISTER_OPTIONNELS)
-            optionnels = curseur.fetchall()
+            resultats = curseur.fetchall()
 
-            if not optionnels:
-                print("Aucun optionnel trouvé.")
-                return
-
-            print("\nListe des optionnels enregistrés :")
-            for optionnel in optionnels:
-                print(
-                    f"ID: {optionnel.ID_OPTIO} | Nom: {optionnel.NOM_OPTIO} | Prix/jour: {optionnel.PRIX_OPTIO_JOUR}"
-                )
+            for optionnel in resultats:
+                optionnels.append((
+                    optionnel.ID_OPTIO,
+                    optionnel.NOM_OPTIO,
+                    optionnel.PRIX_OPTIO_JOUR
+                ))
 
         except Exception as erreur:
             print(f"Erreur lors de la récupération des optionnels : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
+    return optionnels
+
 
 
 # Rechercher un optionnel par nom
