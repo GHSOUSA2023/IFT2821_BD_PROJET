@@ -45,8 +45,8 @@ class MainWindow(QMainWindow):
         label_title.setAlignment(Qt.AlignCenter)
 
         # Boutons de navigation (Agences / Clients)
-        btn_agences = QPushButton("🏢 Gérer les Agences")
-        btn_clients = QPushButton("👤 Gérer les Clients")
+        btn_agences = QPushButton("🏢 Agences")
+        btn_clients = QPushButton("👤 Clients")
 
         btn_agences.setFont(QFont("Arial", 14))
         btn_clients.setFont(QFont("Arial", 14))

@@ -55,7 +55,7 @@ class AgencesUI(QWidget):
         btn_gestion_vehicules.clicked.connect(self.ouvrir_gestion_vehicules)
         btn_gestion_clients.clicked.connect(self.ouvrir_gestion_clients)
 
-        btn_retour.clicked.connect(self.main_window.revenir_menu_principal)
+        btn_retour.clicked.connect(lambda: self.main_window.afficher_interface(self.main_window.ui_agences_mere))
 
         # Ajout des boutons au layout du 'frame'
         for btn in [btn_gestion_agences, btn_gestion_employes, btn_gestion_vehicules, btn_gestion_clients, btn_retour]:

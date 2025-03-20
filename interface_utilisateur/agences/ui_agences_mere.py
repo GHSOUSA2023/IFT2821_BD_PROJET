@@ -36,7 +36,7 @@ class AgenceMereUI(QWidget):
         frame_layout = QVBoxLayout()
 
         # Boutons principaux
-        btn_cadastres = QPushButton("📂 Cadastres")
+        btn_cadastres = QPushButton("📂 Enregistrements")
         btn_operations = QPushButton("⚙️ Opérations")
         btn_retour = QPushButton("⬅ Retour")
 
