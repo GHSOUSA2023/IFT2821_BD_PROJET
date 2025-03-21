@@ -1,0 +1,70 @@
+====================================================================
+                CONTRAT DE LOCATION DE VÉHICULE
+====================================================================
+
+Numéro de contrat : {ID_CONTRACT}
+
+Ce contrat est conclu entre :
+La société : GNLOCATION  
+Agence de location : {NOM_AGENCE}, située à {VILLE_AGENCE}  
+Adresse de l'agence : {ADRESSE_AGENCE}  
+Représentée par : {NOM_EMPLOYE} {PRENOM_EMPLOYE} (Employé responsable)  
+
+ET  
+Le client :  
+Nom : {NOM_CLIENT}  
+Prénom : {PRENOM_CLIENT}  
+Adresse : {ADRESSE_CLIENT}, {VILLE_CLIENT}  
+Téléphone : {TELEPHONE_CLIENT}  
+E-mail : {EMAIL_CLIENT}  
+
+--------------------------------------------------------------------
+Détails du véhicule loué :
+--------------------------------------------------------------------
+Marque : {MARQUE_VEHICULE}  
+Modèle : {MODELE_VEHICULE}  
+Année de fabrication : {ANNEE_FABRICATION}  
+Couleur : {COULEUR_VEHICULE}  
+Immatriculation : {IMMATRICULATION_VEHICULE}  
+
+--------------------------------------------------------------------
+Conditions de location :
+--------------------------------------------------------------------
+Date de début de la location : {CONTRAT_DATE_DEBUT}  
+Date de fin de la location : {CONTRAT_DATE_FIN}  
+Durée de location : {CONTRAT_DUREE_JOURS} jour(s)  
+Tarif journalier appliqué : {PRIX_LOCAT_JOUR} $  
+Prix total de la location : {CONTRAT_PRIX_TOTAL} $  
+
+Le client s'engage à restituer le véhicule en parfait état, avec le plein de carburant, à la date et heure prévues.  
+Tout retard entraînera des frais supplémentaires.  
+En cas de dommages, vol ou accident, le client est responsable des réparations et/ou coûts selon les conditions de l'assurance souscrite.  
+
+--------------------------------------------------------------------
+Assurances et options choisies :
+--------------------------------------------------------------------
+Type d’assurance : {TYPE_ASSURANCE}  
+Prix journalier de l’assurance : {ASSURANCE_PRIX_JOUR} $  
+Options supplémentaires sélectionnées : {OPTIONNEL_NOM} ({OPTIONNEL_PRIX_JOUR} $/jour)  
+
+--------------------------------------------------------------------
+Engagements et responsabilités :
+--------------------------------------------------------------------
+Le client reconnaît avoir pris connaissance des conditions générales de location et accepte les termes sans réserve.  
+Le véhicule ne doit en aucun cas être utilisé à des fins illégales ou dans des conditions contraires à la sécurité routière.  
+La sous-location est formellement interdite.  
+
+--------------------------------------------------------------------
+Signatures :
+--------------------------------------------------------------------
+
+Fait à {VILLE_AGENCE}, le {CONTRAT_DATE_DEBUT}  
+
+Signature du client : ___________________________  
+
+Signature de l'employé : ________________________  
+
+
+====================================================================
+   Merci de faire confiance à GNLOCATION pour votre mobilité !
+====================================================================
