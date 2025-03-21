@@ -3,59 +3,46 @@ from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete, p
 
 # ----------------------------- FONCTIONS POUR RÉSERVATIONS -----------------------------
 # Ajouter une réservation via procédure stockée
-def ajouter_reservation_via_procedure(id_client, id_vehic, date_debut, date_fin, id_tarif, id_assurance, id_optio=None):
-    """
-    Exécute la procédure AjouterNouvelleReservation et retourne l'ID_RESERV créé.
-    La commande SQL est stockée dans procedure.PROCEDURE_CREE_RESERVATION.
-    """
-    connexion = database.connecter()
-    id_reserv = None
-
+def ajouter_reservation_via_procedure(id_client, id_vehic, date_debut, date_fin, id_tarif, id_assurance, id_optio):
+    """Appelle la procédure stockée pour ajouter une réservation et vérifie le prix total calculé."""
+    connexion = database.connecter(auto_commit=True)
+    id_reservation = None
     if connexion:
         try:
             curseur = connexion.cursor()
-            curseur.execute(
-                procedure.PROCEDURE_CREE_RESERVATION,
-                (
-                    id_client,
-                    id_vehic,
-                    date_debut,
-                    date_fin,
-                    id_tarif,
-                    id_assurance,
-                    id_optio
-                )
-            )
-
+            curseur.execute(procedure.AJOUTER_RESERVATION_PROCEDURE,
+                (id_client, id_vehic, date_debut, date_fin, id_tarif, id_assurance, id_optio))
+            
             result = curseur.fetchone()
             if result:
-                id_reserv = result[0]
+                id_reservation = result.ID_RESERV
+                print(f"Réservation ajoutée avec succès (ID: {id_reservation})")
 
-            connexion.commit()
-            print(f"Réservation ajoutée via procédure avec ID {id_reserv}.")
+                # Vérification du prix total calculé
+                curseur.execute("SELECT PRIX_TOTAL FROM RESERVATIONS WHERE ID_RESERV = ?", (id_reservation,))
+                prix_total = curseur.fetchone()
 
         except Exception as erreur:
-            print(f"Erreur lors de l'ajout via procédure : {erreur}")
-
+            print(f"Erreur lors de l'ajout de la réservation via la procédure : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+    return id_reservation
 
-    return id_reserv
+
 
 
 # Confirmer une réservation (mettre à jour le statut à 'CONFIRMEE')
-def confirmer_reservation(id_reservation):
-    """Met à jour le statut d'une réservation en 'CONFIRMEE'."""
+def confirmer_reservation(id_reserv):
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
-            curseur.execute(
-                "UPDATE RESERVATIONS SET STATUS_RESER = 'CONFIRMEE' WHERE ID_RESERV = ?",
-                (id_reservation,)
-            )
+            curseur.execute("""
+                UPDATE RESERVATIONS SET STATUS_RESER = 'CONFIRMEE' 
+                WHERE ID_RESERV = ?
+            """, (id_reserv,))
             connexion.commit()
-            print(f"Réservation {id_reservation} confirmée.")
+            print(f"Réservation {id_reserv} confirmée avec succès.")
         except Exception as erreur:
             print(f"Erreur lors de la confirmation de la réservation : {erreur}")
         finally:

@@ -11,7 +11,7 @@ CONFIGURATION_BD = {
 
 
 # Fonction pour établir une connexion avec la base de données
-def connecter():
+def connecter(auto_commit=False):
     try:
         connexion = pyodbc.connect(
             f"DRIVER={CONFIGURATION_BD['DRIVER']};"
@@ -20,10 +20,12 @@ def connecter():
             f"UID={CONFIGURATION_BD['UTILISATEUR']};"
             f"PWD={CONFIGURATION_BD['MOT_DE_PASSE']}"
         )
+        connexion.autocommit = auto_commit
         return connexion
     except Exception as erreur:
         print(f"Erreur de connexion à la base de données : {erreur}")
         return None
+
 
 
 # Fonction pour fermer la connexion à la base de données
