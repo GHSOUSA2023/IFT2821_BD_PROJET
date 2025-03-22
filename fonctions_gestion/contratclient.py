@@ -101,6 +101,7 @@ def get_contrats_par_email(email_client):
     return contrats
 
 def get_contrat_par_id_contract(id_reservation):
+    """Récupère les détails d'un contrat par l'ID de réservation et retourne un dictionnaire."""
     connexion = database.connecter()
     contrat_details = None
     if connexion:
@@ -109,9 +110,11 @@ def get_contrat_par_id_contract(id_reservation):
             curseur.execute(views.GET_CONTRAT_PAR_ID_CONTRACT, (id_reservation,))
             resultat = curseur.fetchone()
             if resultat:
-                contrat_details = resultat
+                colonnes = [desc[0] for desc in curseur.description]
+                contrat_details = dict(zip(colonnes, resultat))
         except Exception as erreur:
             print(f"Erreur lors de la récupération du contrat : {erreur}")
         finally:
             database.fermer_connexion(connexion)
     return contrat_details
+

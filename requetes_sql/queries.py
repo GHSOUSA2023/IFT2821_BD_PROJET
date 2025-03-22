@@ -154,7 +154,7 @@ WHERE v.IMMATRICULATION LIKE ? OR mo.MODELE LIKE ?;
 
 # Récupérer un optionnel par ID
 GET_OPTIONNEL_PAR_ID = """
-SELECT * FROM OPTIONNELS WHERE ID_OPTIO = ?;
+SELECT ID_OPTIO, NOM_OPTIO, PRIX_OPTIO_JOUR FROM OPTIONNELS WHERE ID_OPTIO = ?;
 """
 
 # Lister tous les optionnels
@@ -196,9 +196,10 @@ WHERE t.ID_TARIF = ?
 
 ############################# ASSURANCES #############################
 
-# Requête pour récupérer une assurance par ID
 GET_ASSURANCE_PAR_ID = """
-SELECT * FROM ASSURANCE WHERE ID_ASSURANCE = ?;
+SELECT ID_ASSURANCE, TYPE_ASSURANCE, PRIX_JOUR
+FROM ASSURANCE
+WHERE ID_ASSURANCE = ?;
 """
 
 # Requête pour lister toutes les assurances

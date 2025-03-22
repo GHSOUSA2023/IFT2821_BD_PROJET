@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QDateEdit, QApplication
 from PyQt5.QtCore import Qt, QTimer, QDate
 from interface_utilisateur.clients.reservations.ui_formulaire_client import FormulaireClientUI
 from fonctions_gestion.clients import rechercher_client_par_email, ajouter_client, get_client_par_id
-from fonctions_gestion.reservations import ajouter_reservation_via_procedure, confirmer_reservation, get_reservation_par_id
+from fonctions_gestion.reservations import ajouter_reservation_via_procedure, confirmer_reservation, get_reservation_par_id, annuler_reservation
 from fonctions_gestion.vehicules import lister_tous_vehicules, lister_vehicules_disponibles, get_vehicule_par_id
 from fonctions_gestion.tarifications import lister_toutes_tarifications, get_tarif_par_id
 from fonctions_gestion.assurances import lister_toutes_assurances, get_assurance_par_id
@@ -39,6 +39,7 @@ class FormulaireReservationGerirUI(QWidget):
     def __init__(self, main_window, id_reservation=None):
         super().__init__()
         self.main_window = main_window
+        self.ui_tableau_liste_contrats_client = self.main_window.ui_tableau_liste_contrats_client
         self.id_client = None
         self.id_reservation = id_reservation
         self.id_vehic = None
@@ -130,8 +131,9 @@ class FormulaireReservationGerirUI(QWidget):
         form_layout.addRow(self.total_label)
 
         # Boutons de navigation et action
-        self.btn_annuler = QPushButton("❌ Annuler")
-        self.btn_annuler.clicked.connect(self.retourner_arriere)
+
+        self.btn_annuler = QPushButton("🚫 Annuler la réservation")
+        self.btn_annuler.clicked.connect(self.annuler_reservation)
 
         self.btn_sauvegarder = QPushButton("💾 Sauvegarder pour plus tard")
         self.btn_sauvegarder.clicked.connect(self.sauvegarder_reservation)
@@ -288,7 +290,7 @@ class FormulaireReservationGerirUI(QWidget):
             optionnel_info = get_optionnel_par_id(self.id_optio)
             if optionnel_info:
                 self.optionnel_label.setText(
-                    f"{optionnel_info['NOM_OPTIO']}, {optionnel_info['PRIX_JOUR']:.2f}$ /jour"
+                    f"{optionnel_info['NOM_OPTIO']}, {optionnel_info['PRIX_OPTIO_JOUR']:.2f}$ /jour"
                 )
             else:
                 self.optionnel_label.setText(f"Optionnel sélectionné (ID: {self.id_optio})")
@@ -328,8 +330,12 @@ class FormulaireReservationGerirUI(QWidget):
         self.total_label.setText("Total : 0.00 $")
 
     def retourner_arriere(self):
-        self.reinitialiser_formulaire()
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
+        if hasattr(self.main_window, 'ui_tableau_liste_contrats_client'):
+            self.main_window.ui_tableau_liste_contrats_client.recharger_tableau()
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_liste_contrats_client)
+        else:
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
+
 
 
     def sauvegarder_reservation(self):
@@ -390,3 +396,23 @@ class FormulaireReservationGerirUI(QWidget):
         else:
             print("❌ La réservation n'a pas pu être confirmée.")
             QMessageBox.warning(self, "Erreur", "La réservation n'a pas pu être confirmée.")
+
+
+    def annuler_reservation(self):
+        if not self.id_reservation:
+            QMessageBox.warning(self, "Erreur", "Aucune réservation sélectionnée à annuler.")
+            return
+
+        confirmation = QMessageBox.question(
+            self, 
+            "Confirmation", 
+            f"Voulez-vous vraiment annuler la réservation ID {self.id_reservation} ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        
+        if confirmation == QMessageBox.Yes:
+            from fonctions_gestion.reservations import annuler_reservation
+            annuler_reservation(self.id_reservation)
+            QMessageBox.information(self, "Succès", "Réservation annulée avec succès.")
+            self.reinitialiser_formulaire()
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)

@@ -117,15 +117,20 @@ def rechercher_tarification(terme_recherche):
 
 # Récupérer une tarification par ID
 def get_tarif_par_id(id_tarif):
-    """Récupère les détails d'une tarification spécifique par son ID."""
+    """Récupère les détails d'une tarification spécifique par son ID sous forme de dictionnaire."""
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
             curseur.execute(queries.GET_TARIF_PAR_ID, (id_tarif,))
-            return curseur.fetchone()
+            row = curseur.fetchone()
+            if row:
+                colonnes = [desc[0] for desc in curseur.description]
+                tarif = dict(zip(colonnes, row))
+                return tarif
         except Exception as erreur:
             print(f"Erreur lors de la récupération de la tarification par ID : {erreur}")
         finally:
             database.fermer_connexion(connexion)
     return None
+

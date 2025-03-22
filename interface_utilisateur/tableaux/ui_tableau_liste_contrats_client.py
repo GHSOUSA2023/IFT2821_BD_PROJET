@@ -10,7 +10,7 @@ class TableauListeContratsClientUI(QWidget):
     def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
-        #self.id_reservation = id_reservation
+        self.email_client = None
         self.setWindowTitle("Recherche de contrats client")
 
         self.initUI()
@@ -72,6 +72,8 @@ class TableauListeContratsClientUI(QWidget):
             QMessageBox.warning(self, "Erreur", "Veuillez entrer un email.")
             return
 
+        self.email_client = email # Mémoriser l'email pour rechargement
+
         contrats = get_contrats_par_email(email)
         self.tableau_contrats.setRowCount(0)
 
@@ -118,6 +120,32 @@ class TableauListeContratsClientUI(QWidget):
         except Exception as e:
             print(f"Erreur lors de l'ouverture du contrat ou du formulaire : {e}")
             QMessageBox.warning(self, "Erreur", "Problème lors de l'ouverture.")
+
+
+
+    def recharger_tableau(self):
+        if not self.email_client:
+            QMessageBox.warning(self, "Erreur", "Recharger Aucun email de client mémorisé.")
+            return
+
+        contrats = get_contrats_par_email(self.email_client)
+        self.tableau_contrats.setRowCount(0)
+
+        if contrats:
+            for index, contrat in enumerate(contrats):
+                self.tableau_contrats.insertRow(index)
+                self.tableau_contrats.setItem(index, 0, QTableWidgetItem(str(contrat.ID_RESERV)))
+                self.tableau_contrats.setItem(index, 1, QTableWidgetItem(str(contrat.ID_CONTRACT)))
+                self.tableau_contrats.setItem(index, 2, QTableWidgetItem(str(contrat.CONTRAT_DATE_DEBUT)))
+                self.tableau_contrats.setItem(index, 3, QTableWidgetItem(str(contrat.CONTRAT_DATE_FIN)))
+                self.tableau_contrats.setItem(index, 4, QTableWidgetItem(str(contrat.CONTRAT_DUREE_JOURS)))
+                self.tableau_contrats.setItem(index, 5, QTableWidgetItem(str(contrat.CONTRAT_PRIX_TOTAL)))
+                self.tableau_contrats.setItem(index, 6, QTableWidgetItem(str(contrat.STATUS)))
+                self.tableau_contrats.setItem(index, 7, QTableWidgetItem(str(contrat.NOM_AGENCE)))
+                self.tableau_contrats.setItem(index, 8, QTableWidgetItem(str(contrat.NOM_CLIENT)))
+                self.tableau_contrats.setItem(index, 9, QTableWidgetItem(str(contrat.MODELE_VEHICULE)))
+        else:
+            QMessageBox.information(self, "Aucun contrat", "Recharger 2 Aucun contrat trouvé pour cet email.")
 
 
     def nettoyer_champs(self):

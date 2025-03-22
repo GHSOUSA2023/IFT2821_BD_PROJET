@@ -24,18 +24,20 @@ def ajouter_optionnel(nom_optionnel, prix_jour):
 
 # Récupérer un optionnel par ID
 def get_optionnel_par_id(id_optionnel):
-    """Récupère un optionnel par son ID."""
+    """Récupère un optionnel par son ID et le retourne sous forme de dictionnaire."""
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
             curseur.execute(queries.GET_OPTIONNEL_PAR_ID, (id_optionnel,))
-            return curseur.fetchone()
+            return database.fetchone_dict(curseur)
         except Exception as erreur:
             print(f"Erreur lors de la récupération de l'optionnel : {erreur}")
         finally:
             database.fermer_connexion(connexion)
     return None
+
+
 
 
 # Modifier un optionnel
