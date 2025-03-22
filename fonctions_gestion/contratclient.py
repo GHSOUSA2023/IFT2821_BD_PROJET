@@ -117,4 +117,3 @@ def get_contrat_par_id_contract(id_reservation):
         finally:
             database.fermer_connexion(connexion)
     return contrat_details
-

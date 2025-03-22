@@ -328,26 +328,34 @@ class FormulaireReservationGerirUI(QWidget):
         self.nb_jours_label.setText("Nombre de jours : 0")
         self.total_label.setText("Total : 0.00 $")
 
-    def retourner_arriere(self):
-        if hasattr(self.main_window, 'ui_tableau_liste_contrats_client'):
-            self.main_window.ui_tableau_liste_contrats_client.email_client = self.email_client  # <-- adicionar esta linha
-            self.main_window.ui_tableau_liste_contrats_client.recharger_tableau()
-            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_liste_contrats_client)
-        else:
-            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
-
-
     def sauvegarder_reservation(self):
         if not self.id_client:
             QMessageBox.warning(self, "Erreur", "Veuillez sélectionner ou créer un client avant de sauvegarder.")
             return
 
+        date_debut = self.date_debut_input.date().toString("yyyy-MM-dd")
+        date_fin = self.date_fin_input.date().toString("yyyy-MM-dd")
+        prix_tarif = self.extraire_prix(self.tarif_label.text())
+        prix_assurance = self.extraire_prix(self.assurance_label.text())
+        prix_optionnel = self.extraire_prix(self.optionnel_label.text())
+        nb_jours = self.date_debut_input.date().daysTo(self.date_fin_input.date())
+        if nb_jours <= 0:
+            nb_jours = 1
+        prix_total = (prix_tarif + prix_assurance + prix_optionnel) * nb_jours
+
         if not self.id_reservation:
-            date_debut = self.date_debut_input.date().toString("yyyy-MM-dd")
-            date_fin = self.date_fin_input.date().toString("yyyy-MM-dd")
+            # INSERT
             self.id_reservation = ajouter_reservation_via_procedure(
                 self.id_client, self.id_vehic, date_debut, date_fin,
                 self.id_tarif, self.id_assurance, self.id_optio
+            )
+        else:
+            # UPDATE
+            from fonctions_gestion.reservations import modifier_reservation
+            modifier_reservation(
+                self.id_reservation, date_debut, date_fin, "EN ATTENTE", 
+                self.id_vehic, self.id_tarif, 
+                self.id_assurance, self.id_optio
             )
 
         if self.id_reservation:
@@ -355,46 +363,49 @@ class FormulaireReservationGerirUI(QWidget):
         else:
             QMessageBox.warning(self, "Erreur", "La réservation n'a pas pu être sauvegardée.")
 
-
     def confirmer_reservation(self):
         print("➡ Début de la confirmation de la réservation.")
 
         if not self.id_reservation:
-            print("ℹ Aucune réservation existante, création d'une nouvelle réservation...")
-            date_debut = self.date_debut_input.date().toString("yyyy-MM-dd")
-            date_fin = self.date_fin_input.date().toString("yyyy-MM-dd")
-            self.id_reservation = ajouter_reservation_via_procedure(
-                self.id_client, self.id_vehic, date_debut, date_fin,
-                self.id_tarif, self.id_assurance, self.id_optio
-            )
-            print(f"✅ Nouvelle réservation créée avec ID: {self.id_reservation}")
+            QMessageBox.warning(self, "Erreur", "Aucune réservation à confirmer.")
+            return
 
-        if self.id_reservation:
-            print(f"➡ Confirmation de la réservation ID: {self.id_reservation}")
-            confirmer_reservation(self.id_reservation)
-            QMessageBox.information(self, "Succès", f"Réservation confirmée (ID: {self.id_reservation}).")
+        # Atualizar a reserva com status CONFIRMEE
+        date_debut = self.date_debut_input.date().toString("yyyy-MM-dd")
+        date_fin = self.date_fin_input.date().toString("yyyy-MM-dd")
+        prix_tarif = self.extraire_prix(self.tarif_label.text())
+        prix_assurance = self.extraire_prix(self.assurance_label.text())
+        prix_optionnel = self.extraire_prix(self.optionnel_label.text())
+        nb_jours = self.date_debut_input.date().daysTo(self.date_fin_input.date())
+        if nb_jours <= 0:
+            nb_jours = 1
+        prix_total = (prix_tarif + prix_assurance + prix_optionnel) * nb_jours
 
-            print("➡ Tentative de récupération du contrat associé...")
+        from fonctions_gestion.reservations import modifier_reservation
+        modifier_reservation(
+            self.id_reservation, date_debut, date_fin, "CONFIRMEE",
+            self.id_vehic, self.id_tarif, self.id_assurance, self.id_optio
+        )
+
+        print(f"➡ Confirmation de la réservation ID: {self.id_reservation}")
+        QMessageBox.information(self, "Succès", f"Réservation confirmée (ID: {self.id_reservation}).")
+
+        print("➡ Tentative de récupération du contrat associé...")
+        contrat_info = get_contrat_par_reservation(self.id_reservation)
+        if not contrat_info:
+            print("⏳ Attente de 2 secondes avant une deuxième tentative...")
+            time.sleep(2)
             contrat_info = get_contrat_par_reservation(self.id_reservation)
-            if not contrat_info:
-                print("⏳ Attente de 2 secondes avant une deuxième tentative...")
-                time.sleep(2)
-                contrat_info = get_contrat_par_reservation(self.id_reservation)
 
-            if contrat_info:
-                print("✅ Contrat récupéré avec succès après attente, ouverture du tableau contrat.")
-                    # 👉 On réinitialise le formulaire avant d'ouvrir le contrat
-                self.reinitialiser_formulaire()
-                                
-                tableau_contrat = TableauContratUI(contrat_info, self.main_window, self)
-                self.main_window.central_widget.addWidget(tableau_contrat)
-                self.main_window.central_widget.setCurrentWidget(tableau_contrat)
-            else:
-                print("❌ Aucun contrat trouvé même après une deuxième tentative.")
-                QMessageBox.warning(self, "Erreur", "Le contrat n'a pas pu être récupéré.")
+        if contrat_info:
+            print("✅ Contrat récupéré avec succès après attente, ouverture du tableau contrat.")
+            self.reinitialiser_formulaire()
+            tableau_contrat = TableauContratUI(contrat_info, self.main_window, self)
+            self.main_window.central_widget.addWidget(tableau_contrat)
+            self.main_window.central_widget.setCurrentWidget(tableau_contrat)
         else:
-            print("❌ La réservation n'a pas pu être confirmée.")
-            QMessageBox.warning(self, "Erreur", "La réservation n'a pas pu être confirmée.")
+            print("❌ Aucun contrat trouvé même après une deuxième tentative.")
+            QMessageBox.warning(self, "Erreur", "Le contrat n'a pas pu être récupéré.")
 
 
     def annuler_reservation(self):
@@ -414,4 +425,16 @@ class FormulaireReservationGerirUI(QWidget):
             annuler_reservation(self.id_reservation)
             QMessageBox.information(self, "Succès", "Réservation annulée avec succès.")
             self.reinitialiser_formulaire()
+            self.retourner_arriere()
+
+    def retourner_arriere(self):
+        if hasattr(self.main_window, 'ui_tableau_liste_contrats_client'):
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_liste_contrats_client)
+
+            # Auto-remplir l'email et lancer la recherche
+            if self.email_client:
+                self.main_window.ui_tableau_liste_contrats_client.email_input.setText(self.email_client)
+                self.main_window.ui_tableau_liste_contrats_client.rechercher_contrats()
+        else:
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
+

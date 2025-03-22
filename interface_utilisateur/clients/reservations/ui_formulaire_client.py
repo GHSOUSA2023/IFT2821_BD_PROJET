@@ -97,6 +97,7 @@ class FormulaireClientUI(QWidget):
                 self.main_window.ui_faire_reservation.adresse_label.setText(adresse.upper())
                 self.main_window.ui_faire_reservation.ville_label.setText(ville.upper())
                 self.main_window.ui_faire_reservation.telephone_label.setText(telephone)
+            self.effacer_formulaire()
             self.retourner_arriere()
 
         elif id_client == "EMAIL_EXISTE":
@@ -112,9 +113,10 @@ class FormulaireClientUI(QWidget):
         self.permis_cond_input.clear()
         self.email_input.clear()
         self.telephone_input.clear()
-        self.carte_cred_input.clear
+        self.carte_cred_input.clear()
 
 
     def retourner_arriere(self):
+        self.effacer_formulaire()
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_faire_reservation)
 
