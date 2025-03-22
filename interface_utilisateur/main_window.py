@@ -4,11 +4,9 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QFont
 
-# Interface principale "ui_agences_mere" (accueil général Agences)
+# Importation des interfaces
 from interface_utilisateur.agences.ui_agences_mere import AgenceMereUI
-# Interface "ui_clients" (accueil Clients)
 from interface_utilisateur.clients.ui_clients import ClientsUI
-# Interface avancée de gestion des agences et employés
 from interface_utilisateur.agences.agence.ui_gestion_agences import GestionAgencesUI
 from interface_utilisateur.agences.employe.ui_gestion_employes import GestionEmployesUI
 from interface_utilisateur.agences.operations.ui_gestion_operations import GestionOperationsUI
@@ -16,11 +14,10 @@ from interface_utilisateur.agences.operations.rapports.ui_gestion_rapports impor
 from interface_utilisateur.tableaux.ui_tableau_liste_contrats_client import TableauListeContratsClientUI
 
 
-
 class MainWindow(QMainWindow):
     """
     Fenêtre principale utilisant un QStackedWidget pour naviguer
-    entre le menu principal, la gestion des agences, clients, et d'autres modules.
+    entre le menu principal, la gestion des agences, clients, et autres modules.
     """
     def __init__(self):
         super().__init__()
@@ -28,7 +25,7 @@ class MainWindow(QMainWindow):
         self.setGeometry(50, 50, 1000, 600)
         self.setStyleSheet("background-color: #f4f4f4;")
 
-        # QStackedWidget pour la navigation interne
+        # QStackedWidget pour la navigation
         self.central_widget = QStackedWidget()
         self.setCentralWidget(self.central_widget)
 
@@ -36,73 +33,73 @@ class MainWindow(QMainWindow):
         self.show_animation()
 
     def initUI(self):
-        """Crée et affiche le menu principal dans le QStackedWidget."""
+        """Crée et affiche le menu principal."""
         self.menu_principal = QWidget()
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
 
         # Titre principal
         label_title = QLabel("GN LOCATION")
-        label_title.setFont(QFont("Arial", 24, QFont.Bold))
+        label_title.setFont(QFont("Arial", 28, QFont.Bold))
         label_title.setAlignment(Qt.AlignCenter)
 
-        # Boutons de navigation (Agences / Clients)
+        # Style unifié des boutons
+        button_style = (
+            "padding: 12px; "
+            "font-size: 16px; "
+            "border-radius: 8px; "
+            "color: white; "
+        )
+
+        # Boutons de navigation
         btn_agences = QPushButton("🏢 Agences")
         btn_clients = QPushButton("👤 Clients")
+        btn_quitter = QPushButton("🚪 Quitter le système")
 
-        btn_agences.setFont(QFont("Arial", 14))
-        btn_clients.setFont(QFont("Arial", 14))
+        # Application des couleurs et styles
+        btn_agences.setStyleSheet(button_style + "background-color: #007BFF;")
+        btn_clients.setStyleSheet(button_style + "background-color: #28A745;")
+        btn_quitter.setStyleSheet(button_style + "background-color: #DC3545;")
 
-        btn_agences.setStyleSheet(
-            "padding: 10px; background-color: #007BFF; color: white; border-radius: 5px;"
-        )
-        btn_clients.setStyleSheet(
-            "padding: 10px; background-color: #28A745; color: white; border-radius: 5px;"
-        )
-
-        # Connexion des boutons aux écrans respectifs
+        # Connexions
         btn_agences.clicked.connect(lambda: self.afficher_interface(self.ui_agences_mere))
         btn_clients.clicked.connect(lambda: self.afficher_interface(self.ui_clients))
+        btn_quitter.clicked.connect(QApplication.quit)
 
+        # Ajout au layout
         layout.addWidget(label_title)
         layout.addSpacing(20)
         layout.addWidget(btn_agences)
         layout.addWidget(btn_clients)
+        layout.addSpacing(10)
+        layout.addWidget(btn_quitter)
 
         self.menu_principal.setLayout(layout)
 
-        # Instanciation des écrans :
-        # 1) Interface mère "ui_agences_mere"
+        # Initialisation des interfaces
         self.ui_agences_mere = AgenceMereUI(self)
-        # 2) Gestion avancée "ui_gestion_agences"
         self.ui_gestion_agences = GestionAgencesUI(self)
-        # 3) Gestion avancée "ui_gestion_employes"
         self.ui_gestion_employes = GestionEmployesUI(self)
-        # 4) Accueil "ui_clients"
         self.ui_clients = ClientsUI(self)
-        # 5) Gestion operations "ui_gestion_operations"
         self.ui_gestion_operations = GestionOperationsUI(self)
-        # 6) Gestion rapports "ui_gestion_rapports"
         self.ui_gestion_rapports = GestionRapportsUI(self)
-        # 7) Tableau liste contrats client "ui_tableau_liste_contrats_client"
         self.ui_tableau_liste_contrats_client = TableauListeContratsClientUI(self)
 
-        # Ajout des écrans au QStackedWidget
-        self.central_widget.addWidget(self.menu_principal)       # index 0
-        self.central_widget.addWidget(self.ui_agences_mere)      # index 1
-        self.central_widget.addWidget(self.ui_gestion_agences)   # index 2
-        self.central_widget.addWidget(self.ui_gestion_employes)  # index 3
-        self.central_widget.addWidget(self.ui_clients)           # index 4
-        self.central_widget.addWidget(self.ui_gestion_operations) # index 5
-        self.central_widget.addWidget(self.ui_gestion_rapports)  # index 6
-        self.central_widget.addWidget(self.ui_tableau_liste_contrats_client) # index 7
-
+        # Ajout dans le QStackedWidget
+        self.central_widget.addWidget(self.menu_principal)
+        self.central_widget.addWidget(self.ui_agences_mere)
+        self.central_widget.addWidget(self.ui_gestion_agences)
+        self.central_widget.addWidget(self.ui_gestion_employes)
+        self.central_widget.addWidget(self.ui_clients)
+        self.central_widget.addWidget(self.ui_gestion_operations)
+        self.central_widget.addWidget(self.ui_gestion_rapports)
+        self.central_widget.addWidget(self.ui_tableau_liste_contrats_client)
 
         # Afficher le menu principal au démarrage
         self.central_widget.setCurrentWidget(self.menu_principal)
 
     def show_animation(self):
-        """Effet d'apparition en fondu sur toute la fenêtre."""
+        """Effet fondu d’apparition."""
         self.animation = QPropertyAnimation(self, b"windowOpacity")
         self.animation.setDuration(800)
         self.animation.setStartValue(0)
@@ -111,9 +108,7 @@ class MainWindow(QMainWindow):
         self.animation.start()
 
     def afficher_interface(self, interface):
-        """
-        Affiche une interface spécifique dans la fenêtre principale (QStackedWidget).
-        """
+        """Affiche une interface spécifique dans le QStackedWidget."""
         self.central_widget.setCurrentWidget(interface)
 
     def revenir_menu_principal(self):
