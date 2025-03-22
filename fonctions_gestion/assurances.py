@@ -31,12 +31,14 @@ def get_assurance_par_id(id_assurance):
         try:
             curseur = connexion.cursor()
             curseur.execute(queries.GET_ASSURANCE_PAR_ID, (id_assurance,))
-            return curseur.fetchone()
+            return database.fetchone_dict(curseur)
         except Exception as erreur:
             print(f"Erreur lors de la récupération de l'assurance : {erreur}")
         finally:
             database.fermer_connexion(connexion)
     return None
+
+
 
 
 # Modifier une assurance

@@ -3,6 +3,8 @@ from PyQt5.QtCore import Qt
 from interface_utilisateur.clients.ui_styles_clients import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
 from interface_utilisateur.clients.reservations.ui_formulaire_reservation import FormulaireReservationUI
 from interface_utilisateur.clients.reservations.ui_formulaire_client import FormulaireClientUI
+from interface_utilisateur.tableaux.ui_tableau_liste_contrats_client import TableauListeContratsClientUI
+
 
 
 class ClientsUI(QWidget):
@@ -41,9 +43,8 @@ class ClientsUI(QWidget):
             btn.setStyleSheet(BUTTON_STYLE)
 
         # Connexions futures
-        # btn_reservation.clicked.connect(lambda: self.main_window.afficher_interface(self.main_window.ui_faire_reservation))
-        # btn_gerer_reserv.clicked.connect(lambda: self.main_window.afficher_interface(self.main_window.ui_gerer_reservations))
         btn_reservation.clicked.connect(self.ouvrir_faire_reservation)
+        btn_gerer_reserv.clicked.connect(self.ouvrir_tableau_contrats)
         btn_retour.clicked.connect(self.main_window.revenir_menu_principal)
 
         # Ajout des boutons dans le cadre
@@ -63,3 +64,9 @@ class ClientsUI(QWidget):
             self.main_window.ui_faire_reservation = FormulaireReservationUI(self.main_window)
             self.main_window.central_widget.addWidget(self.main_window.ui_faire_reservation)
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_faire_reservation)
+
+    def ouvrir_tableau_contrats(self):
+        if not hasattr(self.main_window, "ui_tableau_contrats_client"):
+            self.main_window.ui_tableau_contrats_client = TableauListeContratsClientUI(self.main_window)
+            self.main_window.central_widget.addWidget(self.main_window.ui_tableau_contrats_client)
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_contrats_client)

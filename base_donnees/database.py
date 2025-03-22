@@ -1,6 +1,5 @@
 import pyodbc
 
-# Configuration de la connexion à la base de données
 CONFIGURATION_BD = {
     "DRIVER": "SQL Server",
     "SERVEUR": "localhost",
@@ -9,8 +8,6 @@ CONFIGURATION_BD = {
     "MOT_DE_PASSE": "ift2821h25",
 }
 
-
-# Fonction pour établir une connexion avec la base de données
 def connecter(auto_commit=False):
     try:
         connexion = pyodbc.connect(
@@ -26,9 +23,20 @@ def connecter(auto_commit=False):
         print(f"Erreur de connexion à la base de données : {erreur}")
         return None
 
-
-
-# Fonction pour fermer la connexion à la base de données
 def fermer_connexion(connexion):
     if connexion:
         connexion.close()
+
+# ✅ Converte um único resultado em dict
+def fetchone_dict(cursor):
+    row = cursor.fetchone()
+    if row is None:
+        return None
+    columns = [col[0] for col in cursor.description]
+    return dict(zip(columns, row))
+
+# ✅ Converte uma lista de resultados em liste de dicts
+def fetchall_dict(cursor):
+    rows = cursor.fetchall()
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in rows]

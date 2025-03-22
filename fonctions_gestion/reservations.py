@@ -275,3 +275,39 @@ def afficher_liste_reservations_supprimer():
             database.fermer_connexion(connexion)
 
     return colonnes, reservations
+
+
+# Annuler une réservation (mettre à jour le statut à 'ANNULEE')
+def annuler_reservation(id_reserv):
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queriesupdate.UPDATE_STATUS_RESERVATION_ANNULEE, (id_reserv,))
+
+            connexion.commit()
+            print(f"Réservation {id_reserv} annulée avec succès.")
+        except Exception as erreur:
+            print(f"Erreur lors de l'annulation de la réservation : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+
+
+# Récupérer une réservation par son ID
+def get_reservation_par_id(id_reserv):
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queries.GET_RESERVATION_DETAILS_PAR_ID, (id_reserv,))
+            row = curseur.fetchone()
+            if row:
+                colonnes = [desc[0] for desc in curseur.description]
+                reservation = dict(zip(colonnes, row))
+                return reservation
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération de la réservation par ID : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+    return None
+
