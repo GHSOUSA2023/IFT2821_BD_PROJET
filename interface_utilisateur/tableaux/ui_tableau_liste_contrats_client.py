@@ -103,6 +103,7 @@ class TableauListeContratsClientUI(QWidget):
             if status == "EN ATTENTE":
                 from interface_utilisateur.clients.gestion_reservations.ui_formulaire_reservation_gerir import FormulaireReservationGerirUI
                 formulaire_gerer = FormulaireReservationGerirUI(self.main_window, id_reserv)
+                formulaire_gerer.email_client = self.email_client
                 self.main_window.central_widget.addWidget(formulaire_gerer)
                 self.main_window.central_widget.setCurrentWidget(formulaire_gerer)
                 return

@@ -32,14 +32,13 @@ class CustomDateEdit(QDateEdit):
         event = QKeyEvent(QKeyEvent.KeyPress, Qt.Key_Down, Qt.AltModifier)
         QApplication.postEvent(self, event)
 
-
-
 class FormulaireReservationGerirUI(QWidget):
 
     def __init__(self, main_window, id_reservation=None):
         super().__init__()
         self.main_window = main_window
         self.ui_tableau_liste_contrats_client = self.main_window.ui_tableau_liste_contrats_client
+        self.email_client = None
         self.id_client = None
         self.id_reservation = id_reservation
         self.id_vehic = None
@@ -331,11 +330,11 @@ class FormulaireReservationGerirUI(QWidget):
 
     def retourner_arriere(self):
         if hasattr(self.main_window, 'ui_tableau_liste_contrats_client'):
+            self.main_window.ui_tableau_liste_contrats_client.email_client = self.email_client  # <-- adicionar esta linha
             self.main_window.ui_tableau_liste_contrats_client.recharger_tableau()
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_liste_contrats_client)
         else:
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
-
 
 
     def sauvegarder_reservation(self):
