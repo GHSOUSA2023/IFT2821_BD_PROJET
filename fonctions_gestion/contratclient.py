@@ -19,16 +19,16 @@ def get_contrat_par_reservation(id_reservation):
             curseur = connexion.cursor()
             curseur.execute(views.GET_CONTRAT_PAR_ID, (id_reservation,))
             
-            # ✅ Récupération dynamique des noms de colonnes
+            # Récupération dynamique des noms de colonnes
             colonnes = [colonne[0] for colonne in curseur.description]
             resultat = curseur.fetchone()
             
             if resultat:
-                # ✅ Convertir le résultat en dictionnaire
+                # Convertir le résultat en dictionnaire
                 contrat_details = dict(zip(colonnes, resultat))
                 
         except Exception as erreur:
-            print(f"❌ Erreur lors de la récupération du contrat : {erreur}")
+            print(f"Erreur lors de la récupération du contrat : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
@@ -69,9 +69,9 @@ def envoyer_contrat_email(destinataire, sujet, corps, chemin_pdf):
         serveur.login(expediteur, mot_de_passe)
         serveur.send_message(message)
         serveur.quit()
-        print("✅ Email envoyé avec succès.")
+        print("Email envoyé avec succès.")
     except Exception as e:
-        print(f"❌ Erreur lors de l'envoi de l'email : {e}")
+        print(f"Erreur lors de l'envoi de l'email : {e}")
 
 def remplir_contrat(donnees):
     # Construire le chemin absolu vers le fichier contrat_modele.txt
@@ -81,3 +81,37 @@ def remplir_contrat(donnees):
     contrat_modele = open(chemin_modele, "r", encoding="utf-8").read()
     contrat_rempli = contrat_modele.format(**donnees)
     return contrat_rempli
+
+def get_contrats_par_email(email_client):
+    connexion = database.connecter()
+    contrats = []
+
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(views.GET_CONTRATS_PAR_EMAIL, (email_client,))
+            resultats = curseur.fetchall()
+            for contrat in resultats:
+                contrats.append(contrat)
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération des contrats pour l'email {email_client} : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+
+    return contrats
+
+def get_contrat_par_id_contract(id_reservation):
+    connexion = database.connecter()
+    contrat_details = None
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(views.GET_CONTRAT_PAR_ID_CONTRACT, (id_reservation,))
+            resultat = curseur.fetchone()
+            if resultat:
+                contrat_details = resultat
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération du contrat : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+    return contrat_details
