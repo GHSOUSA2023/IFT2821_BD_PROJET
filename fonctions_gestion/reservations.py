@@ -68,7 +68,7 @@ def ajouter_reservation(date_debut, date_fin, status_reser, id_client, id_vehic,
 
 
 # Modifier une réservation
-def modifier_reservation(id_reserv, date_debut, date_fin, status_reser, id_client, id_vehic, id_tarif, id_assurance, id_optio, prix_total):
+def modifier_reservation(id_reserv, date_debut, date_fin, status_reser, id_vehic, id_tarif, id_assurance, id_optio):
     """Modifie les informations d'une réservation existante."""
     connexion = database.connecter()
     if connexion:
@@ -82,16 +82,19 @@ def modifier_reservation(id_reserv, date_debut, date_fin, status_reser, id_clien
                 print("Aucune réservation trouvée avec cet ID.")
                 return
 
+            # Exécuter la mise à jour
             curseur.execute(
                 queriesupdate.MODIFIER_RESERVATION,
-                (date_debut, date_fin, status_reser, id_client, id_vehic, id_tarif, id_assurance, id_optio, prix_total, id_reserv),
+                (date_debut, date_fin, status_reser, id_vehic, id_tarif, id_assurance, id_optio, id_reserv),
             )
             connexion.commit()
             print("Réservation modifiée avec succès !")
+
         except Exception as erreur:
             print(f"Erreur lors de la modification de la réservation : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
 
 
 # Supprimer une réservation

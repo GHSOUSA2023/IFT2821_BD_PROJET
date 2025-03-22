@@ -69,4 +69,9 @@ class ClientsUI(QWidget):
         if not hasattr(self.main_window, "ui_tableau_contrats_client"):
             self.main_window.ui_tableau_contrats_client = TableauListeContratsClientUI(self.main_window)
             self.main_window.central_widget.addWidget(self.main_window.ui_tableau_contrats_client)
+        else:
+            # Nettoyer les champs avant d'afficher
+            self.main_window.ui_tableau_contrats_client.nettoyer_champs()
+
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_contrats_client)
+

@@ -24,14 +24,13 @@ def ajouter_client(nom, prenom, ville, adresse, permis_cond, email, telephone, c
             return id_client
 
         except Exception as erreur:
-            if "duplicate key" in str(erreur).lower() and "email" in str(erreur).lower():
+            print(f"Erreur SQL complète : {erreur}")
+            if "violation of unique key constraint" in str(erreur).lower() and "clients" in str(erreur).lower():
                 print("Cet email existe déjà.")
                 return "EMAIL_EXISTE"
+
             print(f"Erreur lors de l'ajout du client : {erreur}")
             return None
-        finally:
-            database.fermer_connexion(connexion)
-    return None
 
 
 # Récupérer un client par ID

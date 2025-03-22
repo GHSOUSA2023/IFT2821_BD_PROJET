@@ -53,7 +53,13 @@ WHERE ID_ASSURANCE = ?;
 # Requête pour modifier une reservation
 MODIFIER_RESERVATION = """
 UPDATE RESERVATIONS
-SET DATE_DEBUT = ?, DATE_FIN = ?, STATUS_RESER = ?, ID_VEHIC = ?, ID_TARIF = ?, ID_ASSURANCE = ?, ID_OPTIO = ?, 
+SET DATE_DEBUT = ?, 
+    DATE_FIN = ?, 
+    STATUS_RESER = ?, 
+    ID_VEHIC = ?, 
+    ID_TARIF = ?, 
+    ID_ASSURANCE = ?, 
+    ID_OPTIO = ?
 WHERE ID_RESERV = ?;
 """
 
