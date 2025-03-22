@@ -161,18 +161,22 @@ def rechercher_vehicule(terme_recherche):
 
     return colonnes, vehicules
 
-# 🔹 Récupérer un véhicule par ID
+# Récupérer un véhicule par ID
 def get_vehicule_par_id(id_vehic):
-    """Récupère les informations d'un véhicule spécifique."""
+    """Récupère les informations d'un véhicule spécifique sous forme de dictionnaire."""
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
             curseur.execute(queries.GET_VEHICULE_PAR_ID, (id_vehic,))
-            vehicule = curseur.fetchone()
-            return vehicule
+            row = curseur.fetchone()
+            if row:
+                colonnes = [desc[0] for desc in curseur.description]
+                vehicule = dict(zip(colonnes, row))
+                return vehicule
         except Exception as erreur:
             print(f"❌ Erreur lors de la récupération du véhicule : {erreur}")
         finally:
             database.fermer_connexion(connexion)
     return None
+
