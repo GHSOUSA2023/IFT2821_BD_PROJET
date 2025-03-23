@@ -3,8 +3,7 @@ from PyQt5.QtCore import Qt
 from interface_utilisateur.agences.ui_styles_agences import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
 from fonctions_gestion.reservations import (
     ajouter_reservation, modifier_reservation, supprimer_reservation,
-    lister_toutes_reservations, rechercher_reservation, afficher_liste_reservations_supprimer
-)
+    lister_toutes_reservations, rechercher_reservation, afficher_liste_reservations_supprimer)
 from interface_utilisateur.tableaux.ui_tableau_reservations import TableauReservationsUI
 from interface_utilisateur.tableaux.ui_tableau_liste_contrats_client import TableauListeContratsClientUI
 from interface_utilisateur.agences.operations.reservations.ui_formulaire_reservation_oper import FormulaireReservationOperUI

@@ -8,13 +8,14 @@ class TableauReservationsUI(QWidget):
     """
     Interface pour rechercher et afficher la liste des réservations avec possibilité d'ouverture des détails.
     """
-    def __init__(self, titre, colonnes, donnees, main_window, mode="oper"):
+    def __init__(self, titre, colonnes, donnees, main_window, mode="oper", retour_widget=None):
         super().__init__()
         self.setWindowTitle(titre)
         self.main_window = main_window
         self.colonnes = colonnes
         self.donnees = donnees
         self.mode = mode
+        self.retour_widget = retour_widget
         self.terme_recherche = None  # Mémoriser la dernière recherche
         self.initUI()
 
@@ -116,6 +117,13 @@ class TableauReservationsUI(QWidget):
         self.tableau_reservations.setRowCount(0)
 
     def retourner(self):
-        """Retourne à l'écran de gestion des réservations et recharge les données."""
+        """Retourne à l'écran précédent et recharge les données."""
         self.recharger_tableau()
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_reservations)
+        if self.retour_widget:
+            self.main_window.central_widget.setCurrentWidget(self.retour_widget)
+        else:
+            # Fallback
+            if self.mode == "oper":
+                self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_operations)
+            else:
+                self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_reservations)

@@ -3,8 +3,8 @@ from PyQt5.QtCore import Qt
 from interface_utilisateur.agences.ui_styles_agences import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
 from interface_utilisateur.agences.operations.reservations.ui_gestion_reservations import GestionReservationsUI
 from interface_utilisateur.agences.operations.rapports.ui_gestion_rapports import GestionRapportsUI
-
-
+from fonctions_gestion.contrats import lister_toutes_contrats
+from interface_utilisateur.tableaux.ui_tableau_reservations import TableauReservationsUI
 
 
 class GestionOperationsUI(QWidget):
@@ -84,8 +84,20 @@ class GestionOperationsUI(QWidget):
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_reservations)
 
     def ouvrir_contrats(self):
-        """Méthode temporaire pour afficher les contrats."""
-        print("Ouverture de la gestion des contrats (non implémenté).")
+        """Ouvre le tableau des réservations (contrats) depuis l'interface opérations."""
+        colonnes, reservations = lister_toutes_contrats()
+        self.ui_tableau_reservations = TableauReservationsUI(
+            "Liste des Réservations",
+            colonnes,
+            reservations,
+            self.main_window,
+            mode="oper",
+            retour_widget=self
+        )
+        self.main_window.central_widget.addWidget(self.ui_tableau_reservations)
+        self.main_window.central_widget.setCurrentWidget(self.ui_tableau_reservations)
+
+
 
     def ouvrir_assurances(self):
         """Méthode temporaire pour afficher les assurances."""
