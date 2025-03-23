@@ -4,29 +4,42 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="ffe8ffd3-9df9-4815-9110-641c861ec63c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IFT2821_BD_PROJET" beforeDir="false" afterPath="$PROJECT_DIR$/IFT2821_BD_PROJET" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IFT2821_BD_PROJET/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/IFT2821_BD_PROJET/.idea/workspace.xml" afterDir="false" />
     </list>
+=======
+    <list default="true" id="ffe8ffd3-9df9-4815-9110-641c861ec63c" name="Changes" comment="" />
+>>>>>>> 469e348d5e5f390ca1b5335956a8e68576efc4d8
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+<<<<<<< HEAD
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
+=======
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/IFT2821_BD_PROJET" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+>>>>>>> 469e348d5e5f390ca1b5335956a8e68576efc4d8
   <component name="ProjectId" id="2uT3VhuZDfaGX78xwLBieaThdUu" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< HEAD
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Python.database.executor&quot;: &quot;Debug&quot;,
@@ -79,6 +92,27 @@
       <set>
         <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26053.29" />
         <option value="bundled-python-sdk-b1dbf8ef85a6-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26053.29" />
+=======
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.main_old.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.25659.43" />
+        <option value="bundled-python-sdk-181015f7ab06-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.25659.43" />
+>>>>>>> 469e348d5e5f390ca1b5335956a8e68576efc4d8
       </set>
     </attachedChunks>
   </component>
@@ -90,6 +124,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1742258761913</updated>
+<<<<<<< HEAD
       <workItem from="1742258763072" duration="1914000" />
       <workItem from="1742260855399" duration="14000" />
       <workItem from="1742260905113" duration="1830000" />
@@ -101,12 +136,16 @@
       <workItem from="1742756190594" duration="371000" />
       <workItem from="1742756577865" duration="268000" />
       <workItem from="1742757061179" duration="1448000" />
+=======
+      <workItem from="1742258763072" duration="985000" />
+>>>>>>> 469e348d5e5f390ca1b5335956a8e68576efc4d8
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+<<<<<<< HEAD
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
@@ -123,4 +162,6 @@
     <SUITE FILE_PATH="coverage/LocationVoiture$main.coverage" NAME="main Coverage Results" MODIFIED="1742754354068" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/IFT2821_BD_PROJET" />
     <SUITE FILE_PATH="coverage/LocationVoiture$main_old.coverage" NAME="main_old Coverage Results" MODIFIED="1742754317417" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/IFT2821_BD_PROJET" />
   </component>
+=======
+>>>>>>> 469e348d5e5f390ca1b5335956a8e68576efc4d8
 </project>
