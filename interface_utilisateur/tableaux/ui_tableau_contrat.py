@@ -69,4 +69,4 @@ class TableauContratUI(QWidget):
 
     # Retourne à l'écran précédent
     def retourner(self):
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
+        self.main_window.central_widget.setCurrentWidget(self.retour_widget)

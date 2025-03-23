@@ -98,12 +98,17 @@ class TableauListeContratsClientUI(QWidget):
 
     def ouvrir_contrat_selectionne(self, row, _column):
         try:
-            status = self.tableau_contrats.item(row, 6).text()  # Colonne 6 = STATUS
-            id_reserv = int(self.tableau_contrats.item(row, 0).text())  # Colonne 0 = ID_RESERV
+            status = self.tableau_contrats.item(row, 6).text()
+            id_reserv = int(self.tableau_contrats.item(row, 0).text())
 
             if status == "EN ATTENTE":
-                from interface_utilisateur.clients.gestion_reservations.ui_formulaire_reservation_gerir import FormulaireReservationGerirUI
-                formulaire_gerer = FormulaireReservationGerirUI(self.main_window, id_reserv)
+                if self.mode == "client":
+                    from interface_utilisateur.clients.gestion_reservations.ui_formulaire_reservation_gerir import FormulaireReservationGerirUI
+                    formulaire_gerer = FormulaireReservationGerirUI(self.main_window, id_reserv)
+                else:
+                    from interface_utilisateur.agences.operations.reservations.ui_formulaire_reservation_gerer_oper import FormulaireReservationGerirOperUI
+                    formulaire_gerer = FormulaireReservationGerirOperUI(self.main_window, id_reserv)
+
                 formulaire_gerer.email_client = self.email_client
                 self.main_window.central_widget.addWidget(formulaire_gerer)
                 self.main_window.central_widget.setCurrentWidget(formulaire_gerer)
@@ -122,6 +127,7 @@ class TableauListeContratsClientUI(QWidget):
         except Exception as e:
             print(f"Erreur lors de l'ouverture du contrat ou du formulaire : {e}")
             QMessageBox.warning(self, "Erreur", "Problème lors de l'ouverture.")
+
 
 
 
@@ -158,4 +164,6 @@ class TableauListeContratsClientUI(QWidget):
 
     def retourner(self):
         self.nettoyer_champs()
+        # Sinon, retour à l'interface clients
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
+

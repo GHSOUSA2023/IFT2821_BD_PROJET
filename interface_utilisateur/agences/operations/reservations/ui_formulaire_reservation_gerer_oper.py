@@ -429,13 +429,15 @@ class FormulaireReservationGerirOperUI(QWidget):
             self.retourner_arriere()
 
     def retourner_arriere(self):
-        if hasattr(self.main_window, 'ui_tableau_liste_contrats_client'):
+        if hasattr(self.main_window, 'ui_tableau_contrats_client_oper'):
+            self.main_window.ui_tableau_contrats_client_oper.recharger_tableau()
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_contrats_client_oper)
+        elif hasattr(self.main_window, 'ui_tableau_liste_contrats_client'):
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_liste_contrats_client)
-
-            # Auto-remplir l'email et lancer la recherche
             if self.email_client:
                 self.main_window.ui_tableau_liste_contrats_client.email_input.setText(self.email_client)
                 self.main_window.ui_tableau_liste_contrats_client.rechercher_contrats()
         else:
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
+
 

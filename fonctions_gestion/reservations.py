@@ -1,5 +1,5 @@
 from base_donnees import database
-from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete, procedure
+from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete, procedure, views
 
 # ----------------------------- FONCTIONS POUR RÉSERVATIONS -----------------------------
 # Ajouter une réservation via procédure stockée
@@ -122,120 +122,97 @@ def supprimer_reservation(id_reserv):
             database.fermer_connexion(connexion)
 
 
-# Lister toutes les réservations
+# Lister toutes les réservations avec les détails étendus depuis la vue VIEW_RESERVATION_DETAILS
 def lister_toutes_reservations():
-    """Retourne une liste de toutes les réservations avec les détails associés."""
-    connexion = database.connecter()
+    """
+    Liste toutes les réservations avec les détails étendus depuis la vue VIEW_RESERVATION_DETAILS.
+    """
+    colonnes = [
+        "Nº reservation",
+        "Nº contrat",
+        "Date début",
+        "Date fin",
+        "Nombre de jours",
+        "Prix total",
+        "Status du contrat",
+        "Agence",
+        "Nom client",
+        "Véhicule"
+    ]
     reservations = []
 
+    connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
-            curseur.execute(queries.LISTER_RESERVATIONS)
+            curseur.execute(views.GET_CONTRATS_TOUT)
             resultats = curseur.fetchall()
 
-            for reservation in resultats:
-                reservations.append((
-                    reservation.ID_RESERV,
-                    reservation.DATE_DEBUT,
-                    reservation.DATE_FIN,
-                    reservation.STATUS_RESER,
-                    reservation.DUREE_JOUR,
-                    reservation.ID_CLIENT,
-                    reservation.ID_VEHIC,
-                    reservation.ID_TARIF,
-                    reservation.ID_ASSURANCE,
-                    reservation.ID_OPTIO,
-                    reservation.PRIX_TOTAL
-                ))
-
-        except Exception as erreur:
-            print(f"Erreur lors de la récupération des réservations : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
-    return reservations
-
-
-# Rechercher une réservation par ID client, véhicule ou date
-def rechercher_reservation(terme_recherche):
-    """Recherche une réservation par ID du client, ID du véhicule ou date et retourne les résultats sous forme de tableau."""
-    connexion = database.connecter()
-    colonnes = ["ID", "Date Début", "Date Fin", "Statut", "Durée (jours)", "Client", "Véhicule", "Tarif", "Assurance", "Options", "Prix Total"]
-    reservations = []
-
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-            terme = f"%{terme_recherche}%"  
-
-            requete = """
-                SELECT r.ID_RESERV, r.DATE_DEBUT, r.DATE_FIN, r.STATUS_RESER, r.DUREE_JOUR,
-                       r.ID_CLIENT, r.ID_VEHIC, r.ID_TARIF, r.ID_ASSURANCE, r.ID_OPTIO, r.PRIX_TOTAL
-                FROM RESERVATIONS r
-                WHERE CAST(r.ID_CLIENT AS TEXT) LIKE ? OR 
-                      CAST(r.ID_VEHIC AS TEXT) LIKE ? OR 
-                      r.DATE_DEBUT LIKE ?
-            """
-
-            curseur.execute(requete, (terme, terme, terme))  
-            resultats = curseur.fetchall()
-
-            for reservation in resultats:
+            for contrat in resultats:
                 reservations.append([
-                    reservation.ID_RESERV,
-                    reservation.DATE_DEBUT,
-                    reservation.DATE_FIN,
-                    reservation.STATUS_RESER,
-                    reservation.DUREE_JOUR,
-                    reservation.ID_CLIENT,
-                    reservation.ID_VEHIC,
-                    reservation.ID_TARIF,
-                    reservation.ID_ASSURANCE,
-                    reservation.ID_OPTIO,
-                    reservation.PRIX_TOTAL
+                    contrat.ID_RESERV,
+                    contrat.ID_CONTRACT,
+                    contrat.CONTRAT_DATE_DEBUT,
+                    contrat.CONTRAT_DATE_FIN,
+                    contrat.CONTRAT_DUREE_JOURS,
+                    contrat.CONTRAT_PRIX_TOTAL,
+                    contrat.STATUS,
+                    contrat.NOM_AGENCE,
+                    contrat.NOM_CLIENT,
+                    contrat.MODELE_VEHICULE
                 ])
-
         except Exception as erreur:
-            print(f"Erreur lors de la recherche de réservation : {erreur}")
+            print(f"Erreur lors de la récupération des réservations détaillées : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
     return colonnes, reservations
 
 
-# Afficher la liste des réservations à modifier
-def afficher_liste_reservations_modifier():
+# Rechercher une réservation dans la vue détaillée
+def rechercher_reservation(terme_recherche):
     """
-    Récupère la liste des réservations sous forme de tableau de données.
+    Recherche des réservations dans la vue VIEW_RESERVATION_DETAILS
+    par ID réservation, ID contrat ou nom du client.
     """
-    colonnes = ["ID", "Date Début", "Date Fin", "Statut", "Durée (jours)", "Client", "Véhicule", "Tarif", "Assurance", "Options", "Prix Total"]
+    colonnes = [
+        "Nº reservation",
+        "Nº contrat",
+        "Date début",
+        "Date fin",
+        "Nombre de jours",
+        "Prix total",
+        "Status du contrat",
+        "Agence",
+        "Nom client",
+        "Véhicule"
+    ]
     reservations = []
 
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
-            curseur.execute(queries.LISTER_RESERVATIONS)
+            terme = f"%{terme_recherche.lower()}%"  # Minuscule pour correspondre à NOM_CLIENT en minuscules
+            curseur.execute(views.RECHERCHER_RESERVATIONS, (terme, terme, terme))
             resultats = curseur.fetchall()
 
-            for reservation in resultats:
+            for contrat in resultats:
                 reservations.append([
-                    reservation.ID_RESERV,
-                    reservation.DATE_DEBUT,
-                    reservation.DATE_FIN,
-                    reservation.STATUS_RESER,
-                    reservation.DUREE_JOUR,
-                    reservation.ID_CLIENT,
-                    reservation.ID_VEHIC,
-                    reservation.ID_TARIF,
-                    reservation.ID_ASSURANCE,
-                    reservation.ID_OPTIO,
-                    reservation.PRIX_TOTAL
+                    contrat.ID_RESERV,
+                    contrat.ID_CONTRACT,
+                    contrat.CONTRAT_DATE_DEBUT,
+                    contrat.CONTRAT_DATE_FIN,
+                    contrat.CONTRAT_DUREE_JOURS,
+                    contrat.CONTRAT_PRIX_TOTAL,
+                    contrat.STATUS,
+                    contrat.NOM_AGENCE,
+                    contrat.NOM_CLIENT,
+                    contrat.MODELE_VEHICULE
                 ])
 
         except Exception as erreur:
-            print(f"Erreur lors de la récupération des réservations : {erreur}")
+            print(f"Erreur lors de la recherche des réservations détaillées : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
@@ -245,31 +222,42 @@ def afficher_liste_reservations_modifier():
 # Afficher la liste des réservations à supprimer
 def afficher_liste_reservations_supprimer():
     """
-    Récupère la liste des réservations sous forme de tableau de données pour suppression.
+    Récupère la liste des réservations sous forme de tableau de données pour suppression,
+    affichant les mêmes champs que dans le tableau client.
     """
-    colonnes = ["ID", "Date Début", "Date Fin", "Statut", "Durée (jours)", "Client", "Véhicule", "Tarif", "Assurance", "Options", "Prix Total"]
+    colonnes = [
+        "Nº réservation",
+        "Nº contrat",
+        "Date début",
+        "Date fin",
+        "Nombre de jours",
+        "Prix total",
+        "Status du contrat",
+        "Agence",
+        "Nom client",
+        "Véhicule"
+    ]
     reservations = []
 
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
-            curseur.execute(queries.LISTER_RESERVATIONS)
+            curseur.execute(views.GET_CONTRATS_TOUT)
             resultats = curseur.fetchall()
 
-            for reservation in resultats:
+            for contrat in resultats:
                 reservations.append([
-                    reservation.ID_RESERV,
-                    reservation.DATE_DEBUT,
-                    reservation.DATE_FIN,
-                    reservation.STATUS_RESER,
-                    reservation.DUREE_JOUR,
-                    reservation.ID_CLIENT,
-                    reservation.ID_VEHIC,
-                    reservation.ID_TARIF,
-                    reservation.ID_ASSURANCE,
-                    reservation.ID_OPTIO,
-                    reservation.PRIX_TOTAL
+                    contrat.ID_RESERV,
+                    contrat.ID_CONTRACT,
+                    contrat.CONTRAT_DATE_DEBUT,
+                    contrat.CONTRAT_DATE_FIN,
+                    contrat.CONTRAT_DUREE_JOURS,
+                    contrat.CONTRAT_PRIX_TOTAL,
+                    contrat.STATUS,
+                    contrat.NOM_AGENCE,
+                    contrat.NOM_CLIENT,
+                    contrat.MODELE_VEHICULE
                 ])
 
         except Exception as erreur:
