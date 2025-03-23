@@ -3,12 +3,13 @@ from PyQt5.QtCore import Qt
 from interface_utilisateur.agences.ui_styles_agences import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
 from fonctions_gestion.reservations import (
     ajouter_reservation, modifier_reservation, supprimer_reservation,
-    lister_toutes_reservations, rechercher_reservation, 
-    afficher_liste_reservations_modifier, afficher_liste_reservations_supprimer
+    lister_toutes_reservations, rechercher_reservation, afficher_liste_reservations_supprimer
 )
 from interface_utilisateur.tableaux.ui_tableau_reservations import TableauReservationsUI
-from interface_utilisateur.agences.operations.reservations.ui_formulaire_reservation import FormulaireReservationUI
+from interface_utilisateur.tableaux.ui_tableau_liste_contrats_client import TableauListeContratsClientUI
+from interface_utilisateur.agences.operations.reservations.ui_formulaire_reservation_oper import FormulaireReservationOperUI
 from PyQt5.QtWidgets import QMessageBox
+
 
 class GestionReservationsUI(QWidget):
     """
@@ -49,7 +50,7 @@ class GestionReservationsUI(QWidget):
 
         # Connexions
         btn_ajouter.clicked.connect(self.ouvrir_formulaire_ajouter)
-        btn_modifier.clicked.connect(self.afficher_liste_reservations_modifier)
+        btn_modifier.clicked.connect(self.ouvrir_tableau_contrats_oper)
         btn_supprimer.clicked.connect(self.afficher_liste_reservations_supprimer)
         btn_lister.clicked.connect(self.afficher_liste_reservations)
         btn_rechercher.clicked.connect(self.rechercher_reservation)
@@ -68,36 +69,22 @@ class GestionReservationsUI(QWidget):
 
     def ouvrir_formulaire_ajouter(self):
         """Ouvre le formulaire pour ajouter une nouvelle réservation."""
-        self.formulaire_reservation = FormulaireReservationUI(self.main_window, mode="ajouter")
+        self.formulaire_reservation = FormulaireReservationOperUI(self.main_window, mode="ajouter")
         self.main_window.central_widget.addWidget(self.formulaire_reservation)
         self.main_window.central_widget.setCurrentWidget(self.formulaire_reservation)
 
-    def afficher_liste_reservations_modifier(self):
-        """
-        Affiche la liste des réservations avec option de modification.
-        """
-        colonnes, reservations = afficher_liste_reservations_modifier()
+    def ouvrir_tableau_contrats_oper(self):
+        colonnes, reservations = lister_toutes_reservations()
+        if not hasattr(self.main_window, "ui_tableau_contrats_client_oper"):
+            self.main_window.ui_tableau_contrats_client_oper = TableauReservationsUI(
+                "Liste des Réservations", colonnes, reservations, self.main_window
+            )
+            self.main_window.central_widget.addWidget(self.main_window.ui_tableau_contrats_client_oper)
+        else:
+            self.main_window.ui_tableau_contrats_client_oper.recharger_tableau()
 
-        if reservations:
-            self.tableau_reservations_modifier = TableauReservationsUI("Modifier une Réservation", colonnes, reservations, self.main_window)
-            self.tableau_reservations_modifier.table_widget.cellClicked.connect(self.ouvrir_formulaire_modifier)
-            self.main_window.central_widget.addWidget(self.tableau_reservations_modifier)
-            self.main_window.central_widget.setCurrentWidget(self.tableau_reservations_modifier)
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_contrats_client_oper)
 
-    def ouvrir_formulaire_modifier(self, row, column):
-        """Ouvre le formulaire de modification lorsqu'une ligne est cliquée."""
-        id_reserv = self.tableau_reservations_modifier.table_widget.item(row, 0).text()
-        
-        reservation_data = None
-        for reservation in self.tableau_reservations_modifier.donnees:
-            if reservation[0] == id_reserv:
-                reservation_data = reservation
-                break
-
-        if reservation_data:
-            self.formulaire_modification = FormulaireReservationUI(self.main_window, mode="modifier", reservation=reservation_data)
-            self.main_window.central_widget.addWidget(self.formulaire_modification)
-            self.main_window.central_widget.setCurrentWidget(self.formulaire_modification)
 
     def afficher_liste_reservations_supprimer(self):
         """
@@ -110,6 +97,7 @@ class GestionReservationsUI(QWidget):
             self.tableau_reservations_supprimer.table_widget.cellClicked.connect(self.confirmer_suppression)
             self.main_window.central_widget.addWidget(self.tableau_reservations_supprimer)
             self.main_window.central_widget.setCurrentWidget(self.tableau_reservations_supprimer)
+
 
     def confirmer_suppression(self, row, column):
         """
@@ -131,12 +119,13 @@ class GestionReservationsUI(QWidget):
             print("Réservation supprimée avec succès !")
             self.tableau_reservations_supprimer.table_widget.removeRow(row)
 
+
+
     def afficher_liste_reservations(self):
         """
         Récupère toutes les réservations et les affiche dans le tableau TableauReservationsUI.
         """
-        colonnes = ["ID", "Début", "Fin", "Statut", "Durée", "Client", "Véhicule", "Tarif", "Assurance", "Optionnel", "Prix Total"]
-        reservations = lister_toutes_reservations()
+        colonnes, reservations = lister_toutes_reservations()
 
         if reservations:
             self.tableau_reservations = TableauReservationsUI("Liste des Réservations", colonnes, reservations, self.main_window)
@@ -149,7 +138,7 @@ class GestionReservationsUI(QWidget):
         """
         from PyQt5.QtWidgets import QInputDialog
 
-        terme, ok = QInputDialog.getText(self, "Recherche de Réservation", "Entrez un ID Client, ID Véhicule ou Date de Début:")
+        terme, ok = QInputDialog.getText(self, " 🔍 Recherche de Réservation", "Entrez un Nom du Client, nº contrat or nº reservation ...")
         
         if ok and terme.strip():
             colonnes, reservations = rechercher_reservation(terme.strip())
