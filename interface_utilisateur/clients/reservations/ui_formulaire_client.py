@@ -6,9 +6,9 @@ class FormulaireClientUI(QWidget):
     """
     Formulaire pour ajouter un nouveau client, intégré dans le QStackedWidget principal.
     """
-    def __init__(self, main_window):
+    def __init__(self, parent):
         super().__init__()
-        self.main_window = main_window  # Référence vers la main_window
+        self.parent_form = parent
         self.setWindowTitle("Ajouter un nouveau client")
         self.setGeometry(150, 150, 500, 400)
         self.initUI()
@@ -89,14 +89,14 @@ class FormulaireClientUI(QWidget):
 
         if id_client and id_client != "EMAIL_EXISTE":
             QMessageBox.information(self, "Succès", "Client ajouté avec succès.")
-            if hasattr(self.main_window, 'ui_faire_reservation'):
-                self.main_window.ui_faire_reservation.id_client = id_client
+            if hasattr(self.parent_form, 'main_window'):
+                self.parent_form.id_client = id_client
                 # Remplir les champs du formulaire de réservation
-                self.main_window.ui_faire_reservation.nom_label.setText(nom.upper())
-                self.main_window.ui_faire_reservation.prenom_label.setText(prenom.upper())
-                self.main_window.ui_faire_reservation.adresse_label.setText(adresse.upper())
-                self.main_window.ui_faire_reservation.ville_label.setText(ville.upper())
-                self.main_window.ui_faire_reservation.telephone_label.setText(telephone)
+                self.parent_form.nom_label.setText(nom.upper())
+                self.parent_form.prenom_label.setText(prenom.upper())
+                self.parent_form.adresse_label.setText(adresse.upper())
+                self.parent_form.ville_label.setText(ville.upper())
+                self.parent_form.telephone_label.setText(telephone)
             self.effacer_formulaire()
             self.retourner_arriere()
 
@@ -117,6 +117,15 @@ class FormulaireClientUI(QWidget):
 
 
     def retourner_arriere(self):
-        self.effacer_formulaire()
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_faire_reservation)
+        if hasattr(self.parent_form, 'main_window'):
+            # Retourner au formulaire précédent (par exemple, le formulaire de réservation)
+            self.parent_form.main_window.central_widget.setCurrentWidget(self.parent_form)
+        elif hasattr(self.parent_form, 'central_widget'):
+            # Retourner à l'interface des clients si ouvert depuis la fenêtre principale
+            self.parent_form.central_widget.setCurrentWidget(self.parent_form.ui_clients)
+        else:
+            # En cas de problème inattendu
+            print("⚠ Impossible de retourner à l'écran précédent.")
+
+
 

@@ -4,12 +4,13 @@ from fonctions_gestion.contratclient import get_contrats_par_email, get_contrat_
 from interface_utilisateur.tableaux.ui_tableau_contrat import TableauContratUI
 
 class TableauListeContratsClientUI(QWidget):
-    """
+    """ouvrir_contrat_selectionne
     Interface pour rechercher et afficher la liste des contrats d'un client par son e-mail.
     """
-    def __init__(self, main_window):
+    def __init__(self, main_window, mode="client"):
         super().__init__()
         self.main_window = main_window
+        self.mode = mode
         self.email_client = None
         self.setWindowTitle("Recherche de contrats client")
 

@@ -34,10 +34,11 @@ class CustomDateEdit(QDateEdit):
 
 
 
-class FormulaireReservationUI(QWidget):
-    def __init__(self, main_window):
+class FormulaireReservationOperUI(QWidget):
+    def __init__(self, main_window, mode="ajouter"):
         super().__init__()
         self.main_window = main_window
+        self.mode = mode
         self.id_client = None
         self.id_reservation = None
         self.id_vehic = None
@@ -259,7 +260,7 @@ class FormulaireReservationUI(QWidget):
 
     def retourner_arriere(self):
         self.reinitialiser_formulaire()
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_reservations)
 
 
     def sauvegarder_reservation(self):
