@@ -90,9 +90,11 @@ class FormulaireContratGererUI(QWidget):
 
 
         # Date de fin
+        date_min_fin = self.date_debut_input.date()
         date_aujourdhui = QDate.currentDate()
         self.date_fin_input = CustomDateEdit()
         self.date_fin_input.setDate(date_aujourdhui)
+        self.date_fin_input.setMinimumDate(date_min_fin)
         self.date_fin_input.dateChanged.connect(self.calculer_total)
 
 
@@ -224,6 +226,7 @@ class FormulaireContratGererUI(QWidget):
         total = (prix_tarif + prix_assurance + prix_optionnel) * nb_jours
         self.total_label.setText(f"Total : {total:.2f} $")
 
+
     def extraire_prix(self, label_text):
         match = re.search(r"([\d\.]+)\$", label_text)
         return float(match.group(1)) if match else 0.0
@@ -244,7 +247,9 @@ class FormulaireContratGererUI(QWidget):
             date_debut = QDate.fromString(str(reservation['DATE_DEBUT']), "yyyy-MM-dd")
             date_fin = QDate.fromString(str(reservation['DATE_FIN']), "yyyy-MM-dd")
             self.date_debut_input.setDate(date_debut)
-            self.date_fin_input.setDate(QDate.currentDate())
+            self.date_fin_input.setMinimumDate(date_debut)
+            self.date_fin_input.setDate(date_fin if date_fin >= date_debut else date_debut)
+
 
             # Remplir les IDs
             self.id_vehic = reservation['ID_VEHIC']
