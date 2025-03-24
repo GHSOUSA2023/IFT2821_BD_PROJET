@@ -1,5 +1,6 @@
 from base_donnees import database
 from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete
+from PyQt5.QtWidgets import QMessageBox
 import io
 import sys
 
@@ -137,8 +138,6 @@ def confirmer_suppression(self, row, column):
     """
     Demande confirmation avant suppression d'une agence.
     """
-    from PyQt5.QtWidgets import QMessageBox
-
     id_agence = self.tableau_agences_supprimer.table_widget.item(row, 0).text()  # ID de l'agence
     nom_agence = self.tableau_agences_supprimer.table_widget.item(row, 1).text()  # Nom de l'agence
 
