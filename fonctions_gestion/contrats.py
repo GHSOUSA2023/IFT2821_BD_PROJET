@@ -46,3 +46,25 @@ def lister_toutes_contrats():
             database.fermer_connexion(connexion)
 
     return colonnes, reservations
+
+
+def terminer_contrat(id_reservation, date_fin, prix_total, duree_jours):
+    """
+    Terminer un contrat en mettant à jour sa date de fin, son statut, la durée et le prix total.
+    """
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(
+                queriesupdate.MODIFIER_CONTRAT, 
+                (date_fin, 'TERMINEE', duree_jours, prix_total, id_reservation)
+            )
+            connexion.commit()
+            return True
+        except Exception as erreur:
+            print(f"Erreur lors de la terminaison du contrat : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+
+    return False

@@ -21,3 +21,6 @@ STATUS_RESERVATION = ["EN ATTENTE", "CONFIRMEE", "ANNULEE", "TERMINEE"]
 
 # Options valides pour les statuts des contrats
 STATUS_CONTRAT = ["EN COURS", "TERMINEE"]
+
+# Disponibilité des véhicules stockés
+STATUS_DISP_VEHICULE = ["DISPONIBLE", "NON DISPONIBLE"]

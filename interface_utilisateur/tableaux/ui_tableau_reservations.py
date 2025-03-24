@@ -87,14 +87,18 @@ class TableauReservationsUI(QWidget):
             status = self.tb_op_tableau_reservations.item(row, 6).text()
             id_reserv = int(self.tb_op_tableau_reservations.item(row, 0).text())
 
-            if status == "EN ATTENTE":
-                if self.mode == "contrat":
-                    # OUVRE O FORMULAIRE CONTRAT
+            if self.mode == "contrat":
+                if status == "CONFIRMEE":                
                     formulaire_gerer = FormulaireContratGererUI(self.main_window, id_reserv, retour_widget=self)
+                    self.main_window.central_widget.addWidget(formulaire_gerer)
+                    self.main_window.central_widget.setCurrentWidget(formulaire_gerer)    
                 else:
-                    # Modo normal 'oper'
-                    formulaire_gerer = FormulaireReservationGerirOperUI(self.main_window, id_reserv, retour_widget=self)
+                    QMessageBox.information(self, "Information", "⚠️ Aucun contrat n’a été généré pour cette réservation.")
+                return  # Termina aqui se for mode contrat
 
+            # Comportamento normal (mode oper)
+            if status == "EN ATTENTE":
+                formulaire_gerer = FormulaireReservationGerirOperUI(self.main_window, id_reserv, retour_widget=self)
                 self.main_window.central_widget.addWidget(formulaire_gerer)
                 self.main_window.central_widget.setCurrentWidget(formulaire_gerer)
                 return
@@ -109,9 +113,11 @@ class TableauReservationsUI(QWidget):
                     QMessageBox.warning(self, "Erreur", "Impossible de récupérer les détails du contrat.")
             else:
                 QMessageBox.warning(self, "Information", "⚠️ La réservation n’est accessible que pour les contrats confirmés ou terminés.")
+
         except Exception as e:
             print(f"Erreur lors de l'ouverture du contrat ou du formulaire : {e}")
             QMessageBox.warning(self, "Erreur", "Problème lors de l'ouverture.")
+
 
     def tb_op_retourner(self):
         # Recharge le tableau avant de revenir

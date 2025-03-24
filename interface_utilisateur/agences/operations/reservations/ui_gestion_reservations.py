@@ -97,31 +97,39 @@ class GestionReservationsUI(QWidget):
 
         if reservations:
             self.tableau_reservations_supprimer = TableauReservationsUI("Supprimer une Réservation", colonnes, reservations, self.main_window)
-            self.tableau_reservations_supprimer.table_widget.cellClicked.connect(self.gr_confirmer_suppression)
+            self.tableau_reservations_supprimer.tb_op_tableau_reservations.cellClicked.connect(self.gr_confirmer_suppression)
             self.main_window.central_widget.addWidget(self.tableau_reservations_supprimer)
             self.main_window.central_widget.setCurrentWidget(self.tableau_reservations_supprimer)
 
-
     def gr_confirmer_suppression(self, row, column):
-        """
-        Confirmation avant suppression d'une réservation.
-        """
-        id_reserv = self.tableau_reservations_supprimer.table_widget.item(row, 0).text()
-        date_debut = self.tableau_reservations_supprimer.table_widget.item(row, 1).text()
+                """
+                Confirmation avant suppression d'une réservation uniquement si le statut est 'EN ATTENTE'.
+                """
+                id_reserv = self.tableau_reservations_supprimer.tb_op_tableau_reservations.item(row, 0).text()
+                date_debut = self.tableau_reservations_supprimer.tb_op_tableau_reservations.item(row, 1).text()
+                statut = self.tableau_reservations_supprimer.tb_op_tableau_reservations.item(row, 6).text()  # Coluna status
 
-        reponse = QMessageBox.question(
-            None, 
-            "Confirmation",
-            f"Voulez-vous vraiment supprimer la réservation du {date_debut} ?",
-            QMessageBox.Yes | QMessageBox.No,
-            QMessageBox.No
-        )
+                if statut != "EN ATTENTE":
+                    QMessageBox.information(
+                        self,
+                        "Suppression impossible",
+                        "❌ La réservation ne peut pas être supprimée car un contrat de location est déjà lié à celle-ci."
+                    )
+                    return
 
-        if reponse == QMessageBox.Yes:
-            supprimer_reservation(id_reserv)
-            print("Réservation supprimée avec succès !")
-            self.tableau_reservations_supprimer.table_widget.removeRow(row)
+                reponse = QMessageBox.question(
+                    None,
+                    "Confirmation",
+                    f"Voulez-vous vraiment supprimer la réservation du {date_debut} ?",
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.No
+                )
 
+                if reponse == QMessageBox.Yes:
+                    supprimer_reservation(id_reserv)
+                    print("Réservation supprimée avec succès !")
+                    # Recharger la liste après suppression
+                    self.gr_afficher_liste_reservations_supprimer()
 
 
     def gr_afficher_liste_reservations(self):
