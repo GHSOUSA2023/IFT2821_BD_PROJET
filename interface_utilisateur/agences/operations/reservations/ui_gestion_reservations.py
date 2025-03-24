@@ -48,11 +48,11 @@ class GestionReservationsUI(QWidget):
             btn.setStyleSheet(BUTTON_STYLE)
 
         # Connexions
-        btn_ajouter.clicked.connect(self.ouvrir_formulaire_ajouter)
-        btn_modifier.clicked.connect(self.ouvrir_tableau_contrats_oper)
-        btn_supprimer.clicked.connect(self.afficher_liste_reservations_supprimer)
-        btn_lister.clicked.connect(self.afficher_liste_reservations)
-        btn_rechercher.clicked.connect(self.rechercher_reservation)
+        btn_ajouter.clicked.connect(self.gr_ouvrir_formulaire_ajouter)
+        btn_modifier.clicked.connect(self.gr_ouvrir_tableau_contrats_oper)
+        btn_supprimer.clicked.connect(self.gr_afficher_liste_reservations_supprimer)
+        btn_lister.clicked.connect(self.gr_afficher_liste_reservations)
+        btn_rechercher.clicked.connect(self.gr_rechercher_reservation)
         btn_retour.clicked.connect(lambda: self.main_window.afficher_interface(self.main_window.ui_gestion_operations))
 
         for btn in [btn_ajouter, btn_modifier, btn_supprimer, btn_lister, btn_rechercher, btn_retour]:
@@ -66,26 +66,30 @@ class GestionReservationsUI(QWidget):
 
     # ------------------- Fonctions -------------------
 
-    def ouvrir_formulaire_ajouter(self):
+    def gr_ouvrir_formulaire_ajouter(self):
         """Ouvre le formulaire pour ajouter une nouvelle réservation."""
         self.formulaire_reservation = FormulaireReservationOperUI(self.main_window, mode="ajouter")
         self.main_window.central_widget.addWidget(self.formulaire_reservation)
         self.main_window.central_widget.setCurrentWidget(self.formulaire_reservation)
 
-    def ouvrir_tableau_contrats_oper(self):
+    def gr_ouvrir_tableau_contrats_oper(self):
         colonnes, reservations = lister_toutes_reservations()
-        if not hasattr(self.main_window, "ui_tableau_contrats_client_oper"):
-            self.main_window.ui_tableau_contrats_client_oper = TableauReservationsUI(
-                "Liste des Réservations", colonnes, reservations, self.main_window
+        if not hasattr(self.main_window, "ui_tableau_g_reservation"):  # renomeando para “oper”
+            self.main_window.ui_tableau_g_reservation = TableauReservationsUI(
+                "Liste des Réservations (Mode Operationnel)",
+                colonnes,
+                reservations,
+                self.main_window,
+                mode="oper"  # se quiser usar esse modo, ou “oper”
             )
-            self.main_window.central_widget.addWidget(self.main_window.ui_tableau_contrats_client_oper)
+            self.main_window.central_widget.addWidget(self.main_window.ui_tableau_g_reservation)
         else:
-            self.main_window.ui_tableau_contrats_client_oper.recharger_tableau()
+            self.main_window.ui_tableau_g_reservation.tb_op_recharger_tableau()
 
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_contrats_client_oper)
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_g_reservation)
 
 
-    def afficher_liste_reservations_supprimer(self):
+    def gr_afficher_liste_reservations_supprimer(self):
         """
         Affiche la liste des réservations dans le tableau avec possibilité de suppression.
         """
@@ -93,12 +97,12 @@ class GestionReservationsUI(QWidget):
 
         if reservations:
             self.tableau_reservations_supprimer = TableauReservationsUI("Supprimer une Réservation", colonnes, reservations, self.main_window)
-            self.tableau_reservations_supprimer.table_widget.cellClicked.connect(self.confirmer_suppression)
+            self.tableau_reservations_supprimer.table_widget.cellClicked.connect(self.gr_confirmer_suppression)
             self.main_window.central_widget.addWidget(self.tableau_reservations_supprimer)
             self.main_window.central_widget.setCurrentWidget(self.tableau_reservations_supprimer)
 
 
-    def confirmer_suppression(self, row, column):
+    def gr_confirmer_suppression(self, row, column):
         """
         Confirmation avant suppression d'une réservation.
         """
@@ -120,7 +124,7 @@ class GestionReservationsUI(QWidget):
 
 
 
-    def afficher_liste_reservations(self):
+    def gr_afficher_liste_reservations(self):
         """
         Récupère toutes les réservations et les affiche dans le tableau TableauReservationsUI.
         """
@@ -131,7 +135,7 @@ class GestionReservationsUI(QWidget):
             self.main_window.central_widget.addWidget(self.tableau_reservations)
             self.main_window.central_widget.setCurrentWidget(self.tableau_reservations)
 
-    def rechercher_reservation(self):
+    def gr_rechercher_reservation(self):
         """
         Affiche un champ de recherche et affiche les résultats dans le tableau.
         """

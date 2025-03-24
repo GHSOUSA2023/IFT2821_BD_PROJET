@@ -4,6 +4,12 @@ from fonctions_gestion.reservations import rechercher_reservation, lister_toutes
 from fonctions_gestion.contratclient import get_contrat_par_reservation
 from interface_utilisateur.tableaux.ui_tableau_contrat import TableauContratUI
 
+from interface_utilisateur.agences.operations.contrats.ui_formulaire_contrat_gerer import FormulaireContratGererUI
+from interface_utilisateur.agences.operations.reservations.ui_formulaire_reservation_oper import FormulaireReservationOperUI
+from interface_utilisateur.agences.operations.reservations.ui_formulaire_reservation_gerer_oper import FormulaireReservationGerirOperUI
+
+
+
 class TableauReservationsUI(QWidget):
     """
     Interface pour rechercher et afficher la liste des réservations avec possibilité d'ouverture des détails.
@@ -25,73 +31,69 @@ class TableauReservationsUI(QWidget):
         # Champ de recherche
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("🔍 Rechercher par Nom du Client, nº contrat ou nº réservation ...")
-        self.search_input.textChanged.connect(self.filtrer_tableau)
+        self.search_input.textChanged.connect(self.tb_op_filtrer_tableau)
         layout.addWidget(QLabel("Recherche réservation :"))
         layout.addWidget(self.search_input)
 
-        # Tableau d'affichage des réservations
-        self.tableau_reservations = QTableWidget()
-        self.tableau_reservations.setColumnCount(len(self.colonnes))
-        self.tableau_reservations.setHorizontalHeaderLabels(self.colonnes)
+        # Tableau
+        self.tb_op_tableau_reservations = QTableWidget()
+        self.tb_op_tableau_reservations.setColumnCount(len(self.colonnes))
+        self.tb_op_tableau_reservations.setHorizontalHeaderLabels(self.colonnes)
 
-        header = self.tableau_reservations.horizontalHeader()
+        header = self.tb_op_tableau_reservations.horizontalHeader()
         for i in range(len(self.colonnes)):
             header.setSectionResizeMode(i, QHeaderView.ResizeToContents)
 
-        self.tableau_reservations.cellDoubleClicked.connect(self.ouvrir_contrat_selectionne)
-        layout.addWidget(self.tableau_reservations)
+        self.tb_op_tableau_reservations.cellDoubleClicked.connect(self.tb_op_ouvrir_contrat_selectionne)
+        layout.addWidget(self.tb_op_tableau_reservations)
 
-        self.charger_donnees(self.donnees)
+        self.tb_op_charger_donnees(self.donnees)
 
         # Bouton retour
         self.btn_retour = QPushButton("🔙 Retour")
-        self.btn_retour.clicked.connect(self.retourner)
+        self.btn_retour.clicked.connect(self.tb_op_retourner)
         layout.addWidget(self.btn_retour)
 
         self.setLayout(layout)
 
-    def charger_donnees(self, donnees):
-        """Charge les données dans le tableau."""
-        self.tableau_reservations.setRowCount(0)
+    def tb_op_charger_donnees(self, donnees):
+        self.tb_op_tableau_reservations.setRowCount(0)
         for index, ligne in enumerate(donnees):
-            self.tableau_reservations.insertRow(index)
+            self.tb_op_tableau_reservations.insertRow(index)
             for col, valeur in enumerate(ligne):
-                self.tableau_reservations.setItem(index, col, QTableWidgetItem(str(valeur)))
-        self.tableau_reservations.resizeColumnsToContents()
+                self.tb_op_tableau_reservations.setItem(index, col, QTableWidgetItem(str(valeur)))
+        self.tb_op_tableau_reservations.resizeColumnsToContents()
 
-    def filtrer_tableau(self):
-        """Filtre le tableau selon la recherche."""
+    def tb_op_filtrer_tableau(self):
         terme = self.search_input.text().strip().lower()
-        self.terme_recherche = terme  # Mémorise le terme de recherche
+        self.terme_recherche = terme
         if not terme:
             colonnes, reservations = lister_toutes_reservations()
-            self.charger_donnees(reservations)
+            self.tb_op_charger_donnees(reservations)
             return
-
         colonnes, reservations_filtres = rechercher_reservation(terme)
-        self.charger_donnees(reservations_filtres)
+        self.tb_op_charger_donnees(reservations_filtres)
 
-    def recharger_tableau(self):
-        """Recharge les données avec la dernière recherche ou la liste complète."""
+    def tb_op_recharger_tableau(self):
         if self.terme_recherche:
             colonnes, reservations_filtres = rechercher_reservation(self.terme_recherche)
-            self.charger_donnees(reservations_filtres)
+            self.tb_op_charger_donnees(reservations_filtres)
         else:
             colonnes, reservations = lister_toutes_reservations()
-            self.charger_donnees(reservations)
+            self.tb_op_charger_donnees(reservations)
 
-    def ouvrir_contrat_selectionne(self, row, _column):
+    def tb_op_ouvrir_contrat_selectionne(self, row, _column):
         try:
-            status = self.tableau_reservations.item(row, 6).text()
-            id_reserv = int(self.tableau_reservations.item(row, 0).text())
+            status = self.tb_op_tableau_reservations.item(row, 6).text()
+            id_reserv = int(self.tb_op_tableau_reservations.item(row, 0).text())
 
             if status == "EN ATTENTE":
-                if self.mode == "client":
-                    from interface_utilisateur.clients.gestion_reservations.ui_formulaire_reservation_gerir import FormulaireReservationGerirUI
-                    formulaire_gerer = FormulaireReservationGerirUI(self.main_window, id_reserv)
+                if self.mode == "contrat":
+                    # OUVRE O FORMULAIRE CONTRAT
+                    formulaire_gerer = FormulaireContratGererUI(self.main_window, id_reserv, retour_widget=self)
                 else:
-                    from interface_utilisateur.agences.operations.reservations.ui_formulaire_reservation_gerer_oper import FormulaireReservationGerirOperUI
-                    formulaire_gerer = FormulaireReservationGerirOperUI(self.main_window, id_reserv)
+                    # Modo normal 'oper'
+                    formulaire_gerer = FormulaireReservationGerirOperUI(self.main_window, id_reserv, retour_widget=self)
 
                 self.main_window.central_widget.addWidget(formulaire_gerer)
                 self.main_window.central_widget.setCurrentWidget(formulaire_gerer)
@@ -111,19 +113,26 @@ class TableauReservationsUI(QWidget):
             print(f"Erreur lors de l'ouverture du contrat ou du formulaire : {e}")
             QMessageBox.warning(self, "Erreur", "Problème lors de l'ouverture.")
 
-    def nettoyer_champs(self):
-        """Efface le champ de recherche et le contenu du tableau."""
-        self.search_input.clear()
-        self.tableau_reservations.setRowCount(0)
-
-    def retourner(self):
-        """Retourne à l'écran précédent et recharge les données."""
-        self.recharger_tableau()
+    def tb_op_retourner(self):
+        # Recharge le tableau avant de revenir
+        self.tb_op_recharger_tableau()
+        
         if self.retour_widget:
+            # Si un widget de retour est défini, on y retourne
             self.main_window.central_widget.setCurrentWidget(self.retour_widget)
+        elif self.mode == "contrat":
+            # Si le mode est 'contrat', retour à la gestion des opérations
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_operations)
+        elif self.mode == "oper":
+            # Si le mode est 'oper', retour à la gestion des réservations
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_reservations)
         else:
-            # Fallback
-            if self.mode == "oper":
-                self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_operations)
-            else:
-                self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_reservations)
+            # Sinon, retour par défaut vers le tableau général des réservations
+            if hasattr(self.main_window, 'ui_tableau_g_reservation'):
+                self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_g_reservation)
+
+
+
+    def tb_op_nettoyer_champs(self):
+        self.search_input.clear()
+        self.tb_op_tableau_reservations.setRowCount(0)

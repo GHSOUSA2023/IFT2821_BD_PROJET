@@ -1,11 +1,10 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QFrame
 from PyQt5.QtCore import Qt
 from interface_utilisateur.agences.ui_styles_agences import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
-from interface_utilisateur.agences.operations.reservations.ui_gestion_reservations import GestionReservationsUI
-from interface_utilisateur.agences.operations.rapports.ui_gestion_rapports import GestionRapportsUI
 from fonctions_gestion.contrats import lister_toutes_contrats
 from interface_utilisateur.tableaux.ui_tableau_reservations import TableauReservationsUI
-
+from interface_utilisateur.agences.operations.reservations.ui_gestion_reservations import GestionReservationsUI
+from interface_utilisateur.agences.operations.rapports.ui_gestion_rapports import GestionRapportsUI
 
 class GestionOperationsUI(QWidget):
     """
@@ -22,13 +21,9 @@ class GestionOperationsUI(QWidget):
         self.main_window = main_window
         self.setWindowTitle("Gestion des Opérations")
         self.setStyleSheet("background-color: #EAEDED;")
-
         self.initUI()
 
     def initUI(self):
-        """
-        Initialise l'interface : titres, boutons et mise en page.
-        """
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
 
@@ -50,73 +45,61 @@ class GestionOperationsUI(QWidget):
         btn_rapports = QPushButton("📊 Rapports")
         btn_retour = QPushButton("⬅ Retour")
 
-        # Appliquer le style aux boutons
+        # Style
         for btn in [btn_reservations, btn_contrats, btn_assurances, btn_tarification, btn_rapports, btn_retour]:
             btn.setStyleSheet(BUTTON_STYLE)
 
-        # Connexions des boutons (placeholders pour l'instant)
-        btn_reservations.clicked.connect(self.ouvrir_reservations)
-        btn_contrats.clicked.connect(self.ouvrir_contrats)
-        btn_assurances.clicked.connect(self.ouvrir_assurances)
-        btn_tarification.clicked.connect(self.ouvrir_tarification)
-        btn_rapports.clicked.connect(self.ouvrir_rapports)
-        btn_retour.clicked.connect(self.retourner)
+        # Connexions
+        btn_reservations.clicked.connect(self.go_ouvrir_reservations)
+        btn_contrats.clicked.connect(self.go_ouvrir_contrats)
+        btn_assurances.clicked.connect(self.go_ouvrir_assurances)
+        btn_tarification.clicked.connect(self.go_ouvrir_tarification)
+        btn_rapports.clicked.connect(self.go_ouvrir_rapports)
+        btn_retour.clicked.connect(self.go_retourner)
 
         # Ajout des boutons au conteneur
         for btn in [btn_reservations, btn_contrats, btn_assurances, btn_tarification, btn_rapports, btn_retour]:
             frame_layout.addWidget(btn)
 
         frame.setLayout(frame_layout)
-
-        # Ajout au layout principal
         layout.addWidget(label_title)
         layout.addWidget(frame)
         self.setLayout(layout)
 
-    # ------------------- Méthodes de navigation -------------------
-
-    def ouvrir_reservations(self):
-        """Méthode temporaire pour afficher les réservations."""
+    def go_ouvrir_reservations(self):
+        """Exemple d'ouverture de la gestion des réservations."""
         if not hasattr(self.main_window, "ui_gestion_reservations"):
             self.main_window.ui_gestion_reservations = GestionReservationsUI(self.main_window)
             self.main_window.central_widget.addWidget(self.main_window.ui_gestion_reservations)
-
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_reservations)
 
-    def ouvrir_contrats(self):
-        """Ouvre le tableau des réservations (contrats) depuis l'interface opérations."""
+    def go_ouvrir_contrats(self):
+        """Ouvre le tableau qui liste toutes les réservations/contrats (mode='contrat')."""
         colonnes, reservations = lister_toutes_contrats()
-        self.ui_tableau_reservations = TableauReservationsUI(
-            "Liste des Réservations",
+        self.main_window.ui_tableau_contrats = TableauReservationsUI(
+            "Liste des Contrats",
             colonnes,
             reservations,
             self.main_window,
-            mode="oper",
+            mode="contrat",
             retour_widget=self
         )
-        self.main_window.central_widget.addWidget(self.ui_tableau_reservations)
-        self.main_window.central_widget.setCurrentWidget(self.ui_tableau_reservations)
+        self.main_window.central_widget.addWidget(self.main_window.ui_tableau_contrats)
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_contrats)
 
-
-
-    def ouvrir_assurances(self):
-        """Méthode temporaire pour afficher les assurances."""
+    def go_ouvrir_assurances(self):
         print("Ouverture de la gestion des assurances (non implémenté).")
 
-    def ouvrir_tarification(self):
-        """Méthode temporaire pour afficher la tarification."""
+    def go_ouvrir_tarification(self):
         print("Ouverture de la gestion de la tarification (non implémenté).")
 
-    def ouvrir_rapports(self):
-        """
-        Affiche le module des rapports et statistiques.
-        """
+    def go_ouvrir_rapports(self):
+        """Affiche le module des rapports et statistiques."""
         if not hasattr(self.main_window, "ui_gestion_rapports"):
             self.main_window.ui_gestion_rapports = GestionRapportsUI(self.main_window)
             self.main_window.central_widget.addWidget(self.main_window.ui_gestion_rapports)
-
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_rapports)
 
-    def retourner(self):
-        """Retourner à l'écran principal."""
+    def go_retourner(self):
+        """Retourne à l'écran principal."""
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_agences_mere)
