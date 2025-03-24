@@ -95,3 +95,13 @@ MODIFIER_TARIFICATION = """
     SET KM_JOUR = ?, PRIX_LOCAT_JOUR = ?, ID_TP_VEHIC = ?
     WHERE ID_TARIF = ?
 """
+
+# Requête pour modifier une contrat
+MODIFIER_CONTRAT = """
+UPDATE CONTRACTS
+SET DATE_FIN = ?, 
+    STATUS_CONTRACT = ?, 
+    DUREE_JOURS = ?,
+    PRIX_TOTAL = ?
+WHERE ID_RESERV = ?;
+"""
