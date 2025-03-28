@@ -12,8 +12,14 @@ from interface_utilisateur.agences.employe.ui_gestion_employes import GestionEmp
 from interface_utilisateur.agences.operations.ui_gestion_operations import GestionOperationsUI
 from interface_utilisateur.agences.operations.rapports.ui_gestion_rapports import GestionRapportsUI
 from interface_utilisateur.tableaux.ui_tableau_liste_contrats_client import TableauListeContratsClientUI
-#from interface_utilisateur.tableaux.ui_tableau_reservations import TableauReservationsUI
+# from interface_utilisateur.tableaux.ui_tableau_reservations import TableauReservationsUI
 
+# Importation des styles depuis ui_styles.py
+from interface_utilisateur.ui_styles import (
+    WINDOW_STYLE, WINDOW_GEOMETRY,
+    BUTTON_STYLE_AGENCES, BUTTON_STYLE_CLIENTS, BUTTON_STYLE_QUITTER,
+    LABEL_TITLE_FONT
+)
 
 
 class MainWindow(QMainWindow):
@@ -24,8 +30,10 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("GN Location - Gestion")
-        self.setGeometry(50, 50, 1000, 600)
-        self.setStyleSheet("background-color: #f4f4f4;")
+        self.resize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
+        self.setFixedSize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
+        self.move(WINDOW_GEOMETRY[0], WINDOW_GEOMETRY[1])
+        self.setStyleSheet(WINDOW_STYLE)
 
         # QStackedWidget pour la navigation
         self.central_widget = QStackedWidget()
@@ -42,26 +50,18 @@ class MainWindow(QMainWindow):
 
         # Titre principal
         label_title = QLabel("GN LOCATION")
-        label_title.setFont(QFont("Arial", 28, QFont.Bold))
+        label_title.setFont(QFont(LABEL_TITLE_FONT['family'], LABEL_TITLE_FONT['size'], LABEL_TITLE_FONT['weight']))
         label_title.setAlignment(Qt.AlignCenter)
-
-        # Style unifié des boutons
-        button_style = (
-            "padding: 12px; "
-            "font-size: 16px; "
-            "border-radius: 8px; "
-            "color: white; "
-        )
 
         # Boutons de navigation
         btn_agences = QPushButton("🏢 Agences")
         btn_clients = QPushButton("👤 Clients")
         btn_quitter = QPushButton("🚪 Quitter le système")
 
-        # Application des couleurs et styles
-        btn_agences.setStyleSheet(button_style + "background-color: #007BFF;")
-        btn_clients.setStyleSheet(button_style + "background-color: #28A745;")
-        btn_quitter.setStyleSheet(button_style + "background-color: #DC3545;")
+        # Application des couleurs et styles à partir de ui_styles.py
+        btn_agences.setStyleSheet(BUTTON_STYLE_AGENCES)
+        btn_clients.setStyleSheet(BUTTON_STYLE_CLIENTS)
+        btn_quitter.setStyleSheet(BUTTON_STYLE_QUITTER)
 
         # Connexions
         btn_agences.clicked.connect(lambda: self.afficher_interface(self.ui_agences_mere))
@@ -86,7 +86,7 @@ class MainWindow(QMainWindow):
         self.ui_gestion_operations = GestionOperationsUI(self)
         self.ui_gestion_rapports = GestionRapportsUI(self)
         self.ui_tableau_liste_contrats_client = TableauListeContratsClientUI(self)
-        #self.ui_tableau_reservations = TableauReservationsUI(self)
+        # self.ui_tableau_reservations = TableauReservationsUI(self)
 
         # Ajout dans le QStackedWidget
         self.central_widget.addWidget(self.menu_principal)
@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
         self.central_widget.addWidget(self.ui_gestion_operations)
         self.central_widget.addWidget(self.ui_gestion_rapports)
         self.central_widget.addWidget(self.ui_tableau_liste_contrats_client)
-        #self.central_widget.addWidget(self.ui_tableau_reservations)
+        # self.central_widget.addWidget(self.ui_tableau_reservations)
 
         # Afficher le menu principal au démarrage
         self.central_widget.setCurrentWidget(self.menu_principal)

@@ -92,3 +92,10 @@ BUTTON_STYLE_RETOUR = """
         background-color: #5a6268;
     }
 """
+
+FORMULAIRE_FIELDS_STYLE = """
+    QLineEdit, QComboBox {
+        min-height: 20px;
+        font-size: 12px;
+    }
+"""

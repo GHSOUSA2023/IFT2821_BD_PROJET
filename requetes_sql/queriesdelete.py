@@ -19,10 +19,16 @@ SUPPRIMER_MODELE = """
 DELETE FROM MODELE_VEHIC WHERE ID_MOD = ?;
 """
 
-# Requête pour supprimer un véhicule
+# Query supprimer DISPO_VEICHUL
+SUPPRIMER_DISPO_VEICHUL = """
+DELETE FROM DISPO_VEHICULE WHERE ID_VEHIC = ?;
+"""
+
+# Query supprimer FLOTTE
 SUPPRIMER_VEHICULE = """
 DELETE FROM FLOTTE WHERE ID_VEHIC = ?;
 """
+
 
 #Supprimer une tarification
 SUPPRIMER_TARIFICATION = """

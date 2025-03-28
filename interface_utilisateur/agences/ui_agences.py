@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from interface_utilisateur.agences.ui_styles_agences import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
 from interface_utilisateur.agences.agence.ui_gestion_agences import GestionAgencesUI
 from interface_utilisateur.agences.employe.ui_gestion_employes import GestionEmployesUI
+from interface_utilisateur.agences.vehicules.ui_gestion_vehicules import GestionVehiculesUI
 
 class AgencesUI(QWidget):
     """
@@ -99,7 +100,11 @@ class AgencesUI(QWidget):
         """
         Méthode placeholder: A relier avec l'interface de gestion des véhicules.
         """
-        print("Ouverture de la gestion des véhicules (non implémenté).")
+        if not hasattr(self.main_window, "ui_gestion_vehicules"):
+            self.main_window.ui_gestion_vehicules = GestionVehiculesUI(self.main_window)
+            self.main_window.central_widget.addWidget(self.main_window.ui_gestion_vehicules)
+
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_vehicules)
 
     def ouvrir_gestion_clients(self):
         """
