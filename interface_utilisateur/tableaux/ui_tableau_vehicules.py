@@ -1,10 +1,11 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QLineEdit, QLabel
 from PyQt5.QtCore import Qt
-from fonctions_gestion.vehicules import rechercher_vehicule  # Ajout de la fonction de recherche
+from fonctions_gestion.vehicules import rechercher_vehicule, get_vehicule_par_id
+from interface_utilisateur.agences.vehicules.ui_formulaire_vehicules import FormulaireVehiculeUI
 
 class TableauVehiculesUI(QWidget):
     """
-    Interface générique pour afficher les véhicules avec un champ de recherche.
+    Interface pour afficher les véhicules avec un champ de recherche et double-clic pour modifier.
     """
     def __init__(self, titre, colonnes, donnees, main_window, retour_widget):
         super().__init__()
@@ -27,8 +28,7 @@ class TableauVehiculesUI(QWidget):
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(len(self.colonnes))
         self.table_widget.setHorizontalHeaderLabels(self.colonnes)
-        self.table_widget.cellDoubleClicked.connect(self.selectionner_ligne)
-
+        self.table_widget.cellDoubleClicked.connect(self.ouvrir_selec_formulaire_modification)
 
         self.charger_donnees(self.donnees)
 
@@ -49,35 +49,31 @@ class TableauVehiculesUI(QWidget):
         for row, ligne in enumerate(donnees):
             for col, valeur in enumerate(ligne):
                 self.table_widget.setItem(row, col, QTableWidgetItem(str(valeur)))
-                self.table_widget.resizeColumnsToContents()
+        self.table_widget.resizeColumnsToContents()
 
     def filtrer_tableau(self):
         """Filtre le tableau selon la recherche."""
         terme = self.search_input.text().strip().lower()
-        
+
         if not terme:
             self.charger_donnees(self.donnees)  # Réinitialiser si champ vide
             return
-        
+
         colonnes, vehicules_filtres = rechercher_vehicule(terme)
         self.charger_donnees(vehicules_filtres)
 
-    def selectionner_ligne(self, row, column):
-        id_selectionne = int(self.table_widget.item(row, 0).text())
-        marque = self.table_widget.item(row, 1).text()
-        modele = self.table_widget.item(row, 2).text()
-        couleur = self.table_widget.item(row, 3).text()
-        typecarbur = self.table_widget.item(row, 4).text()
-        typev = self.table_widget.item(row, 5).text()
+    def ouvrir_selec_formulaire_modification(self, row, column):
+        """
+        Ouvre le formulaire de modification lorsqu'une ligne est double-cliquée.
+        """
+        id_vehicule = self.table_widget.item(row, 0).text()
+        vehicule_info = get_vehicule_par_id(id_vehicule)
 
-        # Passer au formulaire et mettre à jour
-        self.retour_widget.id_vehic = id_selectionne
-        self.retour_widget.vehicule_label.setText(f"Véhicule sélectionné : {marque}, {modele}, {couleur}, {typecarbur},{typev}")
-        self.main_window.central_widget.setCurrentWidget(self.retour_widget)
-        self.retour_widget.calculer_total()
-
-
+        if vehicule_info:
+            formulaire_modification = FormulaireVehiculeUI(self.main_window, mode="modifier", vehicule=vehicule_info)
+            self.main_window.central_widget.addWidget(formulaire_modification)
+            self.main_window.central_widget.setCurrentWidget(formulaire_modification)
 
     def retourner(self):
-        """Retourne à l'écran de gestion des véhicules."""
+        """Retourne à l'écran précédent."""
         self.main_window.central_widget.setCurrentWidget(self.retour_widget)

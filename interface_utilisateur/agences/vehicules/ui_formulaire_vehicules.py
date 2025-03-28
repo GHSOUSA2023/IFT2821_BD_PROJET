@@ -1,8 +1,11 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFormLayout, QComboBox, QMessageBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFormLayout, QComboBox, QMessageBox, QFrame
 from fonctions_gestion.vehicules import ajouter_vehicule, modifier_vehicule
-from fonctions_gestion.marques import lister_marques
-from fonctions_gestion.modeles import lister_modeles
-from fonctions_gestion.types_vehicules import lister_types_vehicules
+from fonctions_gestion.flotte import lister_marques, lister_tout_modeles, lister_tout_tp_vehic
+from constantes import constantes
+from fonctions_gestion.agences import lister_tout_agences  # Pour récupérer les agences
+from interface_utilisateur.agences.ui_styles_agences import FORMULAIRE_FIELDS_STYLE
+from interface_utilisateur.agences.operations.maintenance.ui_formulaire_maintenance import FormulaireMaintenanceUI
+
 
 class FormulaireVehiculeUI(QWidget):
     """
@@ -12,9 +15,10 @@ class FormulaireVehiculeUI(QWidget):
         super().__init__()
         self.main_window = main_window
         self.mode = mode
-        self.vehicule = vehicule  # Stocker les données du véhicule si en mode modification
+        self.vehicule = vehicule  # Stocker les données du véhicule si en mode modification (dictionnaire)
         self.setWindowTitle("Ajouter / Modifier un Véhicule")
         self.setGeometry(100, 100, 600, 500)
+        self.setStyleSheet(FORMULAIRE_FIELDS_STYLE)
         self.initUI()
 
     def initUI(self):
@@ -26,39 +30,59 @@ class FormulaireVehiculeUI(QWidget):
         self.annee_input = QLineEdit()
         self.couleur_input = QLineEdit()
         self.km_input = QLineEdit()
-        
+
         self.marque_input = QComboBox()
         self.modele_input = QComboBox()
         self.type_input = QComboBox()
-        self.status_input = QComboBox()
+        self.carburant_input = QComboBox()
+        self.agence_input = QComboBox()
+        self.status_label = QLabel("DISPONIBLE")  # Statut affiché seulement
 
-        # Charger les options disponibles
+        # Charger les marques
         self.marque_input.addItem("Sélectionner une marque")
         for marque in lister_marques():
             self.marque_input.addItem(marque[1], marque[0])  # (Nom, ID)
 
+        # Charger les modèles
         self.modele_input.addItem("Sélectionner un modèle")
-        for modele in lister_modeles():
+        for modele in lister_tout_modeles():
             self.modele_input.addItem(modele[1], modele[0])  # (Nom, ID)
 
+        # Charger les types de véhicules
         self.type_input.addItem("Sélectionner un type")
-        for type_veh in lister_types_vehicules():
+        for type_veh in lister_tout_tp_vehic():
             self.type_input.addItem(type_veh[1], type_veh[0])  # (Nom, ID)
 
-        self.status_input.addItems(["Disponible", "En maintenance", "Réservé"])
+        # Charger les types de carburant
+        self.carburant_input.addItem("Sélectionner un carburant")
+        for carburant in constantes.TYPES_CARBURANT:
+            self.carburant_input.addItem(carburant)
 
-        # Si en mode modification, remplir les champs
+        # Charger les agences
+        agences = lister_tout_agences()
+        self.agence_input.addItem("Sélectionner une agence", None)
+        for agence in agences:
+            self.agence_input.addItem(f"{agence[0]} - {agence[1]}", agence[0])
+
+        # Si mode modification, remplir les champs avec les valeurs existantes depuis le dictionnaire
         if self.mode == "modifier" and self.vehicule:
-            self.immatriculation_input.setText(self.vehicule[1])
-            self.annee_input.setText(str(self.vehicule[2]))
-            self.couleur_input.setText(self.vehicule[3])
-            self.km_input.setText(str(self.vehicule[4]))
+            self.immatriculation_input.setText(self.vehicule['IMMATRICULATION'])
+            self.annee_input.setText(str(self.vehicule['ANNEE_FAB']))
+            self.couleur_input.setText(self.vehicule['COULEUR'])
+            self.km_input.setText(str(self.vehicule['KM']))
 
-            self.marque_input.setCurrentIndex(self.marque_input.findData(self.vehicule[5]))
-            self.modele_input.setCurrentIndex(self.modele_input.findData(self.vehicule[6]))
-            self.type_input.setCurrentIndex(self.type_input.findData(self.vehicule[7]))
-            self.status_input.setCurrentText(self.vehicule[8])
+            self.marque_input.setCurrentIndex(self.marque_input.findText(self.vehicule['MARQUE']))
+            self.modele_input.setCurrentIndex(self.modele_input.findText(self.vehicule['MODELE']))
+            self.type_input.setCurrentIndex(self.type_input.findText(self.vehicule['TYPE_VEHIC']))
+            self.carburant_input.setCurrentIndex(self.carburant_input.findText(self.vehicule['TYPE_CARBUR']))
+            # Correction pour sélectionner l'agence dans le combo
+            for i in range(self.agence_input.count()):
+                if self.vehicule['NOM_AGENCE'] in self.agence_input.itemText(i):
+                    self.agence_input.setCurrentIndex(i)
+                    break
 
+
+        # Ajouter les champs au formulaire
         form_layout.addRow("Immatriculation:", self.immatriculation_input)
         form_layout.addRow("Année de fabrication:", self.annee_input)
         form_layout.addRow("Couleur:", self.couleur_input)
@@ -66,19 +90,51 @@ class FormulaireVehiculeUI(QWidget):
         form_layout.addRow("Marque:", self.marque_input)
         form_layout.addRow("Modèle:", self.modele_input)
         form_layout.addRow("Type de véhicule:", self.type_input)
-        form_layout.addRow("Statut:", self.status_input)
+        form_layout.addRow("Carburant:", self.carburant_input)
+        form_layout.addRow("Statut:", self.status_label)
+        form_layout.addRow("Agence:", self.agence_input)
 
-        # ✅ Ajouter les boutons
+        # Cadre pour mise en maintenance
+        maintenance_frame = QFrame()
+        maintenance_frame.setStyleSheet("""
+            QFrame {
+                border: 2px solid #dcdcdc;
+                border-radius: 8px;
+                padding: 10px;
+                margin-top: 10px;
+                background-color: #f9f9f9;
+            }
+        """)
+        maintenance_layout = QVBoxLayout()
+
+        self.btn_maintenance = QPushButton("🛠 Mettre ce véhicule en maintenance")
+        self.btn_maintenance.setStyleSheet("""
+            QPushButton {
+                background-color: #ff9800;
+                color: white;
+                font-weight: bold;
+                padding: 8px;
+                border-radius: 6px;
+            }
+            QPushButton:hover {
+                background-color: #e68900;
+            }
+        """)
+        self.btn_maintenance.clicked.connect(self.mettre_en_maintenance)
+
+        maintenance_layout.addWidget(self.btn_maintenance)
+        maintenance_frame.setLayout(maintenance_layout)
+        form_layout.addRow("", maintenance_frame)
+
+        # Boutons Sauvegarder / Effacer / Annuler
         self.btn_sauvegarder = QPushButton("💾 Sauvegarder")
         self.btn_effacer = QPushButton("🧹 Effacer")
         self.btn_annuler = QPushButton("❌ Annuler")
 
-        # ✅ Connexions des boutons
         self.btn_sauvegarder.clicked.connect(self.sauvegarder)
         self.btn_effacer.clicked.connect(self.effacer_formulaire)
         self.btn_annuler.clicked.connect(self.annuler)
 
-        # ✅ Ajout des boutons dans un sous-layout
         btn_layout = QVBoxLayout()
         btn_layout.addWidget(self.btn_sauvegarder)
         btn_layout.addWidget(self.btn_effacer)
@@ -88,29 +144,40 @@ class FormulaireVehiculeUI(QWidget):
         layout.addLayout(btn_layout)
         self.setLayout(layout)
 
+    def mettre_en_maintenance(self):
+        """
+        Ouvre le formulaire de maintenance pour ce véhicule.
+        """
+        if self.mode == "modifier" and self.vehicule:
+            formulaire_maintenance = FormulaireMaintenanceUI(self.main_window, self.vehicule['ID_VEHIC'])
+            self.main_window.central_widget.addWidget(formulaire_maintenance)
+            self.main_window.central_widget.setCurrentWidget(formulaire_maintenance)
+        else:
+            QMessageBox.warning(self, "Information", "Vous devez être en mode modification pour accéder à la maintenance.")
+
     def sauvegarder(self):
-        """
-        Enregistre les données en fonction du mode (ajouter/modifier).
-        """
+        """Enregistre les données en fonction du mode (ajouter/modifier)."""
         immatriculation = self.immatriculation_input.text()
-        annee = self.annee_input.text()
+        annee_fab = int(self.annee_input.text())
         couleur = self.couleur_input.text()
-        km = self.km_input.text()
+        km = int(self.km_input.text())
+        type_carbur = self.carburant_input.currentText()
+        id_marq = self.marque_input.currentData()
+        id_mod = self.modele_input.currentData()
+        id_tp_vehic = self.type_input.currentData()
+        id_age = self.agence_input.currentData()
+        status = "DISPONIBLE"
 
-        id_marque = self.marque_input.currentData()
-        id_modele = self.modele_input.currentData()
-        id_type = self.type_input.currentData()
-        status = self.status_input.currentText()
-
-        if not immatriculation or not annee or not couleur or not km:
+        if not immatriculation.strip() or not couleur.strip() or self.annee_input.text().strip() == "" or self.km_input.text().strip() == "":
             QMessageBox.warning(self, "Erreur", "Tous les champs doivent être remplis.")
             return
 
+
         if self.mode == "ajouter":
-            ajouter_vehicule(immatriculation, annee, couleur, km, id_marque, id_modele, id_type, status)
+            ajouter_vehicule(id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
         elif self.mode == "modifier":
-            id_vehicule = self.vehicule[0]
-            modifier_vehicule(id_vehicule, immatriculation, annee, couleur, km, id_marque, id_modele, id_type, status)
+            id_vehicule = self.vehicule['ID_VEHIC']
+            modifier_vehicule(id_vehicule, id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
 
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_vehicules)
 
@@ -123,7 +190,8 @@ class FormulaireVehiculeUI(QWidget):
         self.marque_input.setCurrentIndex(0)
         self.modele_input.setCurrentIndex(0)
         self.type_input.setCurrentIndex(0)
-        self.status_input.setCurrentIndex(0)
+        self.carburant_input.setCurrentIndex(0)
+        self.agence_input.setCurrentIndex(0)
 
     def annuler(self):
         """Annule l'action et retourne à la gestion des véhicules."""

@@ -2,12 +2,10 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QFrame
 from PyQt5.QtCore import Qt
 from interface_utilisateur.agences.ui_styles_agences import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
 from fonctions_gestion.vehicules import (
-    ajouter_vehicule, modifier_vehicule, supprimer_vehicule,
-    lister_tous_vehicules, rechercher_vehicule, 
-    afficher_liste_vehicules_modifier, afficher_liste_vehicules_supprimer
-)
+    ajouter_vehicule, modifier_vehicule, supprimer_vehicule, lister_tous_vehicules, rechercher_vehicule, get_vehicule_par_id)
+from fonctions_gestion.flotte import lister_marques, lister_tout_modeles, lister_tout_tp_vehic
 from interface_utilisateur.tableaux.ui_tableau_vehicules import TableauVehiculesUI
-from interface_utilisateur.agences.vehicules.ui_formulaire_vehicule import FormulaireVehiculeUI
+from interface_utilisateur.agences.vehicules.ui_formulaire_vehicules import FormulaireVehiculeUI
 
 
 class GestionVehiculesUI(QWidget):
@@ -71,37 +69,33 @@ class GestionVehiculesUI(QWidget):
         """
         Ouvre le formulaire pour ajouter un nouveau véhicule.
         """
-        self.formulaire_vehicule = FormulaireVehiculeUI(self.main_window, mode="ajouter")
-        self.main_window.central_widget.addWidget(self.formulaire_vehicule)
-        self.main_window.central_widget.setCurrentWidget(self.formulaire_vehicule)
+        self.ui_formulaire_vehicules = FormulaireVehiculeUI(self.main_window, mode="ajouter")
+        self.main_window.central_widget.addWidget(self.ui_formulaire_vehicules)
+        self.main_window.central_widget.setCurrentWidget(self.ui_formulaire_vehicules)
 
     def afficher_liste_vehicules_modifier(self):
-        """
-        Affiche la liste des véhicules avec option de modification.
-        """
-        colonnes, vehicules = afficher_liste_vehicules_modifier()
+        vehicules = lister_tous_vehicules()
+        colonnes = ["ID", "Immatriculation", "Carburant", "Année", "Couleur", "Statut", "KM", "Marque", "Modèle", "Type"]
 
         if vehicules:
-            self.tableau_vehicules_modifier = TableauVehiculesUI("Modifier un Véhicule", colonnes, vehicules, self.main_window)
+            self.tableau_vehicules_modifier = TableauVehiculesUI("Modifier un Véhicule", colonnes, vehicules, self.main_window, self)
             self.tableau_vehicules_modifier.table_widget.cellClicked.connect(self.ouvrir_formulaire_modifier)
             self.main_window.central_widget.addWidget(self.tableau_vehicules_modifier)
             self.main_window.central_widget.setCurrentWidget(self.tableau_vehicules_modifier)
+
+
 
     def ouvrir_formulaire_modifier(self, row, column):
         """
         Ouvre le formulaire de modification d'un véhicule lorsqu'une ligne est cliquée.
         """
-        id_vehic = self.tableau_vehicules_modifier.table_widget.item(row, 0).text()
+        id_vehic = int(self.tableau_vehicules_modifier.table_widget.item(row, 0).text())
 
-        # Charger les informations du véhicule sélectionné
-        vehicule_data = None
-        for vehicule in self.tableau_vehicules_modifier.donnees:
-            if vehicule[0] == id_vehic:
-                vehicule_data = vehicule
-                break
+        # Charger les informations du véhicule sélectionné depuis la base
+        vehicule_info = get_vehicule_par_id(id_vehic)
 
-        if vehicule_data:
-            self.formulaire_modification = FormulaireVehiculeUI(self.main_window, mode="modifier", vehicule=vehicule_data)
+        if vehicule_info:
+            self.formulaire_modification = FormulaireVehiculeUI(self.main_window, mode="modifier", vehicule=vehicule_info)
             self.main_window.central_widget.addWidget(self.formulaire_modification)
             self.main_window.central_widget.setCurrentWidget(self.formulaire_modification)
 
@@ -109,7 +103,7 @@ class GestionVehiculesUI(QWidget):
         """
         Affiche la liste des véhicules dans le tableau avec possibilité de suppression.
         """
-        colonnes, vehicules = afficher_liste_vehicules_supprimer()
+        colonnes, vehicules = lister_tous_vehicules()
 
         if vehicules:
             self.tableau_vehicules_supprimer = TableauVehiculesUI("Supprimer un Véhicule", colonnes, vehicules, self.main_window)

@@ -3,7 +3,6 @@ from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete
 
 # ----------------------------- FONCTIONS POUR VEHICULES-MARQUES -----------------------------
 
-
 # Ajouter une marque
 def ajouter_marque(nom_marque):
     """Ajoute une nouvelle marque à la base de données."""
@@ -18,7 +17,6 @@ def ajouter_marque(nom_marque):
             print(f"Erreur lors de l'ajout de la marque : {erreur}")
         finally:
             database.fermer_connexion(connexion)
-
 
 # Récupérer une marque par ID
 def get_marque_par_id(id_marque):
@@ -35,7 +33,6 @@ def get_marque_par_id(id_marque):
             database.fermer_connexion(connexion)
     return None
 
-
 # Modifier une marque
 def modifier_marque(id_marque, nouveau_nom):
     """Modifie le nom d'une marque existante."""
@@ -43,32 +40,13 @@ def modifier_marque(id_marque, nouveau_nom):
     if connexion:
         try:
             curseur = connexion.cursor()
-
-            # Vérifier si la marque existe
-            curseur.execute(queries.GET_MARQUE_PAR_ID, (id_marque,))
-            marque = curseur.fetchone()
-            if not marque:
-                print("Aucune marque trouvée avec cet ID.")
-                return
-
-            # Afficher les informations avant changement
-            print("\nDétails de la marque sélectionnée :")
-            print(f"ID : {marque.ID_MARQ}")
-            print(f"Nom : {marque.MARQUE}")
-
-            # Mise à jour de la marque
-            curseur.execute(
-                queriesupdate.MODIFIER_MARQUE,
-                (nouveau_nom.upper(), id_marque),
-            )
+            curseur.execute(queriesupdate.MODIFIER_MARQUE, (nouveau_nom.upper(), id_marque))
             connexion.commit()
             print("Marque modifiée avec succès !")
-
         except Exception as erreur:
             print(f"Erreur lors de la modification de la marque : {erreur}")
         finally:
             database.fermer_connexion(connexion)
-
 
 # Supprimer une marque
 def supprimer_marque(id_marque):
@@ -77,14 +55,6 @@ def supprimer_marque(id_marque):
     if connexion:
         try:
             curseur = connexion.cursor()
-
-            # Vérifier si la marque existe avant suppression
-            curseur.execute(queries.GET_MARQUE_PAR_ID, (id_marque,))
-            marque = curseur.fetchone()
-            if not marque:
-                print("Aucune marque trouvée avec cet ID.")
-                return
-
             curseur.execute(queriesdelete.SUPPRIMER_MARQUE, (id_marque,))
             connexion.commit()
             print("Marque supprimée avec succès !")
@@ -93,30 +63,17 @@ def supprimer_marque(id_marque):
         finally:
             database.fermer_connexion(connexion)
 
-
 # Lister toutes les marques
 def lister_marques():
-    """Affiche la liste de toutes les marques enregistrées."""
+    """Retourne la liste de toutes les marques enregistrées."""
     connexion = database.connecter()
     if connexion:
-        try:
-            curseur = connexion.cursor()
-            curseur.execute(queries.LISTER_MARQUES)
-            marques = curseur.fetchall()
-
-            if not marques:
-                print("Aucune marque enregistrée.")
-                return
-
-            print("\nLISTE DES MARQUES :")
-            for marque in marques:
-                print(f"ID: {marque.ID_MARQ} - Nom: {marque.MARQUE}")
-
-        except Exception as erreur:
-            print(f"Erreur lors de la récupération des marques : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
+        curseur = connexion.cursor()
+        curseur.execute(queries.LISTER_MARQUES)
+        marques = curseur.fetchall()
+        database.fermer_connexion(connexion)
+        return marques
+    return []
 
 # Rechercher une marque par nom
 def rechercher_marque(nom_marque):
@@ -127,23 +84,13 @@ def rechercher_marque(nom_marque):
             curseur = connexion.cursor()
             curseur.execute(queries.RECHERCHER_MARQUE, (f"%{nom_marque.upper()}%",))
             marques = curseur.fetchall()
-
-            if not marques:
-                print("Aucune marque trouvée.")
-                return
-
-            print("\nMARQUES TROUVÉES :")
-            for marque in marques:
-                print(f"ID: {marque.ID_MARQ} - Nom: {marque.MARQUE}")
-
+            return marques
         except Exception as erreur:
             print(f"Erreur lors de la recherche de la marque : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
-
 # ----------------------------- FONCTIONS POUR VEHICULES-MODELES -----------------------------
-
 
 # Ajouter un modèle
 def ajouter_modele(nom_modele):
@@ -160,7 +107,6 @@ def ajouter_modele(nom_modele):
         finally:
             database.fermer_connexion(connexion)
 
-
 # Récupérer un modèle par ID
 def get_modele_par_id(id_modele):
     """Récupère un modèle par son ID."""
@@ -176,7 +122,6 @@ def get_modele_par_id(id_modele):
             database.fermer_connexion(connexion)
     return None
 
-
 # Modifier un modèle
 def modifier_modele(id_modele, nouveau_nom):
     """Modifie un modèle existant."""
@@ -184,32 +129,13 @@ def modifier_modele(id_modele, nouveau_nom):
     if connexion:
         try:
             curseur = connexion.cursor()
-
-            # Vérifier si le modèle existe
-            curseur.execute(queries.GET_MODELE_PAR_ID, (id_modele,))
-            modele = curseur.fetchone()
-            if not modele:
-                print("Aucun modèle trouvé avec cet ID.")
-                return
-
-            # Afficher les informations avant changement
-            print("\nDétails du modèle sélectionné :")
-            print(f"ID : {modele.ID_MOD}")
-            print(f"Nom : {modele.MODELE}")
-
-            # Mise à jour du modèle
-            curseur.execute(
-                queriesupdate.MODIFIER_MODELE,
-                (nouveau_nom.upper(), id_modele),
-            )
+            curseur.execute(queriesupdate.MODIFIER_MODELE, (nouveau_nom.upper(), id_modele))
             connexion.commit()
             print("Modèle modifié avec succès !")
-
         except Exception as erreur:
             print(f"Erreur lors de la modification du modèle : {erreur}")
         finally:
             database.fermer_connexion(connexion)
-
 
 # Supprimer un modèle
 def supprimer_modele(id_modele):
@@ -218,47 +144,25 @@ def supprimer_modele(id_modele):
     if connexion:
         try:
             curseur = connexion.cursor()
-
-            # Vérifier si le modèle existe
-            curseur.execute(queries.GET_MODELE_PAR_ID, (id_modele,))
-            modele = curseur.fetchone()
-            if not modele:
-                print("Aucun modèle trouvé avec cet ID.")
-                return
-
             curseur.execute(queriesdelete.SUPPRIMER_MODELE, (id_modele,))
             connexion.commit()
             print("Modèle supprimé avec succès !")
-
         except Exception as erreur:
             print(f"Erreur lors de la suppression du modèle : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
-
 # Lister tous les modèles
 def lister_tout_modeles():
-    """Affiche tous les modèles enregistrés."""
+    """Retourne tous les modèles enregistrés."""
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
             curseur.execute(queries.GET_TOUT_MODELES)
-            modeles = curseur.fetchall()
-
-            if not modeles:
-                print("Aucun modèle trouvé.")
-                return
-
-            print("\nListe des modèles enregistrés :")
-            for modele in modeles:
-                print(f"ID: {modele.ID_MOD} | Nom: {modele.MODELE}")
-
-        except Exception as erreur:
-            print(f"Erreur lors de la récupération des modèles : {erreur}")
+            return curseur.fetchall()
         finally:
             database.fermer_connexion(connexion)
-
 
 # Rechercher un modèle par nom
 def rechercher_modele(terme):
@@ -268,25 +172,41 @@ def rechercher_modele(terme):
         try:
             curseur = connexion.cursor()
             curseur.execute(queries.RECHERCHER_MODELES, (f"%{terme.upper()}%",))
-            modeles = curseur.fetchall()
-
-            if not modeles:
-                print("Aucun modèle correspondant trouvé.")
-                return
-
-            print("\nRésultats de la recherche :")
-            for modele in modeles:
-                print(f"ID: {modele.ID_MOD} | Nom: {modele.MODELE}")
-
+            return curseur.fetchall()
         except Exception as erreur:
             print(f"Erreur lors de la recherche de modèles : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
+# ----------------------------- FONCTIONS POUR VEHICULES-TYPE-VEHICULE -----------------------------
 
-# ----------------------------- FONCTIONS POUR VEHICULES-MAINTENANCE -----------------------------
+def get_tp_vehic_par_id(id_tp_vehic):
+    """Récupère un type de véhicule par ID."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queries.GET_TYPE_VEHIC_PAR_ID, (id_tp_vehic,))
+            return curseur.fetchone()
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération du type de véhicule : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+    return None
 
-# Ajouter une maintenance
+def lister_tout_tp_vehic():
+    """Retourne tous les types de véhicules."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queries.GET_TOUT_TYPE_VEHIC)
+            return curseur.fetchall()
+        finally:
+            database.fermer_connexion(connexion)
+
+# ----------------------------- FONCTIONS POUR MAINTENANCE -----------------------------
+
 def ajouter_maintenance(id_vehic, id_emp, type_maintenance, date_maintenance, description, status):
     """Ajoute une nouvelle maintenance à la base de données."""
     connexion = database.connecter()
@@ -295,14 +215,7 @@ def ajouter_maintenance(id_vehic, id_emp, type_maintenance, date_maintenance, de
             curseur = connexion.cursor()
             curseur.execute(
                 queriesinputs.AJOUTER_MAINTENANCE,
-                (
-                    id_vehic,
-                    id_emp,
-                    type_maintenance.upper(),
-                    date_maintenance,
-                    description,
-                    status.upper(),
-                ),
+                (id_vehic, id_emp, type_maintenance.upper(), date_maintenance, description, status.upper())
             )
             connexion.commit()
             print("Maintenance ajoutée avec succès !")
@@ -311,311 +224,34 @@ def ajouter_maintenance(id_vehic, id_emp, type_maintenance, date_maintenance, de
         finally:
             database.fermer_connexion(connexion)
 
-
-# Récupérer une maintenance par ID
-def get_maintenance_par_id(id_maintenance):
-    """Récupère une maintenance par son ID."""
+def terminer_maintenance(id_vehicule, date_fin_maintenance, description):
+    """Termine une maintenance pour un véhicule donné."""
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
-            curseur.execute(queries.GET_MAINTENANCE_PAR_ID, (id_maintenance,))
-            return curseur.fetchone()
+            curseur.execute(
+                queriesupdate.TERMINER_MAINTENANCE,
+                (date_fin_maintenance, description, id_vehicule)
+            )
+            connexion.commit()
+            print("Maintenance terminée avec succès !")
         except Exception as erreur:
-            print(f"Erreur lors de la récupération de la maintenance : {erreur}")
+            print(f"Erreur lors de la terminaison de la maintenance : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+
+def get_infos_maint_vehicule_par_id(id_vehicule):
+    """Retourne les informations complètes du véhicule pour affichage dans le formulaire de maintenance."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queries.GET_INFO_VEHIC_MAINT, (id_vehicule,))
+            result = curseur.fetchone()
+            if result:
+                colonnes = [col[0] for col in curseur.description]
+                return dict(zip(colonnes, result))
         finally:
             database.fermer_connexion(connexion)
     return None
-
-
-# Modifier une maintenance
-def modifier_maintenance(id_maintenance, type_maintenance, date_fin_maintenance, description, status):
-    """Modifie une maintenance existante."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-
-            # Vérifier si la maintenance existe
-            maintenance = get_maintenance_par_id(id_maintenance)
-            if not maintenance:
-                print("Aucune maintenance trouvée avec cet ID.")
-                return
-
-            # Afficher les informations avant changement
-            print("\nDétails de la maintenance sélectionnée :")
-            print(f"ID : {maintenance.ID_MAINTEN}")
-            print(f"Type : {maintenance.TYPE_MAINTEN}")
-            print(f"Date fin maintenance : {maintenance.DATE_MAINTEN_FIN}")
-            print(f"Description : {maintenance.DESC_MAINTEN}")
-            print(f"Statut : {maintenance.STATUS_MAINT}")
-
-
-            curseur.execute(
-                queriesupdate.MODIFIER_MAINTENANCE,
-                (
-                    type_maintenance.upper(),
-                    date_fin_maintenance,
-                    description,
-                    status.upper(),
-                    id_maintenance,
-                ),
-            )
-            connexion.commit()
-            print("Maintenance modifiée avec succès !")
-        except Exception as erreur:
-            print(f"Erreur lors de la modification de la maintenance : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
-
-# Supprimer une maintenance
-def supprimer_maintenance(id_maintenance):
-    """Supprime une maintenance après confirmation."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-
-            # Vérifier si la maintenance existe
-            maintenance = get_maintenance_par_id(id_maintenance)
-            if not maintenance:
-                print("Aucune maintenance trouvée avec cet ID.")
-                return
-
-            curseur.execute(queriesdelete.SUPPRIMER_MAINTENANCE, (id_maintenance,))
-            connexion.commit()
-            print("Maintenance supprimée avec succès !")
-        except Exception as erreur:
-            print(f"Erreur lors de la suppression de la maintenance : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
-
-# Lister toutes les maintenances
-def lister_maintenances():
-    """Affiche la liste de toutes les maintenances."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-            curseur.execute(queries.LISTER_MAINTENANCES)
-            maintenances = curseur.fetchall()
-
-            if not maintenances:
-                print("Aucune maintenance enregistrée.")
-                return
-
-            print("\nListe des maintenances :")
-            for maintenance in maintenances:
-                print(
-                    f"ID : {maintenance.ID_MAINTEN} | Type : {maintenance.TYPE_MAINTEN} | Véhicule : {maintenance.ID_VEHIC} | Statut : {maintenance.STATUS_MAINT} | Date Debut : {maintenance.DATE_MAINTEN} | Date Fin : {maintenance.DATE_MAINTEN_FIN}"
-                )
-
-        except Exception as erreur:
-            print(f"Erreur lors de la récupération des maintenances : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
-
-# Rechercher une maintenance
-def rechercher_maintenance(terme):
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-
-            # Se for dígito, vamos buscar por ID_VEHIC
-            if terme.isdigit():
-                # "param_type" recebe algo que NUNCA vai bater com TYPE_MAINTEN:
-                param_type = "#no_match#"    # <--- NÃO mais '%'
-                param_check = terme         # "10"
-                param_id = int(terme)       # 10
-            else:
-                # Se NÃO for dígito, vamos buscar por TYPE_MAINTEN
-                param_type = f"%{terme}%"   # ex: "%REPARATION%"
-                param_check = "#no_num#"    # algo que não passa em ISNUMERIC
-                param_id = -1
-
-            # Executar a query
-            curseur.execute(
-                queries.RECHERCHER_MAINTENANCE, 
-                (param_type, param_check, param_id)
-            )
-            maintenances = curseur.fetchall()
-
-            if not maintenances:
-                print("Aucune maintenance trouvée.")
-                return
-
-            print("\nRésultats de la recherche :")
-            for maintenance in maintenances:
-                print(
-                    f"ID : {maintenance.ID_MAINTEN} | "
-                    f"Type : {maintenance.TYPE_MAINTEN} | "
-                    f"Véhicule : {maintenance.ID_VEHIC} | "
-                    f"Statut : {maintenance.STATUS_MAINT}"
-                )
-
-        except Exception as erreur:
-            print(f"Erreur lors de la recherche de la maintenance : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
-# ----------------------------- FONCTIONS POUR VEHICULES-FLOTTE -----------------------------
-
-# Ajouter un véhicule dans la flotte
-def ajouter_vehicule(id_marque, id_modele, id_type, annee_fab, couleur, immatriculation, status, km, type_carbur):
-    """Ajoute un nouveau véhicule dans la flotte."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-            curseur.execute(
-                queriesinputs.AJOUTER_VEHICULE,
-                (id_marque, id_modele, id_type, annee_fab, couleur.upper(), immatriculation.upper(), status.upper(), km, type_carbur.upper()),
-            )
-            connexion.commit()
-            print("Véhicule ajouté avec succès !")
-        except Exception as erreur:
-            print(f"Erreur lors de l'ajout du véhicule : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
-# Récupérer un véhicule par ID
-def get_vehicule_par_id(id_vehicule):
-    """Récupère un véhicule par son ID."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-            curseur.execute(queries.GET_VEHICULE_PAR_ID, (id_vehicule,))
-            return curseur.fetchone()
-        except Exception as erreur:
-            print(f"Erreur lors de la récupération du véhicule : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-    return None
-
-# Modifier un véhicule
-def modifier_vehicule(id_vehicule, type_carbur, annee_fab, couleur, immatriculation, status, km, id_marque, id_modele, id_type):
-    """Modifie un véhicule existant."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-
-            # Vérifier si le véhicule existe
-            curseur.execute(queries.GET_VEHICULE_PAR_ID, (id_vehicule,))
-            vehicule = curseur.fetchone()
-            if not vehicule:
-                print("Aucun véhicule trouvé avec cet ID.")
-                return
-
-            # Affichage des informations avant modification
-            print("\nDétails du véhicule sélectionné :")
-            print(f"ID : {vehicule[0]}")
-            print(f"Type de carburant : {vehicule[1]}")
-            print(f"Année de fabrication : {vehicule[2]}")
-            print(f"Couleur : {vehicule[3]}")
-            print(f"Immatriculation : {vehicule[4]}")
-            print(f"Statut : {vehicule[5]}")
-            print(f"Kilométrage : {vehicule[6]}")
-            print(f"Marque (ID) : {vehicule[7]}")
-            print(f"Modèle (ID) : {vehicule[8]}")
-            print(f"Type de véhicule (ID) : {vehicule[9]}")
-
-            # Mise à jour du véhicule
-            curseur.execute(
-                queriesupdate.MODIFIER_VEHICULE,
-                (
-                    type_carbur.upper(),
-                    id_marque, 
-                    id_modele, 
-                    id_type, 
-                    annee_fab, 
-                    couleur.upper(), 
-                    immatriculation.upper(), 
-                    status.upper(), 
-                    km, 
-                    id_vehicule,
-                ),
-            )
-            connexion.commit()
-            print("Véhicule modifié avec succès !")
-
-        except Exception as erreur:
-            print(f"Erreur lors de la modification du véhicule : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
-
-# Supprimer un véhicule
-def supprimer_vehicule(id_vehicule):
-    """Supprime un véhicule après confirmation."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-
-            # Vérifier si le véhicule existe
-            curseur.execute(queries.GET_VEHICULE_PAR_ID, (id_vehicule,))
-            vehicule = curseur.fetchone()
-            if not vehicule:
-                print("Aucun véhicule trouvé avec cet ID.")
-                return
-
-            curseur.execute(queriesdelete.SUPPRIMER_VEHICULE, (id_vehicule,))
-            connexion.commit()
-            print("Véhicule supprimé avec succès !")
-
-        except Exception as erreur:
-            print(f"Erreur lors de la suppression du véhicule : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
-# Lister tous les véhicules de la flotte
-def lister_tous_vehicules():
-    """Affiche tous les véhicules enregistrés dans la flotte."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-            curseur.execute(queries.LISTER_VEHICULES)
-            vehicules = curseur.fetchall()
-
-            if not vehicules:
-                print("Aucun véhicule trouvé dans la flotte.")
-                return
-
-            print("\nListe des véhicules enregistrés :")
-            for vehicule in vehicules:
-                print(f"ID: {vehicule.ID_VEHIC} | Marque: {vehicule.MARQUE} | Modèle: {vehicule.MODELE} | Type: {vehicule.TYPE_VEHIC} | Immatriculation: {vehicule.IMMATRICULATION} | Statut: {vehicule.STATUS} | KM: {vehicule.KM}")
-
-        except Exception as erreur:
-            print(f"Erreur lors de la récupération des véhicules : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)
-
-# Rechercher un véhicule par immatriculation ou modèle
-def rechercher_vehicule(terme):
-    """Recherche un véhicule par immatriculation ou modèle."""
-    connexion = database.connecter()
-    if connexion:
-        try:
-            curseur = connexion.cursor()
-            curseur.execute(queries.RECHERCHER_VEHICULE, (f"%{terme.upper()}%", f"%{terme.upper()}%"))
-            vehicules = curseur.fetchall()
-
-            if not vehicules:
-                print("Aucun véhicule correspondant trouvé.")
-                return
-
-            print("\nRésultats de la recherche :")
-            for vehicule in vehicules:
-                print(f"ID: {vehicule.ID_VEHIC} | Marque: {vehicule.MARQUE} | Modèle: {vehicule.MODELE} | Type: {vehicule.TYPE_VEHIC} | Immatriculation: {vehicule.IMMATRICULATION} | Statut: {vehicule.STATUS} | KM: {vehicule.KM}")
-
-        except Exception as erreur:
-            print(f"Erreur lors de la recherche des véhicules : {erreur}")
-        finally:
-            database.fermer_connexion(connexion)

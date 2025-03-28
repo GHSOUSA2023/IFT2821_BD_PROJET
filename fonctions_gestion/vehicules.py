@@ -4,7 +4,7 @@ from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete
 # ----------------------------- FONCTIONS POUR VÉHICULES -----------------------------
 
 # 🔹 Ajouter un véhicule
-def ajouter_vehicule(immatriculation, type_carbur, annee_fab, couleur, status, km, id_marq, id_mod, id_tp_vehic):
+def ajouter_vehicule(id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age):
     """Ajoute un véhicule à la base de données."""
     connexion = database.connecter()
     if connexion:
@@ -12,7 +12,7 @@ def ajouter_vehicule(immatriculation, type_carbur, annee_fab, couleur, status, k
             curseur = connexion.cursor()
             curseur.execute(
                 queriesinputs.AJOUTER_VEHICULE,
-                (immatriculation, type_carbur, annee_fab, couleur, status, km, id_marq, id_mod, id_tp_vehic),
+                (id_marq, id_mod, id_tp_vehic, annee_fab, couleur.upper() , immatriculation.upper(), status, km, type_carbur, id_age)
             )
             connexion.commit()
             print("🚗 Véhicule ajouté avec succès !")
@@ -21,29 +21,42 @@ def ajouter_vehicule(immatriculation, type_carbur, annee_fab, couleur, status, k
         finally:
             database.fermer_connexion(connexion)
 
-# 🔹 Modifier un véhicule
-def modifier_vehicule(id_vehic, immatriculation, type_carbur, annee_fab, couleur, status, km, id_marq, id_mod, id_tp_vehic):
-    """Modifie les informations d'un véhicule existant."""
+# Modifier un véhicule
+def modifier_vehicule(id_vehic, id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age):
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
-            # Vérifier si le véhicule existe avant modification
+
             vehicule = get_vehicule_par_id(id_vehic)
             if not vehicule:
                 print("❌ Aucun véhicule trouvé avec cet ID.")
                 return
 
+            # Mise à jour de FLOTTE
             curseur.execute(
-                queriesupdate.MODIFIER_VEHICULE,
-                (immatriculation, type_carbur, annee_fab, couleur, status, km, id_marq, id_mod, id_tp_vehic, id_vehic),
+                queriesupdate.MODIFIER_VEHICULE_FLOTTE,
+                (
+                    id_marq, id_mod, id_tp_vehic,
+                    annee_fab, couleur, immatriculation,
+                    status, km, type_carbur, id_vehic
+                )
             )
+
+            # Mise à jour de DISPO_VEHICULE
+            curseur.execute(
+                queriesupdate.MODIFIER_DISPO_VEHICULE,
+                (id_age, id_vehic)
+            )
+
             connexion.commit()
             print("🚗 Véhicule modifié avec succès !")
+
         except Exception as erreur:
             print(f"❌ Erreur lors de la modification du véhicule : {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
 
 # 🔹 Supprimer un véhicule
 def supprimer_vehicule(id_vehic):

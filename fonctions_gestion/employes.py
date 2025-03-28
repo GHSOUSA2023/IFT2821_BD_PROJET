@@ -28,10 +28,6 @@ def ajouter_employe(nas, nom, prenom, salaire, poste, id_age):
             database.fermer_connexion(connexion)
 
 
-from base_donnees import database
-from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete
-
-
 # Récupérer un employé par ID
 def get_employe_par_id(id_emp):
     """Récupère les informations d'un employé spécifique."""
