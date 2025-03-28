@@ -219,10 +219,14 @@ def ajouter_maintenance(id_vehic, id_emp, type_maintenance, date_maintenance, de
             )
             connexion.commit()
             print("Maintenance ajoutée avec succès !")
+            return True
         except Exception as erreur:
             print(f"Erreur lors de l'ajout de la maintenance : {erreur}")
+            return False
         finally:
             database.fermer_connexion(connexion)
+    return False
+
 
 def terminer_maintenance(id_vehicule, date_fin_maintenance, description):
     """Termine une maintenance pour un véhicule donné."""
@@ -255,3 +259,30 @@ def get_infos_maint_vehicule_par_id(id_vehicule):
         finally:
             database.fermer_connexion(connexion)
     return None
+
+
+def get_infos_maint_vehicule_par_id_maint(id_vehicule):
+    """Retourne les informations complètes du véhicule pour affichage dans le formulaire de maintenance."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queries.GET_INFO_VEHIC_MAINT_BT_MAINT, (id_vehicule,))
+            result = curseur.fetchone()
+            if result:
+                colonnes = [col[0] for col in curseur.description]
+                return dict(zip(colonnes, result))
+        finally:
+            database.fermer_connexion(connexion)
+    return None
+
+
+def lister_vehicules_en_maintenance():
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queries.GET_TOUT_VEHICULES_MAINT_BT_MAINT)
+            return curseur.fetchall()
+        finally:
+            database.fermer_connexion(connexion)

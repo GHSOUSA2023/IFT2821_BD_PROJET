@@ -11,11 +11,12 @@ class FormulaireVehiculeUI(QWidget):
     """
     Interface du formulaire pour ajouter ou modifier un véhicule.
     """
-    def __init__(self, main_window, mode="ajouter", vehicule=None):
-        super().__init__()
+    def __init__(self, main_window, mode="ajouter", vehicule=None, retour_widget=None):
+        super().__init__()    
         self.main_window = main_window
         self.mode = mode
         self.vehicule = vehicule  # Stocker les données du véhicule si en mode modification (dictionnaire)
+        self.retour_widget = retour_widget
         self.setWindowTitle("Ajouter / Modifier un Véhicule")
         self.setGeometry(100, 100, 600, 500)
         self.setStyleSheet(FORMULAIRE_FIELDS_STYLE)
@@ -91,7 +92,7 @@ class FormulaireVehiculeUI(QWidget):
         form_layout.addRow("Modèle:", self.modele_input)
         form_layout.addRow("Type de véhicule:", self.type_input)
         form_layout.addRow("Carburant:", self.carburant_input)
-        form_layout.addRow("Statut:", self.status_label)
+        #form_layout.addRow("Statut:", self.status_label)
         form_layout.addRow("Agence:", self.agence_input)
 
         # Cadre pour mise en maintenance
@@ -145,33 +146,53 @@ class FormulaireVehiculeUI(QWidget):
         self.setLayout(layout)
 
     def mettre_en_maintenance(self):
-        """
-        Ouvre le formulaire de maintenance pour ce véhicule.
-        """
+        
         if self.mode == "modifier" and self.vehicule:
-            formulaire_maintenance = FormulaireMaintenanceUI(self.main_window, self.vehicule['ID_VEHIC'])
+            status = self.vehicule.get('STATUS')
+
+            if not status or status.strip().upper() != 'DISPONIBLE':
+                QMessageBox.warning(self, "Information", "Cet vehicule déjà est en maintenance.")
+                return
+
+            # Se passou na verificação, abre o formulário
+            formulaire_maintenance = FormulaireMaintenanceUI(
+                self.main_window,
+                self.vehicule['ID_VEHIC'],
+                self.retour_widget
+            )
             self.main_window.central_widget.addWidget(formulaire_maintenance)
             self.main_window.central_widget.setCurrentWidget(formulaire_maintenance)
         else:
-            QMessageBox.warning(self, "Information", "Vous devez être en mode modification pour accéder à la maintenance.")
+            QMessageBox.warning(self, "Information", "Vous devez etre en mode modification par acceder a maintenance.")
+
+
+
+
 
     def sauvegarder(self):
         """Enregistre les données en fonction du mode (ajouter/modifier)."""
-        immatriculation = self.immatriculation_input.text()
-        annee_fab = int(self.annee_input.text())
-        couleur = self.couleur_input.text()
-        km = int(self.km_input.text())
+        immatriculation = self.immatriculation_input.text().strip()
+        couleur = self.couleur_input.text().strip()
+        annee_text = self.annee_input.text().strip()
+        km_text = self.km_input.text().strip()
+
+        if not immatriculation or not couleur or not annee_text or not km_text:
+            QMessageBox.warning(self, "Erreur", "Tous les champs doivent être remplis.")
+            return
+
+        try:
+            annee_fab = int(annee_text)
+            km = int(km_text)
+        except ValueError:
+            QMessageBox.warning(self, "Erreur", "L'année de fabrication et le kilométrage doivent être des nombres valides.")
+            return
+
         type_carbur = self.carburant_input.currentText()
         id_marq = self.marque_input.currentData()
         id_mod = self.modele_input.currentData()
         id_tp_vehic = self.type_input.currentData()
         id_age = self.agence_input.currentData()
         status = "DISPONIBLE"
-
-        if not immatriculation.strip() or not couleur.strip() or self.annee_input.text().strip() == "" or self.km_input.text().strip() == "":
-            QMessageBox.warning(self, "Erreur", "Tous les champs doivent être remplis.")
-            return
-
 
         if self.mode == "ajouter":
             ajouter_vehicule(id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
@@ -180,6 +201,8 @@ class FormulaireVehiculeUI(QWidget):
             modifier_vehicule(id_vehicule, id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
 
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_vehicules)
+
+
 
     def effacer_formulaire(self):
         """Efface tous les champs du formulaire."""

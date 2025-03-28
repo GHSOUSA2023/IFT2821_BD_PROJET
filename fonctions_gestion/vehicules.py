@@ -59,19 +59,24 @@ def modifier_vehicule(id_vehic, id_marq, id_mod, id_tp_vehic, annee_fab, couleur
 
 
 # 🔹 Supprimer un véhicule
+
 def supprimer_vehicule(id_vehic):
-    """Supprime un véhicule par son ID après vérification de son existence."""
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
+            curseur.execute(queriesdelete.SUPPRIMER_DISPO_VEICHUL, (id_vehic,))
+            
             curseur.execute(queriesdelete.SUPPRIMER_VEHICULE, (id_vehic,))
+            
             connexion.commit()
-            print("🚗 Véhicule supprimé avec succès !")
+            print("Véhicule supprimé avec succès!")
         except Exception as erreur:
-            print(f"❌ Erreur lors de la suppression du véhicule : {erreur}")
+            connexion.rollback()
+            print(f"Erreur lors de la suppression du véhicule: {erreur}")
         finally:
             database.fermer_connexion(connexion)
+
 
 # 🔹 Lister tous les véhicules
 def lister_tous_vehicules():
@@ -156,15 +161,15 @@ def rechercher_vehicule(terme_recherche):
             for vehicule in resultats:
                 vehicules.append([
                     vehicule.ID_VEHIC,
+                    vehicule.IMMATRICULATION,
+                    vehicule.TYPE_CARBUR,
+                    vehicule.ANNEE_FAB,
+                    vehicule.COULEUR,
+                    vehicule.STATUS,
+                    vehicule.KM,
                     vehicule.MARQUE,
                     vehicule.MODELE,
-                    vehicule.COULEUR,
-                    vehicule.TYPE_CARBUR,
                     vehicule.TYPE_VEHIC,
-                    vehicule.IMMATRICULATION,
-                    vehicule.ANNEE_FAB,
-                    vehicule.STATUS,
-                    vehicule.KM
                 ])
 
         except Exception as erreur:

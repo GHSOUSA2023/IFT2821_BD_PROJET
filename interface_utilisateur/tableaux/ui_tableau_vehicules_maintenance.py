@@ -1,9 +1,11 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QLineEdit, QLabel
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDateTime
 from fonctions_gestion.vehicules import rechercher_vehicule, get_vehicule_par_id, lister_tous_vehicules
-from interface_utilisateur.agences.vehicules.ui_formulaire_vehicules import FormulaireVehiculeUI
+from fonctions_gestion.flotte import lister_vehicules_en_maintenance
+from interface_utilisateur.agences.operations.maintenance.ui_formulaire_maintenance_gerer import FormulaireMaintenanceGererUI
 
-class TableauVehiculesUI(QWidget):
+
+class TableauVehiculesMaintUI(QWidget):
     """
     Interface pour afficher les véhicules avec un champ de recherche et double-clic pour modifier.
     """
@@ -66,19 +68,22 @@ class TableauVehiculesUI(QWidget):
 
     def ouvrir_selec_formulaire_modification(self, row, column):
         """
-        Ouvre le formulaire de modification lorsqu'une ligne est double-cliquée.
+        Ouvre le formulaire de maintenance lorsqu'une ligne est double-cliquée.
         """
         id_vehicule = self.table_widget.item(row, 0).text()
-        vehicule_info = get_vehicule_par_id(id_vehicule)
 
-        if vehicule_info:
-            formulaire_modification = FormulaireVehiculeUI(self.main_window, mode="modifier", vehicule=vehicule_info, retour_widget=self)
-            self.main_window.central_widget.addWidget(formulaire_modification)
-            self.main_window.central_widget.setCurrentWidget(formulaire_modification)
+        formulaire_maintenance = FormulaireMaintenanceGererUI(
+            self.main_window,
+            id_vehicule,
+            self
+        )
+        self.main_window.central_widget.addWidget(formulaire_maintenance)
+        self.main_window.central_widget.setCurrentWidget(formulaire_maintenance)
+
 
     def tb_mt_recharger_tableau(self):
         """Recharge les données du tableau."""
-        vehicules = lister_tous_vehicules()
+        vehicules = lister_vehicules_en_maintenance()
         self.charger_donnees(vehicules)
 
 
