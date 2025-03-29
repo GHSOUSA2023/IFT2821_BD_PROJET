@@ -108,6 +108,17 @@ class AgencesUI(QWidget):
 
     def ouvrir_gestion_clients(self):
         """
-        Méthode placeholder: A relier avec l'interface de gestion des clients.
+        Affiche l'écran de gestion des clients.
         """
-        print("Ouverture de la gestion des clients (non implémenté).")
+        # Import de la classe de gestion des clients
+        from interface_utilisateur.agences.clients.ui_gestion_clients import GestionClientsUI
+
+        # Vérification si l'attribut n'existe pas déjà dans MainWindow
+        if not hasattr(self.main_window, "ui_gestion_clients"):
+            self.main_window.ui_gestion_clients = GestionClientsUI(self.main_window)
+            self.main_window.central_widget.addWidget(self.main_window.ui_gestion_clients)
+
+        # Définir l'interface de gestion des clients comme écran actuel
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_clients)
+
+

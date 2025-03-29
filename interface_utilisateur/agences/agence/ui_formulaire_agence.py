@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFormLayout
 from fonctions_gestion.agences import ajouter_agence, modifier_agence
+from PyQt5.QtCore import Qt
+
 
 class FormulaireAgenceUI(QWidget):
     """
@@ -7,6 +9,13 @@ class FormulaireAgenceUI(QWidget):
     """
     def __init__(self, main_window, mode="ajouter", agence=None):
         super().__init__()
+        # Empêche l'héritage du background depuis le parent
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        # Permet de remplir le fond avec la palette courante
+        self.setAutoFillBackground(True)
+        # On définit ici le background voulu (blanc)
+        self.setStyleSheet("background-image: none; background-color: white;")
+        self.setPalette(self.style().standardPalette())
         self.main_window = main_window
         self.mode = mode
         self.agence = agence  # Stocker les données de l'agence si en mode modification
@@ -42,10 +51,27 @@ class FormulaireAgenceUI(QWidget):
         # Bouton de validation
         self.btn_valider = QPushButton("Valider")
         self.btn_valider.clicked.connect(self.valider)
+        self.btn_valider.setFixedWidth(150)
 
+        # Bouton de retour
+        self.btn_retour = QPushButton("Retour")
+        self.btn_retour.clicked.connect(self.retour)
+        self.btn_retour.setFixedWidth(150)
+
+        # Ajout des widgets au layout
         layout.addLayout(form_layout)
         layout.addWidget(self.btn_valider)
+        layout.addWidget(self.btn_retour)
         self.setLayout(layout)
+
+
+        # Créer un layout horizontal pour centrer les boutons
+        layout.addLayout(form_layout)
+        layout.addWidget(self.btn_valider, alignment=Qt.AlignHCenter)
+        layout.addSpacing(10)  # Espace entre les boutons
+        layout.addWidget(self.btn_retour, alignment=Qt.AlignHCenter)
+        self.setLayout(layout)
+
 
     def valider(self):
         """
@@ -63,5 +89,11 @@ class FormulaireAgenceUI(QWidget):
             id_agence = self.agence[0]  # Récupérer l'ID de l'agence
             modifier_agence(id_agence, nom, adresse, ville, telephone, email)
 
-        # Retourner à la gestion des agences
+        # Retourner à l'interface de gestion des agences
+        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_agences)
+
+    def retour(self):
+        """
+        Retourne à l'interface de gestion des agences.
+        """
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_agences)

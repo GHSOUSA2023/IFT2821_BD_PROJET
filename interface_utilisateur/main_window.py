@@ -1,3 +1,4 @@
+import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget, QStackedWidget
 )
@@ -12,8 +13,6 @@ from interface_utilisateur.agences.employe.ui_gestion_employes import GestionEmp
 from interface_utilisateur.agences.operations.ui_gestion_operations import GestionOperationsUI
 from interface_utilisateur.agences.operations.rapports.ui_gestion_rapports import GestionRapportsUI
 from interface_utilisateur.tableaux.ui_tableau_liste_contrats_client import TableauListeContratsClientUI
-# from interface_utilisateur.tableaux.ui_tableau_reservations import TableauReservationsUI
-
 # Importation des styles depuis ui_styles.py
 from interface_utilisateur.ui_styles import (
     WINDOW_STYLE, WINDOW_GEOMETRY,
@@ -27,13 +26,29 @@ class MainWindow(QMainWindow):
     Fenêtre principale utilisant un QStackedWidget pour naviguer
     entre le menu principal, la gestion des agences, clients, et autres modules.
     """
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("GN Location - Gestion")
         self.resize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
         self.setFixedSize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
         self.move(WINDOW_GEOMETRY[0], WINDOW_GEOMETRY[1])
-        self.setStyleSheet(WINDOW_STYLE)
+
+        # Construire le chemin absolu vers l'image de background
+        image_path = os.path.join(os.path.dirname(__file__), "background_picture.jpg")
+        image_path = image_path.replace("\\", "/")  # pour Windows
+
+        # Construire une feuille de style combinant ton WINDOW_STYLE et le background image.
+        # Ici, on utilise "border-image" pour étirer l'image sur toute la fenêtre.
+        combined_style = f"""
+            QMainWindow {{
+                border-image: url("{image_path}") 0 0 0 0 stretch stretch;
+            }}
+        """
+        # Si WINDOW_STYLE contient d'autres styles que tu souhaites conserver, tu peux les ajouter :
+        combined_style += "\n" + WINDOW_STYLE
+
+        self.setStyleSheet(combined_style)
 
         # QStackedWidget pour la navigation
         self.central_widget = QStackedWidget()
@@ -58,7 +73,7 @@ class MainWindow(QMainWindow):
         btn_clients = QPushButton("👤 Clients")
         btn_quitter = QPushButton("🚪 Quitter le système")
 
-        # Application des couleurs et styles à partir de ui_styles.py
+        # Application des styles aux boutons
         btn_agences.setStyleSheet(BUTTON_STYLE_AGENCES)
         btn_clients.setStyleSheet(BUTTON_STYLE_CLIENTS)
         btn_quitter.setStyleSheet(BUTTON_STYLE_QUITTER)
@@ -86,7 +101,6 @@ class MainWindow(QMainWindow):
         self.ui_gestion_operations = GestionOperationsUI(self)
         self.ui_gestion_rapports = GestionRapportsUI(self)
         self.ui_tableau_liste_contrats_client = TableauListeContratsClientUI(self)
-        # self.ui_tableau_reservations = TableauReservationsUI(self)
 
         # Ajout dans le QStackedWidget
         self.central_widget.addWidget(self.menu_principal)
@@ -97,7 +111,6 @@ class MainWindow(QMainWindow):
         self.central_widget.addWidget(self.ui_gestion_operations)
         self.central_widget.addWidget(self.ui_gestion_rapports)
         self.central_widget.addWidget(self.ui_tableau_liste_contrats_client)
-        # self.central_widget.addWidget(self.ui_tableau_reservations)
 
         # Afficher le menu principal au démarrage
         self.central_widget.setCurrentWidget(self.menu_principal)

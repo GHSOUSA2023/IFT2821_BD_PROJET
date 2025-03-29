@@ -181,3 +181,23 @@ def rechercher_client_par_email(email):
         finally:
             database.fermer_connexion(connexion)
     return None
+
+# fonctions_gestion/clients.py
+
+def afficher_liste_clients_modifier():
+    """
+    Retourne les colonnes et la liste des clients pour la modification.
+    Vous pouvez adapter les colonnes selon les informations souhaitées.
+    """
+    colonnes = ["ID", "Nom", "Prénom", "Ville", "Adresse", "Permis", "Accidents", "Email", "Téléphone", "Carte Crédit"]
+    clients = lister_tous_clients()  # Utilise votre fonction existante pour lister tous les clients
+    return colonnes, clients
+
+def afficher_liste_clients_supprimer():
+    """
+    Retourne les colonnes et la liste des clients pour la suppression.
+    Vous pouvez adapter les colonnes selon les informations souhaitées.
+    """
+    colonnes = ["ID", "Nom", "Prénom", "Email", "Téléphone"]
+    clients = lister_tous_clients()  # Utilise votre fonction existante pour lister tous les clients
+    return colonnes, clients
