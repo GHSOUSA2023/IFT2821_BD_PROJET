@@ -5,14 +5,21 @@ from constantes import constantes
 from fonctions_gestion.agences import lister_tout_agences  # Pour récupérer les agences
 from interface_utilisateur.agences.ui_styles_agences import FORMULAIRE_FIELDS_STYLE
 from interface_utilisateur.agences.operations.maintenance.ui_formulaire_maintenance import FormulaireMaintenanceUI
-
+from PyQt5.QtCore import Qt
 
 class FormulaireVehiculeUI(QWidget):
     """
     Interface du formulaire pour ajouter ou modifier un véhicule.
     """
     def __init__(self, main_window, mode="ajouter", vehicule=None, retour_widget=None):
-        super().__init__()    
+        super().__init__()
+        # Empêche l'héritage du background depuis le parent
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        # Remplit le fond avec la palette courante et définit le background en blanc
+        self.setAutoFillBackground(True)
+        self.setStyleSheet("background-image: none; background-color: white;")
+        self.setPalette(self.style().standardPalette())
+
         self.main_window = main_window
         self.mode = mode
         self.vehicule = vehicule  # Stocker les données du véhicule si en mode modification (dictionnaire)

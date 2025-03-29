@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
 from fonctions_gestion.employes import ajouter_employe, modifier_employe
 from fonctions_gestion.agences import lister_tout_agences  # Pour récupérer les agences
 from constantes import constantes  # Pour récupérer les postes
+from PyQt5.QtCore import Qt
 
 class FormulaireEmployeUI(QWidget):
     """
@@ -9,6 +10,13 @@ class FormulaireEmployeUI(QWidget):
     """
     def __init__(self, main_window, mode="ajouter", employe=None):
         super().__init__()
+        # Empêche l'héritage du background depuis le parent
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        # Remplit le fond avec la palette courante et définit le background en blanc
+        self.setAutoFillBackground(True)
+        self.setStyleSheet("background-image: none; background-color: white;")
+        self.setPalette(self.style().standardPalette())
+
         self.main_window = main_window
         self.mode = mode
         self.employe = employe  # Stocker les données de l'employé si en mode modification
