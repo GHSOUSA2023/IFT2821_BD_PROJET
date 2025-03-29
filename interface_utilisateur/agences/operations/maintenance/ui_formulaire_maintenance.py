@@ -28,6 +28,11 @@ class FormulaireMaintenanceUI(QWidget):
     """
     def __init__(self, main_window, id_vehicule, retour_widget):
         super().__init__()
+        # Empêche l'héritage du background depuis le parent
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        # Permet de remplir le fond avec la palette courante
+        self.setAutoFillBackground(True)
+        # On définit ici le background voulu (blanc)
         self.main_window = main_window
         self.id_vehicule = id_vehicule
         self.retour_widget = retour_widget
