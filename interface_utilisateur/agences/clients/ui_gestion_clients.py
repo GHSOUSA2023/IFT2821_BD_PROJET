@@ -1,17 +1,13 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QFrame
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QFrame, QMessageBox
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMessageBox
 from interface_utilisateur.agences.ui_styles_agences import BUTTON_STYLE, FRAME_STYLE, TITLE_STYLE
 from fonctions_gestion.clients import (
     ajouter_client, modifier_client, supprimer_client,
     lister_tous_clients, rechercher_client, afficher_liste_clients_modifier,
     afficher_liste_clients_supprimer
 )
-from interface_utilisateur.tableaux.ui_tableau_liste_contrats_client import TableauListeContratsClientUI
+from interface_utilisateur.tableaux.ui_tableau_clients import TableauClientsUI
 from interface_utilisateur.agences.clients.ui_formulaire_clients import FormulaireClientUI
-from interface_utilisateur.clients.reservations.ui_formulaire_client import FormulaireClientUI
-from interface_utilisateur.tableaux.ui_tableau_liste_contrats_client import TableauListeContratsClientUI
-
 
 class GestionClientsUI(QWidget):
     """
@@ -118,8 +114,7 @@ class GestionClientsUI(QWidget):
         colonnes, clients = afficher_liste_clients_supprimer()
 
         if clients:
-            self.tableau_clients_supprimer = TableauClientsUI("Supprimer un Client", colonnes, clients,
-                                                              self.main_window)
+            self.tableau_clients_supprimer = TableauClientsUI("Supprimer un Client", colonnes, clients, self.main_window)
 
             # Connecter le clic à l'ouverture de la confirmation de suppression
             self.tableau_clients_supprimer.table_widget.cellClicked.connect(self.confirmer_suppression)

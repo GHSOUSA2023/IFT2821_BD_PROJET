@@ -9,7 +9,7 @@ class FormulaireClientUI(QWidget):
         super().__init__()
         self.main_window = main_window
         self.mode = mode
-        self.client = client  # Stocker les données du client si en mode modification
+        self.client = client  # Stocker les données du client en cas de modification
         self.setWindowTitle("Ajouter / Modifier un Client")
         self.setGeometry(100, 100, 600, 400)
         self.initUI()
@@ -74,11 +74,17 @@ class FormulaireClientUI(QWidget):
             QMessageBox.warning(self, "Erreur", "Veuillez remplir les champs obligatoires (Nom, Prénom, Email).")
             return
 
+        # Ici, on fournit des valeurs par défaut pour les champs non présents dans le formulaire
+        ville = "N/A"           # Valeur par défaut ou vous pouvez ajouter un champ dans le formulaire
+        permis_cond = "N/A"     # Valeur par défaut
+        carte_cred = "N/A"      # Valeur par défaut
+        hist_accidents = "N/A"  # Pour la modification
+
         if self.mode == "ajouter":
-            ajouter_client(nom, prenom, email, telephone, adresse)
+            ajouter_client(nom, prenom, ville, adresse, permis_cond, email, telephone, carte_cred)
         elif self.mode == "modifier":
             id_client = self.client[0]  # Récupérer l'ID du client existant
-            modifier_client(id_client, nom, prenom, email, telephone, adresse)
+            modifier_client(id_client, nom, prenom, ville, adresse, permis_cond, hist_accidents, email, telephone, carte_cred)
 
         # Retour à la gestion des clients
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_clients)
