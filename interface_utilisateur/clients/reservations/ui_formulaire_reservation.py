@@ -16,7 +16,7 @@ from fonctions_gestion.contratclient import get_contrat_par_reservation
 from interface_utilisateur.tableaux.ui_tableau_assurance import TableauAssurancesUI
 from interface_utilisateur.tableaux.ui_tableau_optionnel import TableauOptionnelsUI
 from interface_utilisateur.tableaux.ui_tableau_tarifications import TableauTarificationsUI
-from interface_utilisateur.tableaux.ui_tableau_vehicules import TableauVehiculesUI
+from interface_utilisateur.tableaux.ui_tableau_vehicules_reserv import TableauVehiculesUI
 from interface_utilisateur.tableaux.ui_tableau_contrat import TableauContratUI
 
 
@@ -227,7 +227,16 @@ class FormulaireReservationUI(QWidget):
         self.date_fin_input.setDate(date_min_fin)
         self.calculer_total()
 
-
+    def set_info_vehicule(self, donnees):
+        """
+        Reçoit les informations complètes du véhicule sélectionné et les affiche avec des libellés clairs.
+        """
+        id_vehic, marque, modele, couleur, carburant, type_vehic = donnees
+        self.id_vehic = int(id_vehic)
+        self.vehicule_label.setText(
+            f"Marque : {marque} | Modèle : {modele} | Couleur : {couleur} | "
+            f"Type carburant : {carburant} | Type véhicule : {type_vehic} (ID : {id_vehic})"
+        )
 
     ################################# Boutons action #################################
 

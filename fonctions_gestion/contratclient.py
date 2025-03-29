@@ -4,8 +4,11 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
-import os
 from fpdf import FPDF
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)).replace('\\fonctions_gestion',''))
+from utils.utils import resource_path
 
 
 # Fonction pour récupérer les détails complets d'un contrat par son ID
@@ -74,11 +77,10 @@ def envoyer_contrat_email(destinataire, sujet, corps, chemin_pdf):
         print(f"Erreur lors de l'envoi de l'email : {e}")
 
 def remplir_contrat(donnees):
-    # Construire le chemin absolu vers le fichier contrat_modele.txt
-    chemin_modele = os.path.join(os.path.dirname(__file__), "../interface_utilisateur/contrats/contrat_modele.txt")
-    chemin_modele = os.path.abspath(chemin_modele)
-
-    contrat_modele = open(chemin_modele, "r", encoding="utf-8").read()
+    # Utilise le chemin dynamique
+    chemin_modele = resource_path("interface_utilisateur/contrats/contrat_modele.txt")
+    with open(chemin_modele, "r", encoding="utf-8") as fichier:
+        contrat_modele = fichier.read()
     contrat_rempli = contrat_modele.format(**donnees)
     return contrat_rempli
 

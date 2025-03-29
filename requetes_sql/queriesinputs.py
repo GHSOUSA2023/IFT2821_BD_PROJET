@@ -28,11 +28,25 @@ INSERT INTO TYPE_VEHIC (TYPE_VEHIC)
 VALUES (?);
 """
 
-# Requête pour ajouter un véhicule
+# Requête pour ajouter un véhicule avec disponibilité
 AJOUTER_VEHICULE = """
-INSERT INTO FLOTTE (ID_MARQ, ID_MOD, ID_TP_VEHIC, ANNEE_FAB, COULEUR, IMMATRICULATION, STATUS, KM, TYPE_CARBUR)
+DECLARE @nouvel_id INT;
+
+-- Insérer dans la table FLOTTE
+INSERT INTO FLOTTE (
+    ID_MARQ, ID_MOD, ID_TP_VEHIC, ANNEE_FAB, COULEUR, IMMATRICULATION, STATUS, KM, TYPE_CARBUR
+)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Récupérer l'ID généré automatiquement
+SET @nouvel_id = SCOPE_IDENTITY();
+
+-- Insérer dans la table DISPO_VEHICULE avec l'ID de l'agence
+INSERT INTO DISPO_VEHICULE (ID_VEHIC, ID_AGE, DISPON_STOCK)
+VALUES (@nouvel_id, ?, 'DISPONIBLE');
 """
+
+
 
 # Requête pour ajouter un optionnel
 AJOUTER_OPTIONNEL = """
@@ -61,12 +75,6 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 AJOUTER_CLIENT = """
 INSERT INTO CLIENTS (NOM, PRENOM, VILLE, ADRESSE, PERMIS_COND, EMAIL, TELEPHONE, CARTE_CRED)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-"""
-
-#Ajouter un véhicule
-AJOUTER_VEHICULE = """
-INSERT INTO VEHICULES (IMMATRICULATION, TYPE_CARBUR, ANNEE_FAB, COULEUR, STATUS, KM, ID_MARQ, ID_MOD, ID_TP_VEHIC)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 """
 
 #Ajouter une nouvelle tarification

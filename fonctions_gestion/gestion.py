@@ -1020,7 +1020,7 @@ def modifier_vehicule(id_vehicule, type_carbur, annee_fab, couleur, immatriculat
 
             # Mise à jour du véhicule
             curseur.execute(
-                queriesupdate.MODIFIER_VEHICULE,
+                queriesupdate.MODIFIER_VEHICULE_FLOTTE,
                 (
                     type_carbur.upper(),
                     id_marque, 

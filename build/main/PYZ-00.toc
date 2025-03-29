@@ -3,6 +3,10 @@
  [('PyQt5',
    'C:\\Users\\GeraldoHenrique\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\PyQt5\\__init__.py',
    'PYMODULE'),
+  ('__future__',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\__future__.py',
+   'PYMODULE'),
   ('_compat_pickle',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_compat_pickle.py',
@@ -10,6 +14,10 @@
   ('_compression',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_compression.py',
+   'PYMODULE'),
+  ('_markupbase',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_markupbase.py',
    'PYMODULE'),
   ('_py_abc',
    'C:\\Program '
@@ -61,6 +69,11 @@
   ('calendar',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\calendar.py',
+   'PYMODULE'),
+  ('constantes', '-', 'PYMODULE'),
+  ('constantes.constantes',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de données\\Project\\App\\constantes\\constantes.py',
    'PYMODULE'),
   ('contextlib',
    'C:\\Program '
@@ -158,6 +171,30 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\message.py',
    'PYMODULE'),
+  ('email.mime',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\__init__.py',
+   'PYMODULE'),
+  ('email.mime.application',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\application.py',
+   'PYMODULE'),
+  ('email.mime.base',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\base.py',
+   'PYMODULE'),
+  ('email.mime.multipart',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\multipart.py',
+   'PYMODULE'),
+  ('email.mime.nonmultipart',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\nonmultipart.py',
+   'PYMODULE'),
+  ('email.mime.text',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\text.py',
+   'PYMODULE'),
   ('email.parser',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\parser.py',
@@ -184,13 +221,90 @@
    'Introduction aux bases de '
    'données\\Project\\App\\fonctions_gestion\\agences.py',
    'PYMODULE'),
+  ('fonctions_gestion.assurances',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\fonctions_gestion\\assurances.py',
+   'PYMODULE'),
+  ('fonctions_gestion.clients',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\fonctions_gestion\\clients.py',
+   'PYMODULE'),
+  ('fonctions_gestion.contratclient',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\fonctions_gestion\\contratclient.py',
+   'PYMODULE'),
+  ('fonctions_gestion.contrats',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\fonctions_gestion\\contrats.py',
+   'PYMODULE'),
+  ('fonctions_gestion.employes',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\fonctions_gestion\\employes.py',
+   'PYMODULE'),
+  ('fonctions_gestion.optionnels',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\fonctions_gestion\\optionnels.py',
+   'PYMODULE'),
+  ('fonctions_gestion.reservations',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\fonctions_gestion\\reservations.py',
+   'PYMODULE'),
+  ('fonctions_gestion.tarifications',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\fonctions_gestion\\tarifications.py',
+   'PYMODULE'),
+  ('fonctions_gestion.vehicules',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\fonctions_gestion\\vehicules.py',
+   'PYMODULE'),
+  ('fpdf',
+   'C:\\Users\\GeraldoHenrique\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\fpdf\\__init__.py',
+   'PYMODULE'),
+  ('fpdf.fonts',
+   'C:\\Users\\GeraldoHenrique\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\fpdf\\fonts.py',
+   'PYMODULE'),
+  ('fpdf.fpdf',
+   'C:\\Users\\GeraldoHenrique\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\fpdf\\fpdf.py',
+   'PYMODULE'),
+  ('fpdf.html',
+   'C:\\Users\\GeraldoHenrique\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\fpdf\\html.py',
+   'PYMODULE'),
+  ('fpdf.php',
+   'C:\\Users\\GeraldoHenrique\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\fpdf\\php.py',
+   'PYMODULE'),
+  ('fpdf.py3k',
+   'C:\\Users\\GeraldoHenrique\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\fpdf\\py3k.py',
+   'PYMODULE'),
+  ('fpdf.template',
+   'C:\\Users\\GeraldoHenrique\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\fpdf\\template.py',
+   'PYMODULE'),
+  ('fpdf.ttfonts',
+   'C:\\Users\\GeraldoHenrique\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\fpdf\\ttfonts.py',
+   'PYMODULE'),
   ('fractions',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\fractions.py',
    'PYMODULE'),
+  ('ftplib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ftplib.py',
+   'PYMODULE'),
   ('getopt',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\getopt.py',
+   'PYMODULE'),
+  ('getpass',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\getpass.py',
    'PYMODULE'),
   ('gettext',
    'C:\\Program '
@@ -203,6 +317,34 @@
   ('hashlib',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\hashlib.py',
+   'PYMODULE'),
+  ('hmac',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\hmac.py',
+   'PYMODULE'),
+  ('html',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\html\\__init__.py',
+   'PYMODULE'),
+  ('html.entities',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\html\\entities.py',
+   'PYMODULE'),
+  ('html.parser',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\html\\parser.py',
+   'PYMODULE'),
+  ('http',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\http\\__init__.py',
+   'PYMODULE'),
+  ('http.client',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\http\\client.py',
+   'PYMODULE'),
+  ('http.cookiejar',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\http\\cookiejar.py',
    'PYMODULE'),
   ('importlib',
    'C:\\Program '
@@ -298,15 +440,71 @@
    'PYMODULE'),
   ('interface_utilisateur', '-', 'PYMODULE'),
   ('interface_utilisateur.agences', '-', 'PYMODULE'),
+  ('interface_utilisateur.agences.agence', '-', 'PYMODULE'),
+  ('interface_utilisateur.agences.agence.ui_formulaire_agence',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\agence\\ui_formulaire_agence.py',
+   'PYMODULE'),
+  ('interface_utilisateur.agences.agence.ui_gestion_agences',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\agence\\ui_gestion_agences.py',
+   'PYMODULE'),
+  ('interface_utilisateur.agences.employe', '-', 'PYMODULE'),
+  ('interface_utilisateur.agences.employe.ui_formulaire_employes',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\employe\\ui_formulaire_employes.py',
+   'PYMODULE'),
+  ('interface_utilisateur.agences.employe.ui_gestion_employes',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\employe\\ui_gestion_employes.py',
+   'PYMODULE'),
+  ('interface_utilisateur.agences.operations', '-', 'PYMODULE'),
+  ('interface_utilisateur.agences.operations.contrats', '-', 'PYMODULE'),
+  ('interface_utilisateur.agences.operations.contrats.ui_formulaire_contrat_gerer',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\operations\\contrats\\ui_formulaire_contrat_gerer.py',
+   'PYMODULE'),
+  ('interface_utilisateur.agences.operations.rapports', '-', 'PYMODULE'),
+  ('interface_utilisateur.agences.operations.rapports.ui_gestion_rapports',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\operations\\rapports\\ui_gestion_rapports.py',
+   'PYMODULE'),
+  ('interface_utilisateur.agences.operations.reservations', '-', 'PYMODULE'),
+  ('interface_utilisateur.agences.operations.reservations.ui_formulaire_reservation_gerer_oper',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\operations\\reservations\\ui_formulaire_reservation_gerer_oper.py',
+   'PYMODULE'),
+  ('interface_utilisateur.agences.operations.reservations.ui_formulaire_reservation_oper',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\operations\\reservations\\ui_formulaire_reservation_oper.py',
+   'PYMODULE'),
+  ('interface_utilisateur.agences.operations.reservations.ui_gestion_reservations',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\operations\\reservations\\ui_gestion_reservations.py',
+   'PYMODULE'),
+  ('interface_utilisateur.agences.operations.ui_gestion_operations',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\agences\\operations\\ui_gestion_operations.py',
+   'PYMODULE'),
   ('interface_utilisateur.agences.ui_agences',
    'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
    'Introduction aux bases de '
    'données\\Project\\App\\interface_utilisateur\\agences\\ui_agences.py',
    'PYMODULE'),
-  ('interface_utilisateur.agences.ui_gestion_agences',
+  ('interface_utilisateur.agences.ui_agences_mere',
    'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
    'Introduction aux bases de '
-   'données\\Project\\App\\interface_utilisateur\\agences\\ui_gestion_agences.py',
+   'données\\Project\\App\\interface_utilisateur\\agences\\ui_agences_mere.py',
    'PYMODULE'),
   ('interface_utilisateur.agences.ui_styles_agences',
    'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
@@ -314,6 +512,23 @@
    'données\\Project\\App\\interface_utilisateur\\agences\\ui_styles_agences.py',
    'PYMODULE'),
   ('interface_utilisateur.clients', '-', 'PYMODULE'),
+  ('interface_utilisateur.clients.gestion_reservations', '-', 'PYMODULE'),
+  ('interface_utilisateur.clients.gestion_reservations.ui_formulaire_reservation_gerir',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\clients\\gestion_reservations\\ui_formulaire_reservation_gerir.py',
+   'PYMODULE'),
+  ('interface_utilisateur.clients.reservations', '-', 'PYMODULE'),
+  ('interface_utilisateur.clients.reservations.ui_formulaire_client',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\clients\\reservations\\ui_formulaire_client.py',
+   'PYMODULE'),
+  ('interface_utilisateur.clients.reservations.ui_formulaire_reservation',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\clients\\reservations\\ui_formulaire_reservation.py',
+   'PYMODULE'),
   ('interface_utilisateur.clients.ui_clients',
    'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
    'Introduction aux bases de '
@@ -335,6 +550,46 @@
    'Introduction aux bases de '
    'données\\Project\\App\\interface_utilisateur\\tableaux\\ui_tableau_agences.py',
    'PYMODULE'),
+  ('interface_utilisateur.tableaux.ui_tableau_assurance',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\tableaux\\ui_tableau_assurance.py',
+   'PYMODULE'),
+  ('interface_utilisateur.tableaux.ui_tableau_contrat',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\tableaux\\ui_tableau_contrat.py',
+   'PYMODULE'),
+  ('interface_utilisateur.tableaux.ui_tableau_employes',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\tableaux\\ui_tableau_employes.py',
+   'PYMODULE'),
+  ('interface_utilisateur.tableaux.ui_tableau_liste_contrats_client',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\tableaux\\ui_tableau_liste_contrats_client.py',
+   'PYMODULE'),
+  ('interface_utilisateur.tableaux.ui_tableau_optionnel',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\tableaux\\ui_tableau_optionnel.py',
+   'PYMODULE'),
+  ('interface_utilisateur.tableaux.ui_tableau_reservations',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\tableaux\\ui_tableau_reservations.py',
+   'PYMODULE'),
+  ('interface_utilisateur.tableaux.ui_tableau_tarifications',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\tableaux\\ui_tableau_tarifications.py',
+   'PYMODULE'),
+  ('interface_utilisateur.tableaux.ui_tableau_vehicules',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\interface_utilisateur\\tableaux\\ui_tableau_vehicules.py',
+   'PYMODULE'),
   ('ipaddress',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ipaddress.py',
@@ -346,6 +601,18 @@
   ('lzma',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\lzma.py',
+   'PYMODULE'),
+  ('mimetypes',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\mimetypes.py',
+   'PYMODULE'),
+  ('netrc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\netrc.py',
+   'PYMODULE'),
+  ('nturl2path',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\nturl2path.py',
    'PYMODULE'),
   ('numbers',
    'C:\\Program '
@@ -384,6 +651,11 @@
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\random.py',
    'PYMODULE'),
   ('requetes_sql', '-', 'PYMODULE'),
+  ('requetes_sql.procedure',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de '
+   'données\\Project\\App\\requetes_sql\\procedure.py',
+   'PYMODULE'),
   ('requetes_sql.queries',
    'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
    'Introduction aux bases de données\\Project\\App\\requetes_sql\\queries.py',
@@ -403,9 +675,17 @@
    'Introduction aux bases de '
    'données\\Project\\App\\requetes_sql\\queriesupdate.py',
    'PYMODULE'),
+  ('requetes_sql.views',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de données\\Project\\App\\requetes_sql\\views.py',
+   'PYMODULE'),
   ('selectors',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\selectors.py',
+   'PYMODULE'),
+  ('shlex',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\shlex.py',
    'PYMODULE'),
   ('shutil',
    'C:\\Program '
@@ -415,9 +695,17 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\signal.py',
    'PYMODULE'),
+  ('smtplib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\smtplib.py',
+   'PYMODULE'),
   ('socket',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\socket.py',
+   'PYMODULE'),
+  ('ssl',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ssl.py',
    'PYMODULE'),
   ('statistics',
    'C:\\Program '
@@ -471,9 +759,26 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\__init__.py',
    'PYMODULE'),
+  ('urllib.error',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\error.py',
+   'PYMODULE'),
   ('urllib.parse',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\parse.py',
+   'PYMODULE'),
+  ('urllib.request',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\request.py',
+   'PYMODULE'),
+  ('urllib.response',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\response.py',
+   'PYMODULE'),
+  ('utils', '-', 'PYMODULE'),
+  ('utils.utils',
+   'D:\\Documents\\Informatique Applique\\Hiver_2025\\IFT2821-A-H25 - '
+   'Introduction aux bases de données\\Project\\App\\utils\\utils.py',
    'PYMODULE'),
   ('zipfile',
    'C:\\Program '

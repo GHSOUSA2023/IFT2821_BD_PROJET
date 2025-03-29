@@ -16,7 +16,7 @@ from fonctions_gestion.contratclient import get_contrat_par_reservation
 from interface_utilisateur.tableaux.ui_tableau_assurance import TableauAssurancesUI
 from interface_utilisateur.tableaux.ui_tableau_optionnel import TableauOptionnelsUI
 from interface_utilisateur.tableaux.ui_tableau_tarifications import TableauTarificationsUI
-from interface_utilisateur.tableaux.ui_tableau_vehicules import TableauVehiculesUI
+from interface_utilisateur.tableaux.ui_tableau_vehicules_reserv import TableauVehiculesUI
 from interface_utilisateur.tableaux.ui_tableau_contrat import TableauContratUI
 
 
@@ -34,9 +34,10 @@ class CustomDateEdit(QDateEdit):
 
 # Formulaire de gestion des réservations dans la section opérations
 class FormulaireReservationGerirOperUI(QWidget):
-    def __init__(self, main_window, id_reservation=None):
+    def __init__(self, main_window, id_reservation=None, retour_widget=None):
         super().__init__()
         self.main_window = main_window
+        self.retour_widget = retour_widget
         self.ui_tableau_liste_contrats_client = self.main_window.ui_tableau_liste_contrats_client
         self.email_client = None
         self.id_client = None
@@ -49,7 +50,7 @@ class FormulaireReservationGerirOperUI(QWidget):
         self.setGeometry(100, 100, 600, 600)
         self.initUI()
         if self.id_reservation:
-            self.charger_reservation(self.id_reservation)
+            self.grm_charger_reservation(self.id_reservation)
 
 
     def initUI(self):
@@ -59,10 +60,10 @@ class FormulaireReservationGerirOperUI(QWidget):
         # Champs pour recherche de client
         self.email_input = QLineEdit()
         self.btn_rechercher_client = QPushButton("🔎 Rechercher client")
-        self.btn_rechercher_client.clicked.connect(self.rechercher_client)
+        self.btn_rechercher_client.clicked.connect(self.grm_rechercher_client)
 
         self.btn_nouveau_client = QPushButton("➕ Ajouter un nouveau client")
-        self.btn_nouveau_client.clicked.connect(self.ouvrir_formulaire_nouveau_client)
+        self.btn_nouveau_client.clicked.connect(self.grm_ouvrir_formulaire_nouveau_client)
 
         # Informations du client
         self.nom_label = QLabel("")
@@ -98,19 +99,19 @@ class FormulaireReservationGerirOperUI(QWidget):
         # Sélections
         self.vehicule_label = QLabel("Aucun véhicule sélectionné")
         self.btn_vehicule = QPushButton("Sélectionner un véhicule")
-        self.btn_vehicule.clicked.connect(self.afficher_tableau_vehicules)
+        self.btn_vehicule.clicked.connect(self.grm_afficher_tableau_vehicules)
 
         self.tarif_label = QLabel("Aucun tarif sélectionné")
         self.btn_tarif = QPushButton("Sélectionner un tarif")
-        self.btn_tarif.clicked.connect(self.afficher_tableau_tarifications)
+        self.btn_tarif.clicked.connect(self.grm_afficher_tableau_tarifications)
 
         self.assurance_label = QLabel("Aucune assurance sélectionnée")
         self.btn_assurance = QPushButton("Sélectionner une assurance")
-        self.btn_assurance.clicked.connect(self.afficher_tableau_assurances)
+        self.btn_assurance.clicked.connect(self.grm_afficher_tableau_assurances)
 
         self.optionnel_label = QLabel("Aucune option sélectionnée")
         self.btn_optionnel = QPushButton("Sélectionner un optionnel")
-        self.btn_optionnel.clicked.connect(self.afficher_tableau_optionnels)
+        self.btn_optionnel.clicked.connect(self.grm_afficher_tableau_optionnels)
 
         # Ajout des champs au formulaire
         form_layout.addRow("Date de début:", self.date_debut_input)
@@ -142,7 +143,7 @@ class FormulaireReservationGerirOperUI(QWidget):
         self.btn_confirmer.clicked.connect(self.confirmer_reservation)
 
         self.btn_retour = QPushButton("🔙 Retour")
-        self.btn_retour.clicked.connect(self.retourner_arriere)
+        self.btn_retour.clicked.connect(self.grm_retourner_arriere)
 
 
         layout.addLayout(form_layout)
@@ -152,7 +153,7 @@ class FormulaireReservationGerirOperUI(QWidget):
         layout.addWidget(self.btn_retour)
         self.setLayout(layout)
 
-    def rechercher_client(self):
+    def grm_rechercher_client(self):
         email = self.email_input.text()
         client = rechercher_client_par_email(email)
         if client:
@@ -165,14 +166,14 @@ class FormulaireReservationGerirOperUI(QWidget):
         else:
             QMessageBox.warning(self, "Erreur", "Aucun client trouvé avec cet email.")
 
-    def ouvrir_formulaire_nouveau_client(self):
+    def grm_ouvrir_formulaire_nouveau_client(self):
         if not hasattr(self.main_window, 'ui_formulaire_client'):
             self.main_window.ui_formulaire_client = FormulaireClientUI(self.main_window)
             self.main_window.central_widget.addWidget(self.main_window.ui_formulaire_client)
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_formulaire_client)
 
     # Méthodes d'affichage des tableaux
-    def afficher_tableau_vehicules(self):
+    def grm_afficher_tableau_vehicules(self):
         donnees = lister_vehicules_disponibles()
         tableau = TableauVehiculesUI(
             "Liste des véhicules disponibles",
@@ -185,21 +186,21 @@ class FormulaireReservationGerirOperUI(QWidget):
         self.main_window.central_widget.setCurrentWidget(tableau)
 
 
-    def afficher_tableau_tarifications(self):
+    def grm_afficher_tableau_tarifications(self):
         donnees = lister_toutes_tarifications()
         tableau = TableauTarificationsUI("Liste des tarifications", 
             ["ID", "KM/Jour", "Prix/Jour", "Type Véhicule"], donnees, self.main_window, self)
         self.main_window.central_widget.addWidget(tableau)
         self.main_window.central_widget.setCurrentWidget(tableau)
 
-    def afficher_tableau_assurances(self):
+    def grm_afficher_tableau_assurances(self):
         donnees = lister_toutes_assurances()
         tableau = TableauAssurancesUI("Liste des assurances", 
             ["ID", "Type", "Prix/Jour"], donnees, self.main_window, self)
         self.main_window.central_widget.addWidget(tableau)
         self.main_window.central_widget.setCurrentWidget(tableau)
 
-    def afficher_tableau_optionnels(self):
+    def grm_afficher_tableau_optionnels(self):
         donnees = lister_tout_optionnels()
         tableau = TableauOptionnelsUI("Liste des optionnels", 
             ["ID", "Nom", "Prix/Jour"], donnees, self.main_window, self)
@@ -232,7 +233,7 @@ class FormulaireReservationGerirOperUI(QWidget):
         self.date_fin_input.setDate(date_min_fin)
         self.calculer_total()
 
-    def charger_reservation(self, id_reservation):
+    def grm_charger_reservation(self, id_reservation):
         reservation = get_reservation_par_id(id_reservation)
         if reservation:
             # Remplir les infos client
@@ -300,6 +301,16 @@ class FormulaireReservationGerirOperUI(QWidget):
         else:
             QMessageBox.warning(self, "Erreur", "Impossible de charger la réservation.")
 
+    def set_info_vehicule(self, donnees):
+        """
+        Reçoit les informations complètes du véhicule sélectionné et les affiche avec des libellés clairs.
+        """
+        id_vehic, marque, modele, couleur, carburant, type_vehic = donnees
+        self.id_vehic = int(id_vehic)
+        self.vehicule_label.setText(
+            f"Marque : {marque} | Modèle : {modele} | Couleur : {couleur} | "
+            f"Type carburant : {carburant} | Type véhicule : {type_vehic} (ID : {id_vehic})"
+        )
 
     ################################# Boutons action #################################
 
@@ -428,15 +439,15 @@ class FormulaireReservationGerirOperUI(QWidget):
             self.reinitialiser_formulaire()
             self.retourner_arriere()
 
-    def retourner_arriere(self):
-        if hasattr(self.main_window, 'ui_tableau_contrats_client_oper'):
-            self.main_window.ui_tableau_contrats_client_oper.recharger_tableau()
-            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_contrats_client_oper)
-        elif hasattr(self.main_window, 'ui_tableau_liste_contrats_client'):
-            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_liste_contrats_client)
+    def grm_retourner_arriere(self):
+        if hasattr(self.main_window, 'ui_tableau_g_reservation'):
+            self.main_window.ui_tableau_g_reservation.tb_op_recharger_tableau()
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_g_reservation)
+        elif hasattr(self.main_window, 'ui_tableau_g_reservation'):
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_tableau_g_reservation)
             if self.email_client:
-                self.main_window.ui_tableau_liste_contrats_client.email_input.setText(self.email_client)
-                self.main_window.ui_tableau_liste_contrats_client.rechercher_contrats()
+                self.main_window.ui_tableau_g_reservation.email_input.setText(self.email_client)
+                self.main_window.ui_tableau_g_reservation.rechercher_contrats()
         else:
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_clients)
 
