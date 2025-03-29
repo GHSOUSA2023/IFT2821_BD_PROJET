@@ -56,7 +56,7 @@ class GestionVehiculesUI(QWidget):
         btn_maintenance.clicked.connect(self.gerer_maintenance_vehicule)
         btn_rechercher.clicked.connect(self.rechercher_vehicule)
 
-        btn_retour.clicked.connect(lambda: self.main_window.afficher_interface(self.main_window.ui_agences_mere))
+        btn_retour.clicked.connect(lambda: self.main_window.afficher_interface(self.main_window.ui_agences))
 
         for btn in [btn_ajouter, btn_modifier, btn_supprimer, btn_lister, btn_rechercher, btn_maintenance, btn_retour]:
             frame_layout.addWidget(btn)
