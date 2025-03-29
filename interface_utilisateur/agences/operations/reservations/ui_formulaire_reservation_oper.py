@@ -37,6 +37,10 @@ class CustomDateEdit(QDateEdit):
 class FormulaireReservationOperUI(QWidget):
     def __init__(self, main_window, mode="ajouter"):
         super().__init__()
+        # Empêche l'héritage du background depuis le parent
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        # Remplit le fond avec la palette courante et définit le background en blanc
+        self.setAutoFillBackground(True)
         self.main_window = main_window
         self.mode = mode
         self.id_client = None
