@@ -80,3 +80,83 @@ def rapport_entretien_par_agence():
         finally:
             database.fermer_connexion(connexion)
     return [], []
+
+def rapport_vehicules_contrats_actifs():
+    """Liste tous les véhicules avec contrats actifs."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queriesrapports.GET_VEHICULES_CONTRATS_ACTIFS)
+            colonnes = [desc[0] for desc in curseur.description]
+            donnees = curseur.fetchall()
+            return colonnes, donnees
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération des véhicules avec contrats actifs : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+    return [], []
+
+def rapport_employes_avec_incidents():
+    """Liste des employés responsables ayant des contrats avec incidents, avec le nombre de contrats impliqués."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queriesrapports.GET_EMPLOYES_AVEC_INCIDENTS)
+            colonnes = [desc[0] for desc in curseur.description]
+            donnees = curseur.fetchall()
+            return colonnes, donnees
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération des employés avec incidents : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+    return [], []
+
+def rapport_reservations_agence_janvier():
+    """Nombre de réservations par agence pour le mois de janvier."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queriesrapports.GET_RESERVATIONS_PAR_AGENCE_JANVIER)
+            colonnes = [desc[0] for desc in curseur.description]
+            donnees = curseur.fetchall()
+            return colonnes, donnees
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération des réservations de janvier : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+    return [], []
+
+def rapport_contrats_agence_janvier():
+    """Nombre de contrats en cours par agence pour le mois de janvier."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queriesrapports.GET_CONTRATS_PAR_AGENCE_JANVIER)
+            colonnes = [desc[0] for desc in curseur.description]
+            donnees = curseur.fetchall()
+            return colonnes, donnees
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération des contrats de janvier : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+    return [], []
+
+def rapport_facturation_agence_par_mois():
+    """Total de la facturation prévue et réalisée par agence et par mois."""
+    connexion = database.connecter()
+    if connexion:
+        try:
+            curseur = connexion.cursor()
+            curseur.execute(queriesrapports.GET_FACTURATION_PAR_AGENCE_MOIS)
+            colonnes = [desc[0] for desc in curseur.description]
+            donnees = curseur.fetchall()
+            return colonnes, donnees
+        except Exception as erreur:
+            print(f"Erreur lors de la récupération du rapport de facturation : {erreur}")
+        finally:
+            database.fermer_connexion(connexion)
+    return [], []
