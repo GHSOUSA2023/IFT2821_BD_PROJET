@@ -1,0 +1,20 @@
+1️⃣ Première chose à faire avant de commencer à programmer :
+git checkout dev-nader       (se placer sur votre branche personnelle)
+git fetch origin             (vérifier les mises à jour du dépôt distant)
+git pull origin dev          (mettre à jour votre branche avec les dernières modifications de la branche dev)
+
+2️⃣ Lorsque vous avez terminé une tâche et qu’elle est stable et fonctionnelle, l’envoyer sur GitHub :
+git add .                    (ajouter tous les fichiers modifiés à l'index)
+git commit -m "décrire ce qui a été fait"  (créer un commit avec un message clair et explicite)
+git push origin dev-nader    (envoyer vos modifications sur votre branche distante)
+
+3️⃣ Comparer avec la branche dev (exécuter localement pour voir l’état actuel du projet) :
+git checkout dev             (passer sur la branche d’intégration dev)
+git pull origin dev          (récupérer la version la plus récente de dev)
+python main.py               (lancer le programme et vérifier le fonctionnement global)
+
+4️⃣ Si tout est conforme et prêt, revenir à votre branche personnelle :
+git checkout dev-nader       (revenir sur votre branche pour finaliser)
+
+5️⃣ Communiquer avec moi pour effectuer le merge vers la branche dev.
+(m’envoyer un message lorsque votre travail est prêt à être intégré dans la branche dev)

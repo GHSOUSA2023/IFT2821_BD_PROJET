@@ -7,7 +7,7 @@ from fonctions_gestion.clients import (
     afficher_liste_clients_supprimer
 )
 from interface_utilisateur.tableaux.ui_tableau_clients import TableauClientsUI
-from interface_utilisateur.agences.clients.ui_formulaire_clients import FormulaireClientUI
+from interface_utilisateur.agences.clients.ui_formulaire_client import FormulaireClientUI
 
 class GestionClientsUI(QWidget):
     """
@@ -103,7 +103,7 @@ class GestionClientsUI(QWidget):
                 break
 
         if client_data:
-            self.formulaire_modification = FormulaireClientUI(self.main_window, mode="modifier", client=client_data)
+            self.formulaire_modification = FormulaireClientGererUI(self.main_window, mode="modifier", client=client_data)
             self.main_window.central_widget.addWidget(self.formulaire_modification)
             self.main_window.central_widget.setCurrentWidget(self.formulaire_modification)
 
