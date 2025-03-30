@@ -3,7 +3,7 @@ from requetes_sql import queries, queriesinputs, queriesupdate, queriesdelete
 
 # ----------------------------- FONCTIONS POUR VÉHICULES -----------------------------
 
-# 🔹 Ajouter un véhicule
+# Ajouter un véhicule
 def ajouter_vehicule(id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age):
     """Ajoute un véhicule à la base de données."""
     connexion = database.connecter()

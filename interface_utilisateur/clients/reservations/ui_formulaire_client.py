@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFormLayout, QMessageBox
 from fonctions_gestion.clients import ajouter_client
 import re
+from PyQt5.QtCore import Qt
 
 class FormulaireClientUI(QWidget):
     """
@@ -8,6 +9,10 @@ class FormulaireClientUI(QWidget):
     """
     def __init__(self, parent):
         super().__init__()
+        # Empêche l'héritage du background depuis le parent
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        # Remplit le fond avec la palette courante et définit le background en blanc
+        self.setAutoFillBackground(True)
         self.parent_form = parent
         self.setWindowTitle("Ajouter un nouveau client")
         self.setGeometry(150, 150, 500, 400)

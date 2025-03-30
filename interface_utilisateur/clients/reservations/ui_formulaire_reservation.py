@@ -37,6 +37,10 @@ class CustomDateEdit(QDateEdit):
 class FormulaireReservationUI(QWidget):
     def __init__(self, main_window):
         super().__init__()
+        # Empêche l'héritage du background depuis le parent
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        # Remplit le fond avec la palette courante et définit le background en blanc
+        self.setAutoFillBackground(True)
         self.main_window = main_window
         self.id_client = None
         self.id_reservation = None
@@ -127,7 +131,7 @@ class FormulaireReservationUI(QWidget):
         form_layout.addRow(self.total_label)
 
         # Boutons de navigation et action
-        self.btn_annuler = QPushButton("❌ Annuler")
+        self.btn_annuler = QPushButton("❌ Abandonner")
         self.btn_annuler.clicked.connect(self.retourner_arriere)
 
         self.btn_sauvegarder = QPushButton("💾 Sauvegarder pour plus tard")
