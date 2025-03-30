@@ -11,7 +11,12 @@ from fonctions_gestion.rapports import (
     rapport_clients_incidents_assurance,
     rapport_vehicules_incidents,
     rapport_vehicules_disponibles_par_agence,
-    rapport_entretien_par_agence
+    rapport_entretien_par_agence,
+    rapport_vehicules_contrats_actifs,
+    rapport_employes_avec_incidents,
+    rapport_reservations_agence_janvier,
+    rapport_contrats_agence_janvier,
+    rapport_facturation_agence_par_mois
 )
 
 
@@ -43,12 +48,15 @@ class GestionRapportsUI(QWidget):
         label_finance.setStyleSheet("font-weight: bold; font-size: 16px; margin-top: 10px;")
         frame_layout.addWidget(label_finance)
 
-        btn_fin1 = QPushButton("Flotte complète et contrats actifs")
-        btn_fin1.clicked.connect(self.afficher_rapport_flotte)
-        btn_fin2 = QPushButton("Clients avec incidents d'assurance")
-        btn_fin2.clicked.connect(self.afficher_rapport_clients_incidents)
-        btn_fin3 = QPushButton("Véhicules avec incidents")
-        btn_fin3.clicked.connect(self.afficher_rapport_vehicules_incidents)
+        btn_fin1 = QPushButton("Réservations par agence (janvier)")
+        btn_fin1.clicked.connect(self.afficher_rapport_reservations_janvier)
+
+        btn_fin2 = QPushButton("Contrats en cours par agence (janvier)")
+        btn_fin2.clicked.connect(self.afficher_rapport_contrats_janvier)
+
+        btn_fin3 = QPushButton("Facturation prévue et réalisée")
+        btn_fin3.clicked.connect(self.afficher_rapport_facturation)
+
         for btn in [btn_fin1, btn_fin2, btn_fin3]:
             btn.setStyleSheet(BUTTON_STYLE_FINANCE)
             frame_layout.addWidget(btn)
@@ -58,12 +66,13 @@ class GestionRapportsUI(QWidget):
         label_clients.setStyleSheet("font-weight: bold; font-size: 16px; margin-top: 10px;")
         frame_layout.addWidget(label_clients)
 
-        btn_cli1 = QPushButton("Véhicules disponibles par agence")
-        btn_cli1.clicked.connect(self.afficher_rapport_vehicules_disponibles)
-        btn_cli2 = QPushButton("État d'entretien des véhicules")
-        btn_cli2.clicked.connect(self.afficher_rapport_entretien)
-        btn_cli3 = QPushButton("Évolution du nombre de clients")
-        for btn in [btn_cli1, btn_cli2, btn_cli3]:
+        btn_cli1 = QPushButton("Clients avec incidents d'assurance")
+        btn_cli1.clicked.connect(self.afficher_rapport_clients_incidents)
+
+        btn_cli2 = QPushButton("Clients avec contrats actifs")
+        btn_cli2.clicked.connect(self.afficher_rapport_vehicules_contrats_actifs)
+
+        for btn in [btn_cli1, btn_cli2]:
             btn.setStyleSheet(BUTTON_STYLE_CLIENTS)
             frame_layout.addWidget(btn)
 
@@ -72,11 +81,22 @@ class GestionRapportsUI(QWidget):
         label_ops.setStyleSheet("font-weight: bold; font-size: 16px; margin-top: 10px;")
         frame_layout.addWidget(label_ops)
 
-        btn_op1 = QPushButton("Statistiques des réservations")
-        btn_op2 = QPushButton("Contrats actifs")
-        btn_op3 = QPushButton("Utilisation des véhicules")
-        btn_op4 = QPushButton("Incidents et annulations")
-        for btn in [btn_op1, btn_op2, btn_op3, btn_op4]:
+        btn_op1 = QPushButton("Flotte complète et contrats actifs")
+        btn_op1.clicked.connect(self.afficher_rapport_flotte)
+
+        btn_op2 = QPushButton("Véhicules disponibles par agence")
+        btn_op2.clicked.connect(self.afficher_rapport_vehicules_disponibles)
+
+        btn_op3 = QPushButton("Responsables de contrats avec incidents")
+        btn_op3.clicked.connect(self.afficher_rapport_employes_incidents)
+
+        btn_op4 = QPushButton("Véhicules avec incidents")
+        btn_op4.clicked.connect(self.afficher_rapport_vehicules_incidents)
+
+        btn_op5 = QPushButton("État d'entretien des véhicules")
+        btn_op5.clicked.connect(self.afficher_rapport_entretien)
+
+        for btn in [btn_op1, btn_op2, btn_op3, btn_op4, btn_op5]:
             btn.setStyleSheet(BUTTON_STYLE_OPERATIONS)
             frame_layout.addWidget(btn)
 
@@ -111,6 +131,26 @@ class GestionRapportsUI(QWidget):
     def afficher_rapport_entretien(self):
         colonnes, donnees = rapport_entretien_par_agence()
         self.afficher_tableau("État d'entretien des véhicules par agence", colonnes, donnees)
+
+    def afficher_rapport_vehicules_contrats_actifs(self):
+        colonnes, donnees = rapport_vehicules_contrats_actifs()
+        self.afficher_tableau("Véhicules avec contrats actifs", colonnes, donnees)
+
+    def afficher_rapport_employes_incidents(self):
+        colonnes, donnees = rapport_employes_avec_incidents()
+        self.afficher_tableau("Employés ayant eu des incidents", colonnes, donnees)
+
+    def afficher_rapport_reservations_janvier(self):
+        colonnes, donnees = rapport_reservations_agence_janvier()
+        self.afficher_tableau("Réservations par agence (janvier)", colonnes, donnees)
+
+    def afficher_rapport_contrats_janvier(self):
+        colonnes, donnees = rapport_contrats_agence_janvier()
+        self.afficher_tableau("Contrats en cours par agence (janvier)", colonnes, donnees)
+
+    def afficher_rapport_facturation(self):
+        colonnes, donnees = rapport_facturation_agence_par_mois()
+        self.afficher_tableau("Facturation prévue et réalisée par agence et mois", colonnes, donnees)
 
     def afficher_tableau(self, titre, colonnes, donnees):
         tableau = TableauRapportsUI(titre, colonnes, donnees, self.main_window, self)
