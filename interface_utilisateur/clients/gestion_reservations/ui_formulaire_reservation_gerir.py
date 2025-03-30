@@ -36,6 +36,10 @@ class FormulaireReservationGerirUI(QWidget):
 
     def __init__(self, main_window, id_reservation=None):
         super().__init__()
+        # Empêche l'héritage du background depuis le parent
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        # Remplit le fond avec la palette courante et définit le background en blanc
+        self.setAutoFillBackground(True)
         self.main_window = main_window
         self.ui_tableau_liste_contrats_client = self.main_window.ui_tableau_liste_contrats_client
         self.email_client = None

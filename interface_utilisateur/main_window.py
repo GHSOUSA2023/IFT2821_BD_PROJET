@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("GN Location - Gestion")
         self.resize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
-        self.setFixedSize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
+        self.resize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])  # Define tamanho inicial
         self.move(WINDOW_GEOMETRY[0], WINDOW_GEOMETRY[1])
 
         # Construire le chemin absolu vers l'image de background

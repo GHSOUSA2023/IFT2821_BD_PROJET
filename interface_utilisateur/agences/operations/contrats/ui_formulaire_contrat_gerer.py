@@ -14,11 +14,13 @@ from fonctions_gestion.assurances import lister_toutes_assurances, get_assurance
 from fonctions_gestion.optionnels import lister_tout_optionnels, get_optionnel_par_id
 from fonctions_gestion.contratclient import get_contrat_par_reservation
 from fonctions_gestion.contrats import terminer_contrat
+
 from interface_utilisateur.tableaux.ui_tableau_assurance import TableauAssurancesUI
 from interface_utilisateur.tableaux.ui_tableau_optionnel import TableauOptionnelsUI
 from interface_utilisateur.tableaux.ui_tableau_tarifications import TableauTarificationsUI
 from interface_utilisateur.tableaux.ui_tableau_vehicules import TableauVehiculesUI
 from interface_utilisateur.tableaux.ui_tableau_contrat import TableauContratUI
+from interface_utilisateur.agences.operations.incidents.ui_fomulaire_incident import FormulaireIncidentUI
 
 
 
@@ -140,14 +142,13 @@ class FormulaireContratGererUI(QWidget):
 
         # Boutons de navigation et action
 
-        #self.btn_annuler = QPushButton("🚫 Annuler la réservation MERDA")
-        #self.btn_annuler.clicked.connect(self.annuler_reservation)
-
-        #self.btn_sauvegarder = QPushButton("💾 Sauvegarder pour plus tard")
-        #self.btn_sauvegarder.clicked.connect(self.sauvegarder_reservation)
-
         self.btn_conclure = QPushButton("✅ Conclure le contrat")
         self.btn_conclure.clicked.connect(self.conclure_contrat)
+
+        # Bouton pour enregistrer un incident
+        self.btn_incident = QPushButton("📋 Enregistrer un incident")
+        self.btn_incident.clicked.connect(self.gc_ouvrir_formulaire_incident)
+
 
         self.btn_retour = QPushButton("🔙 Retour")
         self.btn_retour.clicked.connect(self.gc_retourner_arriere)
@@ -157,6 +158,7 @@ class FormulaireContratGererUI(QWidget):
         #layout.addWidget(self.btn_annuler)
         #layout.addWidget(self.btn_sauvegarder)
         layout.addWidget(self.btn_conclure)
+        layout.addWidget(self.btn_incident)
         layout.addWidget(self.btn_retour)
         self.setLayout(layout)
 
@@ -304,6 +306,36 @@ class FormulaireContratGererUI(QWidget):
             self.calculer_total()
         else:
             QMessageBox.warning(self, "Erreur", "Impossible de charger la réservation.")
+
+    def gc_ouvrir_formulaire_incident(self):
+        """
+        Ouvre le formulaire pour déclarer un incident à partir des infos actuelles.
+        """
+        contrat = get_contrat_par_reservation(self.id_reservation)
+        
+        if not contrat:
+            QMessageBox.warning(self, "Erreur", "Aucun contrat trouvé pour cette réservation.")
+            return
+
+        # Créer un dictionnaire avec les infos du véhicule à passer
+        vehicule_info = get_vehicule_par_id(self.id_vehic)
+        if not vehicule_info:
+            QMessageBox.warning(self, "Erreur", "Aucune information de véhicule trouvée.")
+            return
+
+        formulaire_incident = FormulaireIncidentUI(
+            self.main_window,
+            self,  # retour_widget
+            contrat['ID_CONTRACT'],
+            f"{self.nom_label.text()} {self.prenom_label.text()}",
+            vehicule_info,
+            self.date_debut_input.date().toString("yyyy-MM-dd"),
+            self.date_fin_input.date().toString("yyyy-MM-dd")
+        )
+
+        self.main_window.central_widget.addWidget(formulaire_incident)
+        self.main_window.central_widget.setCurrentWidget(formulaire_incident)
+
 
 
     ################################# Boutons action #################################
