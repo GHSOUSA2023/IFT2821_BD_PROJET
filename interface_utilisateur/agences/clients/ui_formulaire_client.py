@@ -47,7 +47,7 @@ class FormulaireClientUI(QWidget):
         self.btn_effacer = QPushButton("🧹 Effacer")
         self.btn_effacer.clicked.connect(self.effacer_formulaire)
         
-        self.btn_annuler = QPushButton("❌ Annuler")
+        self.btn_annuler = QPushButton("❌ A")
         self.btn_annuler.clicked.connect(self.retourner_arriere)
 
         layout.addLayout(form_layout)
