@@ -41,24 +41,24 @@ class GestionOperationsUI(QWidget):
         btn_reservations = QPushButton("📅 Réservations")
         btn_contrats = QPushButton("📜 Contrats")
         #btn_assurances = QPushButton("🛡 Assurances")
-        btn_tarification = QPushButton("💰 Tarification")
+        #btn_tarification = QPushButton("💰 Tarification")
         btn_rapports = QPushButton("📊 Rapports")
         btn_retour = QPushButton("⬅ Retour")
 
         # Style
-        for btn in [btn_reservations, btn_contrats, btn_tarification, btn_rapports, btn_retour]:
+        for btn in [btn_reservations, btn_contrats, btn_rapports, btn_retour]:
             btn.setStyleSheet(BUTTON_STYLE)
 
         # Connexions
         btn_reservations.clicked.connect(self.go_ouvrir_reservations)
         btn_contrats.clicked.connect(self.go_ouvrir_contrats)
         #btn_assurances.clicked.connect(self.go_ouvrir_assurances)
-        btn_tarification.clicked.connect(self.go_ouvrir_tarification)
+        #btn_tarification.clicked.connect(self.go_ouvrir_tarification)
         btn_rapports.clicked.connect(self.go_ouvrir_rapports)
         btn_retour.clicked.connect(self.go_retourner)
 
         # Ajout des boutons au conteneur
-        for btn in [btn_reservations, btn_contrats, btn_tarification, btn_rapports, btn_retour]:
+        for btn in [btn_reservations, btn_contrats, btn_rapports, btn_retour]:
             frame_layout.addWidget(btn)
 
         frame.setLayout(frame_layout)
