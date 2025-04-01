@@ -12,7 +12,7 @@ def ajouter_client(nom, prenom, ville, adresse, permis_cond, email, telephone, c
             curseur = connexion.cursor()
             curseur.execute(
                 queriesinputs.AJOUTER_CLIENT,
-                (nom.upper(), prenom.upper(), ville.upper(), adresse.upper(), permis_cond, email.lower(), telephone, carte_cred),
+                (nom.upper(), prenom.upper(), ville.upper(), adresse.upper(), permis_cond.upper(),email.lower(), telephone, carte_cred),
             )
             connexion.commit()
 
@@ -50,7 +50,7 @@ def get_client_par_id(id_client):
     return None
 
 # Modifier un client
-def modifier_client(id_client, nom, prenom, ville, adresse, permis_cond, hist_accidents, email, telephone, carte_cred):
+def modifier_client(id_client, nom, prenom, ville, adresse, permis_cond, email, telephone, carte_cred):
     """Modifie les informations d'un client existant."""
     connexion = database.connecter()
     if connexion:
@@ -61,16 +61,33 @@ def modifier_client(id_client, nom, prenom, ville, adresse, permis_cond, hist_ac
                 print("Aucun client trouvé avec cet ID.")
                 return
 
+            hist_accidents = client[6]  # On garde la valeur existante
+
             curseur.execute(
                 queriesupdate.MODIFIER_CLIENT,
-                (nom.upper(), prenom.upper(), ville.upper(), adresse.upper(), permis_cond, hist_accidents, email.lower(), telephone, carte_cred, id_client),
+                (
+                    nom.upper(),              # NOM
+                    prenom.upper(),           # PRENOM
+                    adresse.upper(),          # ADRESSE
+                    permis_cond.upper(),      # PERMIS_COND
+                    hist_accidents,           # HIST_ACCIDENTS (inchangé)
+                    email.lower(),            # EMAIL
+                    telephone,                # TELEPHONE
+                    carte_cred,               # CARTE_CRED
+                    id_client                 # WHERE ID_CLIENT = ?
+                )
             )
             connexion.commit()
             print("✅ Client modifié avec succès !")
+            return True
+
         except Exception as erreur:
             print(f"❌ Erreur lors de la modification du client : {erreur}")
+            return None
+
         finally:
             database.fermer_connexion(connexion)
+
 
 # Supprimer un client
 def supprimer_client(id_client):

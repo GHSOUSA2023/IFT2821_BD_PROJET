@@ -128,10 +128,7 @@ class FormulaireClientUI(QWidget):
             self.parent_form.main_window.central_widget.setCurrentWidget(self.parent_form)
         elif hasattr(self.parent_form, 'central_widget'):
             # Retourner à l'interface des clients si ouvert depuis la fenêtre principale
-            self.parent_form.central_widget.setCurrentWidget(self.parent_form.ui_clients)
+            self.parent_form.central_widget.setCurrentWidget(self.parent_form.ui_gestion_clients)
         else:
             # En cas de problème inattendu
             print("⚠ Impossible de retourner à l'écran précédent.")
-
-
-
