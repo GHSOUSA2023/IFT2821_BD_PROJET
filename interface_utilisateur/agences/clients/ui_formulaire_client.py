@@ -41,14 +41,27 @@ class FormulaireClientUI(QWidget):
         form_layout.addRow("Téléphone:", self.telephone_input)
         form_layout.addRow("Carte de crédit:", self.carte_cred_input)
 
+        # Bouton "Ajouter client"
         self.btn_valider = QPushButton("➕ Ajouter client")
         self.btn_valider.clicked.connect(self.valider)
+        self.btn_valider.setFixedWidth(150)
 
+        # Bouton "Effacer"
         self.btn_effacer = QPushButton("🧹 Effacer")
         self.btn_effacer.clicked.connect(self.effacer_formulaire)
-        
-        self.btn_annuler = QPushButton("❌ Annuler")
+        self.btn_effacer.setFixedWidth(150)
+
+        # Bouton "Annuler"
+        self.btn_annuler = QPushButton("❌ Retour")
         self.btn_annuler.clicked.connect(self.retourner_arriere)
+        self.btn_annuler.setFixedWidth(150)
+
+        # Ajout des widgets au layout
+        layout.addLayout(form_layout)
+        layout.addWidget(self.btn_valider)
+        layout.addWidget(self.btn_effacer)
+        layout.addWidget(self.btn_annuler)
+        self.setLayout(layout)
 
         layout.addLayout(form_layout)
         layout.addWidget(self.btn_valider)
