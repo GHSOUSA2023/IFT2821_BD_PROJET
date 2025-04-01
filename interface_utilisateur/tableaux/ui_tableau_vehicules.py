@@ -7,10 +7,11 @@ class TableauVehiculesUI(QWidget):
     """
     Interface pour afficher les véhicules avec un champ de recherche et double-clic pour modifier.
     """
-    def __init__(self, titre, colonnes, donnees, main_window, retour_widget):
+    def __init__(self, titre, colonnes, donnees, main_window, retour_widget, mode=None):
         super().__init__()
         self.main_window = main_window
         self.retour_widget = retour_widget
+        self.mode = mode
         self.setWindowTitle(titre)
         self.colonnes = colonnes
         self.donnees = donnees
@@ -28,8 +29,8 @@ class TableauVehiculesUI(QWidget):
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(len(self.colonnes))
         self.table_widget.setHorizontalHeaderLabels(self.colonnes)
-        self.table_widget.cellDoubleClicked.connect(self.ouvrir_selec_formulaire_modification)
-
+        if self.mode == "modifier":
+            self.table_widget.cellDoubleClicked.connect(self.ouvrir_selec_formulaire_modification)
         self.charger_donnees(self.donnees)
 
         # ✅ Bouton retour

@@ -155,7 +155,7 @@ def rechercher_client(terme_recherche):
         try:
             curseur = connexion.cursor()
             terme = f"%{terme_recherche}%"
-            curseur.execute(queries.RECHERCHER_CLIENT, (terme, terme, terme))
+            curseur.execute(queries.RECHERCHER_CLIENT, (terme, terme, terme, terme))
             resultats = curseur.fetchall()
 
             for client in resultats:
