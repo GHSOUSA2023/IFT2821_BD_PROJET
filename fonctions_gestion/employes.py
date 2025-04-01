@@ -13,20 +13,22 @@ def ajouter_employe(nas, nom, prenom, salaire, poste, id_age):
             curseur = connexion.cursor()
             curseur.execute(
                 queriesinputs.AJOUTER_EMPLOYE,
-                (nas, 
-                nom.upper(), 
-                prenom.upper(), 
-                salaire, 
-                poste, 
-                id_age),
+                (
+                    nas,
+                    nom.upper(),
+                    prenom.upper(),
+                    salaire,
+                    poste,
+                    id_age,
+                ),
             )
             connexion.commit()
             print("Employé ajouté avec succès !")
         except Exception as erreur:
             print(f"Erreur lors de l'ajout de l'employé : {erreur}")
+            raise erreur  # 🔥 Essa linha é essencial para que o erro suba ao `sauvegarder()`
         finally:
             database.fermer_connexion(connexion)
-
 
 # Récupérer un employé par ID
 def get_employe_par_id(id_emp):

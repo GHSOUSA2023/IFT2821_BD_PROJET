@@ -12,14 +12,16 @@ def ajouter_vehicule(id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatricu
             curseur = connexion.cursor()
             curseur.execute(
                 queriesinputs.AJOUTER_VEHICULE,
-                (id_marq, id_mod, id_tp_vehic, annee_fab, couleur.upper() , immatriculation.upper(), status, km, type_carbur, id_age)
+                (id_marq, id_mod, id_tp_vehic, annee_fab, couleur.upper(), immatriculation.upper(), status, km, type_carbur, id_age)
             )
             connexion.commit()
             print("🚗 Véhicule ajouté avec succès !")
         except Exception as erreur:
             print(f"❌ Erreur lors de l'ajout du véhicule : {erreur}")
+            raise erreur  # 🔥 Propaga o erro para a UI capturar
         finally:
             database.fermer_connexion(connexion)
+
 
 # Modifier un véhicule
 def modifier_vehicule(id_vehic, id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age):
@@ -134,7 +136,8 @@ def lister_vehicules_disponibles():
                     vehicule.TYPE_VEHIC,
                     vehicule.ANNEE_FAB,
                     vehicule.IMMATRICULATION,
-                    vehicule.DISPON_STOCK                
+                    vehicule.DISPON_STOCK,
+                    vehicule.NOM_AGE                
                 ))
         except Exception as erreur:
             print(f"Erreur lors de la récupération des véhicules disponibles : {erreur}")

@@ -172,17 +172,14 @@ class FormulaireVehiculeUI(QWidget):
         else:
             QMessageBox.warning(self, "Information", "Vous devez etre en mode modification par acceder a maintenance.")
 
-
-
-
-
     def sauvegarder(self):
-        """Enregistre les données en fonction du mode (ajouter/modifier)."""
+        """Valide les champs et enregistre un véhicule (ajout ou modification)."""
         immatriculation = self.immatriculation_input.text().strip()
         couleur = self.couleur_input.text().strip()
         annee_text = self.annee_input.text().strip()
         km_text = self.km_input.text().strip()
 
+        # 🔍 Validation de base
         if not immatriculation or not couleur or not annee_text or not km_text:
             QMessageBox.warning(self, "Erreur", "Tous les champs doivent être remplis.")
             return
@@ -201,13 +198,27 @@ class FormulaireVehiculeUI(QWidget):
         id_age = self.agence_input.currentData()
         status = "DISPONIBLE"
 
-        if self.mode == "ajouter":
-            ajouter_vehicule(id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
-        elif self.mode == "modifier":
-            id_vehicule = self.vehicule['ID_VEHIC']
-            modifier_vehicule(id_vehicule, id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
+        # 🔐 Tentative d'enregistrement
+        try:
+            if self.mode == "ajouter":
+                ajouter_vehicule(id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
+                QMessageBox.information(self, "Succès", "Véhicule ajouté avec succès.")
+            elif self.mode == "modifier":
+                id_vehicule = self.vehicule['ID_VEHIC']
+                modifier_vehicule(id_vehicule, id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
+                QMessageBox.information(self, "Succès", "Véhicule modifié avec succès.")
 
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_vehicules)
+            # ✅ Retour seulement après succès
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_vehicules)
+
+        except Exception as e:
+            erreur_str = str(e)
+            if "Violation of UNIQUE KEY constraint 'UQ__FLOTTE" in erreur_str:
+                QMessageBox.critical(self, "Immatriculation existante", f"L'immatriculation {immatriculation} est déjà utilisée pour un autre véhicule.")
+            else:
+                print(f"❌ Erreur lors de l'ajout ou modification du véhicule : {e}")
+                QMessageBox.critical(self, "Erreur", f"Une erreur est survenue :\n{e}")
+
 
 
 

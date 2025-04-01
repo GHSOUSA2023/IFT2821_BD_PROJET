@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFormLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFormLayout, QMessageBox
 from fonctions_gestion.agences import ajouter_agence, modifier_agence
 from PyQt5.QtCore import Qt
+import re
 
 
 class FormulaireAgenceUI(QWidget):
@@ -75,22 +76,53 @@ class FormulaireAgenceUI(QWidget):
 
     def valider(self):
         """
-        Enregistre les données en fonction du mode (ajouter/modifier).
+        Valide chaque champ individuellement et enregistre les données si tout est correct.
         """
-        nom = self.nom_input.text()
-        adresse = self.adresse_input.text()
-        ville = self.ville_input.text()
-        telephone = self.telephone_input.text()
-        email = self.email_input.text()
+        nom = self.nom_input.text().strip()
+        adresse = self.adresse_input.text().strip()
+        ville = self.ville_input.text().strip()
+        telephone = self.telephone_input.text().strip()
+        email = self.email_input.text().strip()
 
+        # Validation individuelle
+        if not nom:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Nom' est obligatoire.")
+            return
+
+        if not adresse:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Adresse' est obligatoire.")
+            return
+
+        if not ville:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Ville' est obligatoire.")
+            return
+
+        if not telephone:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Téléphone' est obligatoire.")
+            return
+        if not re.match(r'^\d{3}-\d{3}-\d{4}$', telephone):
+            QMessageBox.warning(self, "Format invalide", "Le format du téléphone doit être 123-456-7890.")
+            return
+
+        if not email:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Email' est obligatoire.")
+            return
+        if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
+            QMessageBox.warning(self, "Format invalide", "Le format de l'email est invalide.")
+            return
+
+        # Si tout est valide, procéder
         if self.mode == "ajouter":
             ajouter_agence(nom, adresse, ville, telephone, email)
+            QMessageBox.information(self, "Succès", "Agence ajoutée avec succès.")
         elif self.mode == "modifier":
-            id_agence = self.agence[0]  # Récupérer l'ID de l'agence
+            id_agence = self.agence[0]
             modifier_agence(id_agence, nom, adresse, ville, telephone, email)
+            QMessageBox.information(self, "Succès", "Agence modifiée avec succès.")
 
-        # Retourner à l'interface de gestion des agences
+        # Retour à la gestion des agences
         self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_agences)
+
 
     def retour(self):
         """

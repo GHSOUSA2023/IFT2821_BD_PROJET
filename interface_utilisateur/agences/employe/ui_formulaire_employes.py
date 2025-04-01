@@ -3,6 +3,7 @@ from fonctions_gestion.employes import ajouter_employe, modifier_employe
 from fonctions_gestion.agences import lister_tout_agences  # Pour récupérer les agences
 from constantes import constantes  # Pour récupérer les postes
 from PyQt5.QtCore import Qt
+import re
 
 class FormulaireEmployeUI(QWidget):
     """
@@ -89,53 +90,77 @@ class FormulaireEmployeUI(QWidget):
         layout.addLayout(btn_layout)
         self.setLayout(layout)
 
-    def valider(self):
-        """
-        Enregistre les données en fonction du mode (ajouter/modifier).
-        """
-        nas = self.nas_input.text()
-        nom = self.nom_input.text()
-        prenom = self.prenom_input.text()
-        salaire = self.salaire_input.text()
-        poste = self.poste_input.currentText()  # Correction pour récupérer l'option sélectionnée
-        id_agence = self.agence_input.currentData()  # ID de l'agence sélectionnée
-
-        if self.mode == "ajouter":
-            ajouter_employe(nas, nom, prenom, salaire, poste, id_agence)
-        elif self.mode == "modifier":
-            id_emp = self.employe[0]  # Récupérer l'ID de l'employé
-            modifier_employe(id_emp, nas, nom, prenom, salaire, poste, id_agence)
-
-        # Retourner à la gestion des employés
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_employes)
-
 
     def sauvegarder(self):
         """
-        Enregistre les données en fonction du mode (ajouter/modifier).
+        Valide chaque champ individuellement et enregistre les données si tout est correct.
         """
-        nas = self.nas_input.text()
-        nom = self.nom_input.text()
-        prenom = self.prenom_input.text()
-        salaire = self.salaire_input.text()
-        poste = self.poste_input.currentText()  
-        id_agence = self.agence_input.currentData()  
+        nas = self.nas_input.text().strip()
+        nom = self.nom_input.text().strip()
+        prenom = self.prenom_input.text().strip()
+        salaire = self.salaire_input.text().strip()
+        poste = self.poste_input.currentText()
+        id_agence = self.agence_input.currentData()
+
+        # 🔍 Validations
+        if not nas:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'NAS' est obligatoire.")
+            return
+        if not re.match(r'^\d{9}$', nas):
+            QMessageBox.warning(self, "Format invalide", "Le NAS doit être une chaîne de 9 chiffres (ex: 111111114).")
+            return
+
+        if not nom:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Nom' est obligatoire.")
+            return
+
+        if not prenom:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Prénom' est obligatoire.")
+            return
+
+        if not salaire:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Salaire' est obligatoire.")
+            return
+        try:
+            salaire_float = float(salaire)
+            if salaire_float < 0:
+                QMessageBox.warning(self, "Valeur invalide", "Le salaire doit être un nombre positif.")
+                return
+        except ValueError:
+            QMessageBox.warning(self, "Format invalide", "Le salaire doit être un nombre valide.")
+            return
 
         if poste == "Sélectionner un poste":
-            QMessageBox.warning(self, "Erreur", "Veuillez sélectionner un poste valide.")
+            QMessageBox.warning(self, "Champ manquant", "Veuillez sélectionner un poste valide.")
             return
 
         if id_agence is None:
-            QMessageBox.warning(self, "Erreur", "Veuillez sélectionner une agence valide.")
+            QMessageBox.warning(self, "Champ manquant", "Veuillez sélectionner une agence valide.")
             return
 
-        if self.mode == "ajouter":
-            ajouter_employe(nas, nom, prenom, salaire, poste, id_agence)
-        elif self.mode == "modifier":
-            id_employe = self.employe[0]  # Récupérer l'ID de l'employé
-            modifier_employe(id_employe, nas, nom, prenom, salaire, poste, id_agence)
+        # 🔐 Tentative d'enregistrement dans la base de données
+        try:
+            if self.mode == "ajouter":
+                ajouter_employe(nas, nom, prenom, salaire_float, poste, id_agence)
+                QMessageBox.information(self, "Succès", "Employé ajouté avec succès.")
+            elif self.mode == "modifier":
+                id_emp = self.employe[0]
+                modifier_employe(id_emp, nas, nom, prenom, salaire_float, poste, id_agence)
+                QMessageBox.information(self, "Succès", "Employé modifié avec succès.")
 
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_employes)
+            # ✅ Retour uniquement après succès
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_employes)
+
+        except Exception as e:
+            erreur_str = str(e)
+            if "Violation of UNIQUE KEY constraint 'UQ__EMPLOYES" in erreur_str:
+                QMessageBox.critical(self, "NAS existant", f"Le NAS {nas} appartient déjà à un autre employé.")
+            else:
+                print(f"❌ Erreur lors de l'ajout ou modification de l'employé : {e}")
+                QMessageBox.critical(self, "Erreur", f"Une erreur est survenue :\n{e}")
+
+
+
 
     def effacer_formulaire(self):
         """Efface tous les champs du formulaire."""

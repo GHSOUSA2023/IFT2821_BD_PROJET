@@ -49,6 +49,7 @@ class TableauReservationsUI(QWidget):
 
         self.tb_op_charger_donnees(self.donnees)
 
+
         # Bouton retour
         self.btn_retour = QPushButton("🔙 Retour")
         self.btn_retour.clicked.connect(self.tb_op_retourner)
@@ -121,6 +122,9 @@ class TableauReservationsUI(QWidget):
 
     def tb_op_retourner(self):
         # Recharge le tableau avant de revenir
+        self.terme_recherche = None
+        self.search_input.clear()
+
         self.tb_op_recharger_tableau()
         
         if self.retour_widget:

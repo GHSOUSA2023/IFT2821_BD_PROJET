@@ -91,17 +91,18 @@ class GestionVehiculesUI(QWidget):
 
     def ouvrir_formulaire_modifier(self, row, column):
         """
-        Ouvre le formulaire de modification d'un véhicule lorsqu'une ligne est cliquée.
+        Récupère tous les véhicules et les affiche dans le tableau.
         """
-        id_vehic = int(self.tableau_vehicules_modifier.table_widget.item(row, 0).text())
+        colonnes = ["ID", "Immatriculation", "Carburant", "Année", "Couleur", "Statut", "KM", "Marque", "Modèle", "Type"]
+        
+        # 🔹 Récupération des données
+        vehicules = lister_tous_vehicules()
 
-        # Charger les informations du véhicule sélectionné depuis la base
-        vehicule_info = get_vehicule_par_id(id_vehic)
-
-        if vehicule_info:
-            self.formulaire_modification = FormulaireVehiculeUI(self.main_window, mode="modifier", vehicule=vehicule_info)
-            self.main_window.central_widget.addWidget(self.formulaire_modification)
-            self.main_window.central_widget.setCurrentWidget(self.formulaire_modification)
+        # 🔹 Vérification des données avant affichage
+        if vehicules:
+            self.tableau_vehicules = TableauVehiculesUI("Liste des Véhicules", colonnes, vehicules, self.main_window, retour_widget=self, mode="modifier")
+            self.main_window.central_widget.addWidget(self.tableau_vehicules)
+            self.main_window.central_widget.setCurrentWidget(self.tableau_vehicules)
 
     def afficher_liste_vehicules_supprimer(self):
         """
