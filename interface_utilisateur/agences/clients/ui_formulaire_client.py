@@ -49,10 +49,12 @@ class FormulaireClientUI(QWidget):
         # Bouton "Effacer"
         self.btn_effacer = QPushButton("🧹 Effacer")
         self.btn_effacer.clicked.connect(self.effacer_formulaire)
+
         self.btn_effacer.setFixedWidth(150)
 
         # Bouton "Annuler"
         self.btn_annuler = QPushButton("❌ Retour")
+
         self.btn_annuler.clicked.connect(self.retourner_arriere)
         self.btn_annuler.setFixedWidth(150)
 
