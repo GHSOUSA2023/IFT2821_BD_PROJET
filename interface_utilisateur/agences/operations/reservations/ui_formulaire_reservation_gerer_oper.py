@@ -441,7 +441,7 @@ class FormulaireReservationGerirOperUI(QWidget):
             annuler_reservation(self.id_reservation)
             QMessageBox.information(self, "Succès", "Réservation annulée avec succès.")
             self.reinitialiser_formulaire()
-            self.retourner_arriere()
+            self.grm_retourner_arriere()
 
     def grm_retourner_arriere(self):
         if hasattr(self.main_window, 'ui_tableau_g_reservation'):
