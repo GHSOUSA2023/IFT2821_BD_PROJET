@@ -89,13 +89,14 @@ class FormulaireAgenceUI(QWidget):
             QMessageBox.warning(self, "Champ manquant", "Le champ 'Nom' est obligatoire.")
             return
 
+        if not ville:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Ville' est obligatoire.")
+            return
+
         if not adresse:
             QMessageBox.warning(self, "Champ manquant", "Le champ 'Adresse' est obligatoire.")
             return
 
-        if not ville:
-            QMessageBox.warning(self, "Champ manquant", "Le champ 'Ville' est obligatoire.")
-            return
 
         if not telephone:
             QMessageBox.warning(self, "Champ manquant", "Le champ 'Téléphone' est obligatoire.")

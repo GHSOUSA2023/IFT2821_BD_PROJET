@@ -42,8 +42,8 @@ class GestionAgencesUI(QWidget):
 
         # Boutons
         btn_ajouter = QPushButton("➕ Ajouter une Agence")
-        btn_modifier = QPushButton("✏ Modifier une Agence")
-        btn_supprimer = QPushButton("🗑 Supprimer une Agence")
+        btn_modifier = QPushButton("✒️ Modifier une Agence")
+        btn_supprimer = QPushButton("🗑️ Supprimer une Agence")
         btn_lister = QPushButton("📋 Lister les Agences")
         btn_rechercher = QPushButton("🔍 Rechercher une Agence")
         btn_retour = QPushButton("⬅ Retour")
