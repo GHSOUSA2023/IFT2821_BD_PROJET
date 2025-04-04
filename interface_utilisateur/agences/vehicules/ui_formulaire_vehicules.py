@@ -135,9 +135,9 @@ class FormulaireVehiculeUI(QWidget):
         form_layout.addRow("", maintenance_frame)
 
         # Boutons Sauvegarder / Effacer / Annuler
-        self.btn_sauvegarder = QPushButton("💾 Sauvegarder")
+        self.btn_sauvegarder = QPushButton("💾 Ajouter la vehicule")
         self.btn_effacer = QPushButton("🧹 Effacer")
-        self.btn_annuler = QPushButton("❌ Annuler")
+        self.btn_annuler = QPushButton("⬅️ Retourner")
 
         # Réduire la taille des boutons pour uniformiser
         self.btn_sauvegarder.setFixedWidth(150)

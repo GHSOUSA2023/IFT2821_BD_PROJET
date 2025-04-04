@@ -144,7 +144,8 @@ class FormulaireReservationGerirUI(QWidget):
         self.btn_confirmer = QPushButton("✅ Confirmer la réservation")
         self.btn_confirmer.clicked.connect(self.confirmer_reservation)
 
-        self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
+        self.btn_retour.setFixedWidth(150)
         self.btn_retour.clicked.connect(self.retourner_arriere)
 
 

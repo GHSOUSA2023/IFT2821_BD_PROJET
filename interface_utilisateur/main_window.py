@@ -119,6 +119,8 @@ class MainWindow(QMainWindow):
             QMessageBox.No
         )
         if reply == QMessageBox.Yes:
+            # Afficher un message de remerciement avant de quitter
+            QMessageBox.information(self, "Merci", "Merci pour votre attention !")
             QApplication.quit()
 
     def show_animation(self):
@@ -137,6 +139,23 @@ class MainWindow(QMainWindow):
     def revenir_menu_principal(self):
         """Retour au menu principal."""
         self.central_widget.setCurrentWidget(self.menu_principal)
+
+    def closeEvent(self, event):
+        """Demande une confirmation avant de fermer la fenêtre."""
+        reply = QMessageBox.question(
+            self,
+            "Confirmation",
+            "Êtes-vous sûr de vouloir quitter ?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            # Afficher un message de remerciement avant de fermer
+            QMessageBox.information(self, "Merci", "Merci pour votre attention !")
+            event.accept()  # Accepter la fermeture
+        else:
+            event.ignore()  # Ignorer la fermeture
+
 
 if __name__ == "__main__":
     app = QApplication([])

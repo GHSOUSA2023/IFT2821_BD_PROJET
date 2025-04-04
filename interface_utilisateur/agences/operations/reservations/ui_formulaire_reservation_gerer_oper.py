@@ -137,24 +137,42 @@ class FormulaireReservationGerirOperUI(QWidget):
 
         # Boutons de navigation et action
 
+        # ✅ Bouton "Annuler la réservation"
         self.btn_annuler = QPushButton("🚫 Annuler la réservation")
+        self.btn_annuler.setFixedWidth(150)
         self.btn_annuler.clicked.connect(self.annuler_reservation)
 
+        # ✅ Bouton "Sauvegarder pour plus tard"
         self.btn_sauvegarder = QPushButton("💾 Sauvegarder pour plus tard")
+        self.btn_sauvegarder.setFixedWidth(150)
         self.btn_sauvegarder.clicked.connect(self.sauvegarder_reservation)
 
+        # ✅ Bouton "Confirmer la réservation"
         self.btn_confirmer = QPushButton("✅ Confirmer la réservation")
+        self.btn_confirmer.setFixedWidth(150)
         self.btn_confirmer.clicked.connect(self.confirmer_reservation)
 
+        # ✅ Bouton "Retour"
         self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour.setFixedWidth(150)
         self.btn_retour.clicked.connect(self.grm_retourner_arriere)
 
+        # ✅ Créer un layout vertical pour centrer les boutons
+        btn_layout = QVBoxLayout()
+        btn_layout.setAlignment(Qt.AlignHCenter)  # Centrer les boutons horizontalement
 
+        # ✅ Ajouter les boutons au layout avec espacement
+        btn_layout.addWidget(self.btn_annuler, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_sauvegarder, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_confirmer, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_retour, alignment=Qt.AlignHCenter)
+
+        # ✅ Ajouter le layout des boutons au layout principal
         layout.addLayout(form_layout)
-        layout.addWidget(self.btn_annuler)
-        layout.addWidget(self.btn_sauvegarder)
-        layout.addWidget(self.btn_confirmer)
-        layout.addWidget(self.btn_retour)
+        layout.addLayout(btn_layout)
         self.setLayout(layout)
 
     def grm_rechercher_client(self):

@@ -130,25 +130,33 @@ class FormulaireReservationUI(QWidget):
         form_layout.addRow(self.nb_jours_label)
         form_layout.addRow(self.total_label)
 
-        # Boutons de navigation et action
-        self.btn_annuler = QPushButton("❌ Abandonner")
-        self.btn_annuler.clicked.connect(self.retourner_arriere)
-
+        # ✅ Boutons de navigation et action
         self.btn_sauvegarder = QPushButton("💾 Sauvegarder pour plus tard")
+        self.btn_sauvegarder.setFixedWidth(225)
         self.btn_sauvegarder.clicked.connect(self.sauvegarder_reservation)
 
         self.btn_confirmer = QPushButton("✅ Confirmer la réservation")
+        self.btn_confirmer.setFixedWidth(225)
         self.btn_confirmer.clicked.connect(self.confirmer_reservation)
 
-        self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
+        self.btn_retour.setFixedWidth(150)
         self.btn_retour.clicked.connect(self.retourner_arriere)
 
+        # ✅ Créer un layout vertical pour centrer les boutons
+        btn_layout = QVBoxLayout()
+        btn_layout.setAlignment(Qt.AlignHCenter)  # Centrer les boutons horizontalement
 
+        # ✅ Ajouter les boutons au layout avec espacement
+        btn_layout.addWidget(self.btn_sauvegarder, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_confirmer, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_retour, alignment=Qt.AlignHCenter)
+
+        # ✅ Ajouter le layout des boutons au layout principal
         layout.addLayout(form_layout)
-        layout.addWidget(self.btn_annuler)
-        layout.addWidget(self.btn_sauvegarder)
-        layout.addWidget(self.btn_confirmer)
-        layout.addWidget(self.btn_retour)
+        layout.addLayout(btn_layout)
         self.setLayout(layout)
 
     def rechercher_client(self):
