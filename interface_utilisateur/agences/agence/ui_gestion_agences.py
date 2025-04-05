@@ -142,14 +142,13 @@ class GestionAgencesUI(QWidget):
         )
 
         if reponse == QMessageBox.Yes:
-            # Supprimer l'agence si l'utilisateur clique sur "Oui"
-            supprimer_agence(id_agence)
+            success, message = supprimer_agence(id_agence)
 
-            # Afficher un message de succès
-            QMessageBox.information(self, "Succès", "Agence supprimée avec succès!")
-
-            # Retirer la ligne du tableau après la confirmation
-            self.tableau_agences_supprimer.table_widget.removeRow(row)
+            if success:
+                QMessageBox.information(self, "Succès", f"L'agence '{nom_agence}' a été supprimée avec succès!")
+                self.tableau_agences_supprimer.table_widget.removeRow(row)
+            else:
+                QMessageBox.warning(self, "Erreur", message)
         else:
             # Afficher un message d'annulation
             QMessageBox.information(self, "Annulation", "Suppression annulée.")

@@ -26,7 +26,7 @@ def ajouter_employe(nas, nom, prenom, salaire, poste, id_age):
             print("Employé ajouté avec succès !")
         except Exception as erreur:
             print(f"Erreur lors de l'ajout de l'employé : {erreur}")
-            raise erreur  # 🔥 Essa linha é essencial para que o erro suba ao `sauvegarder()`
+            raise erreur  # Relancer l'erreur pour la gestion des exceptions
         finally:
             database.fermer_connexion(connexion)
 
@@ -158,7 +158,6 @@ def afficher_liste_employes_supprimer():
 
     return colonnes, employes
 
-
 def supprimer_employe(id_emp):
     """Supprime un employé par son ID après vérification de son existence."""
     connexion = database.connecter()
@@ -166,28 +165,31 @@ def supprimer_employe(id_emp):
         try:
             curseur = connexion.cursor()
 
-            # Vérifier si l'employé existe avant suppression
+            # Vérifier si l'employé existe
             curseur.execute(queries.GET_EMPLOYE_PAR_ID, (id_emp,))
             employe = curseur.fetchone()
 
             if not employe:
-                print("Aucun employé trouvé avec cet ID.")
-                return
+                return False, "Aucun employé trouvé avec cet ID."
 
-            # Afficher les informations avant suppression (debug)
             print("\nDétails de l'employé sélectionné :")
             print(f"ID : {employe.ID_EMP}")
             print(f"Nom : {employe.NOM}")
             print(f"Prénom : {employe.PRENOM}")
 
-            # Supprimer l'employé
+            # Suppression
             curseur.execute(queriesdelete.SUPPRIMER_EMPLOYE, (id_emp,))
             connexion.commit()
             print("Employé supprimé avec succès !")
+            return True, None
+
         except Exception as erreur:
-            print(f"Erreur lors de la suppression de l'employé : {erreur}")
+            if "REFERENCE constraint" in str(erreur):
+                return False, "Impossible de supprimer cet employé car il est lié à d'autres données (ex. : maintenance)."
+            return False, f"Erreur lors de la suppression : {erreur}"
         finally:
             database.fermer_connexion(connexion)
+
 
 
 # Lister tous les employés

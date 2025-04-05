@@ -43,17 +43,17 @@ class FormulaireTarificationUI(QWidget):
         form_layout.addRow("Prix/Locat/Jour:", self.prix_locat_input)
         form_layout.addRow("Type Véhicule:", self.type_vehicule_input)
 
-        # ✅ Ajouter les boutons
+        #Ajouter les boutons
         self.btn_sauvegarder = QPushButton("💾 Sauvegarder")
         self.btn_effacer = QPushButton("🧹 Effacer")
         self.btn_annuler = QPushButton("❌ Annuler")
 
-        # ✅ Connexions des boutons
+        #Connexions des boutons
         self.btn_sauvegarder.clicked.connect(self.sauvegarder)
         self.btn_effacer.clicked.connect(self.effacer_formulaire)
         self.btn_annuler.clicked.connect(self.annuler)
 
-        # ✅ Ajout des boutons dans un sous-layout
+        #Ajout des boutons dans un sous-layout
         btn_layout = QVBoxLayout()
         btn_layout.addWidget(self.btn_sauvegarder)
         btn_layout.addWidget(self.btn_effacer)

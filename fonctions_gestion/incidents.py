@@ -16,16 +16,16 @@ def ajouter_incident(type_incident, date_incident, couts, details, id_contrat):
                 (type_incident, date_incident, couts, details, id_contrat)
             )
             connexion.commit()
-            print("⚠️ Incident ajouté avec succès !")
+            print("Incident ajouté avec succès !")
             return True
         except pyodbc.IntegrityError as erreur:
             if "UNIQUE KEY constraint" in str(erreur):
-                print("⚠️ Un incident est déjà enregistré pour ce contrat.")
+                print("Un incident est déjà enregistré pour ce contrat.")
                 return "incident_existe"
-            print(f"❌ Erreur d'intégrité : {erreur}")
+            print(f"Erreur d'intégrité : {erreur}")
             return False
         except Exception as erreur:
-            print(f"❌ Erreur générale lors de l'ajout de l'incident : {erreur}")
+            print(f"Erreur générale lors de l'ajout de l'incident : {erreur}")
             return False
         finally:
             database.fermer_connexion(connexion)

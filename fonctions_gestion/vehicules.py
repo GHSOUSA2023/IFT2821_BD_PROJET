@@ -15,10 +15,10 @@ def ajouter_vehicule(id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatricu
                 (id_marq, id_mod, id_tp_vehic, annee_fab, couleur.upper(), immatriculation.upper(), status, km, type_carbur, id_age)
             )
             connexion.commit()
-            print("🚗 Véhicule ajouté avec succès !")
+            print("Véhicule ajouté avec succès !")
         except Exception as erreur:
-            print(f"❌ Erreur lors de l'ajout du véhicule : {erreur}")
-            raise erreur  # 🔥 Propaga o erro para a UI capturar
+            print(f"Erreur lors de l'ajout du véhicule : {erreur}")
+            raise erreur  # Relancer l'erreur pour la gestion de la transaction
         finally:
             database.fermer_connexion(connexion)
 
@@ -32,7 +32,7 @@ def modifier_vehicule(id_vehic, id_marq, id_mod, id_tp_vehic, annee_fab, couleur
 
             vehicule = get_vehicule_par_id(id_vehic)
             if not vehicule:
-                print("❌ Aucun véhicule trouvé avec cet ID.")
+                print("Aucun véhicule trouvé avec cet ID.")
                 return
 
             # Mise à jour de FLOTTE
@@ -52,35 +52,43 @@ def modifier_vehicule(id_vehic, id_marq, id_mod, id_tp_vehic, annee_fab, couleur
             )
 
             connexion.commit()
-            print("🚗 Véhicule modifié avec succès !")
+            print("Véhicule modifié avec succès !")
 
         except Exception as erreur:
-            print(f"❌ Erreur lors de la modification du véhicule : {erreur}")
+            print(f"Erreur lors de la modification du véhicule : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
 
-# 🔹 Supprimer un véhicule
-
+#Supprimer un véhicule
 def supprimer_vehicule(id_vehic):
     connexion = database.connecter()
     if connexion:
         try:
             curseur = connexion.cursor()
+
+            # Supprimer la disponibilité associée
             curseur.execute(queriesdelete.SUPPRIMER_DISPO_VEICHUL, (id_vehic,))
             
+            # Supprimer le véhicule
             curseur.execute(queriesdelete.SUPPRIMER_VEHICULE, (id_vehic,))
-            
+
             connexion.commit()
             print("Véhicule supprimé avec succès!")
+            return True, None
+
         except Exception as erreur:
             connexion.rollback()
-            print(f"Erreur lors de la suppression du véhicule: {erreur}")
+            if "REFERENCE constraint" in str(erreur):
+                return False, "Impossible de supprimer ce véhicule car il est lié à d'autres données (ex. : réservations)."
+            return False, f"Erreur lors de la suppression du véhicule : {erreur}"
+
         finally:
             database.fermer_connexion(connexion)
 
 
-# 🔹 Lister tous les véhicules
+
+#Lister tous les véhicules
 def lister_tous_vehicules():
     """Retourne une liste de tous les véhicules enregistrés avec détails associés."""
     connexion = database.connecter()
@@ -107,7 +115,7 @@ def lister_tous_vehicules():
                 ))
 
         except Exception as erreur:
-            print(f"❌ Erreur lors de la récupération des véhicules : {erreur}")
+            print(f"Erreur lors de la récupération des véhicules : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
@@ -147,7 +155,7 @@ def lister_vehicules_disponibles():
     return vehicules
 
 
-# 🔹 Rechercher un véhicule par immatriculation ou modèle
+#Rechercher un véhicule par immatriculation ou modèle
 def rechercher_vehicule(terme_recherche):
     """Recherche un véhicule par immatriculation ou modèle et retourne les résultats sous forme de tableau."""
     connexion = database.connecter()
@@ -176,7 +184,7 @@ def rechercher_vehicule(terme_recherche):
                 ])
 
         except Exception as erreur:
-            print(f"❌ Erreur lors de la recherche de véhicules : {erreur}")
+            print(f"Erreur lors de la recherche de véhicules : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
@@ -196,7 +204,7 @@ def get_vehicule_par_id(id_vehic):
                 vehicule = dict(zip(colonnes, row))
                 return vehicule
         except Exception as erreur:
-            print(f"❌ Erreur lors de la récupération du véhicule : {erreur}")
+            print(f"Erreur lors de la récupération du véhicule : {erreur}")
         finally:
             database.fermer_connexion(connexion)
     return None

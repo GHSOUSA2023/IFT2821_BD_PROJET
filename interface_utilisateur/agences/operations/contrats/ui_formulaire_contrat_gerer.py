@@ -149,19 +149,19 @@ class FormulaireContratGererUI(QWidget):
         self.btn_incident = QPushButton("📋 Enregistrer un incident")
         self.btn_incident.clicked.connect(self.gc_ouvrir_formulaire_incident)
 
-        # ✅ Bouton "Retour"
+        #Bouton "Retour"
         self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.setFixedWidth(150)
         self.btn_retour.clicked.connect(self.gc_retourner_arriere)
 
-        # ✅ Créer un layout vertical pour centrer le bouton
+        #Créer un layout vertical pour centrer le bouton
         btn_layout = QVBoxLayout()
         btn_layout.setAlignment(Qt.AlignHCenter)  # Centrer le bouton horizontalement
 
-        # ✅ Ajouter le bouton au layout avec centrage
+        #Ajouter le bouton au layout avec centrage
         btn_layout.addWidget(self.btn_retour, alignment=Qt.AlignHCenter)
 
-        # ✅ Ajouter le layout du bouton au layout principal
+        #Ajouter le layout du bouton au layout principal
         layout.addLayout(form_layout)
         layout.addLayout(btn_layout)
         self.setLayout(layout)

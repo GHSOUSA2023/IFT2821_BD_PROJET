@@ -78,11 +78,11 @@ def modifier_client(id_client, nom, prenom, ville, adresse, permis_cond, email, 
                 )
             )
             connexion.commit()
-            print("✅ Client modifié avec succès !")
+            print("Client modifié avec succès !")
             return True
 
         except Exception as erreur:
-            print(f"❌ Erreur lors de la modification du client : {erreur}")
+            print(f"Erreur lors de la modification du client : {erreur}")
             return None
 
         finally:
@@ -96,20 +96,27 @@ def supprimer_client(id_client):
     if connexion:
         try:
             curseur = connexion.cursor()
+
+            # Vérifier si le client existe
             curseur.execute(queries.GET_CLIENT_PAR_ID, (id_client,))
             client = curseur.fetchone()
 
             if not client:
-                print("Aucun client trouvé avec cet ID.")
-                return
+                return False, "Aucun client trouvé avec cet ID."
 
+            # Supprimer le client
             curseur.execute(queriesdelete.SUPPRIMER_CLIENT, (id_client,))
             connexion.commit()
-            print("✅ Client supprimé avec succès !")
+            print("Client supprimé avec succès !")
+            return True, None
+
         except Exception as erreur:
-            print(f"❌ Erreur lors de la suppression du client : {erreur}")
+            if "REFERENCE constraint" in str(erreur):
+                return False, "Impossible de supprimer ce client car il est lié à d'autres données (ex. : réservations)."
+            return False, f"Erreur lors de la suppression : {erreur}"
         finally:
             database.fermer_connexion(connexion)
+
 
 # Lister tous les clients
 def lister_tous_clients():
@@ -138,7 +145,7 @@ def lister_tous_clients():
                 ))
 
         except Exception as erreur:
-            print(f"❌ Erreur lors de la récupération des clients : {erreur}")
+            print(f"Erreur lors de la récupération des clients : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
@@ -173,7 +180,7 @@ def rechercher_client(terme_recherche):
                 ])
 
         except Exception as erreur:
-            print(f"❌ Erreur lors de la recherche du client : {erreur}")
+            print(f"Erreur lors de la recherche du client : {erreur}")
         finally:
             database.fermer_connexion(connexion)
 
@@ -194,7 +201,7 @@ def rechercher_client_par_email(email):
             client = curseur.fetchone()
             return client
         except Exception as erreur:
-            print(f"❌ Erreur lors de la recherche du client par email : {erreur}")
+            print(f"Erreur lors de la recherche du client par email : {erreur}")
         finally:
             database.fermer_connexion(connexion)
     return None
