@@ -42,7 +42,7 @@ class GestionReservationsUI(QWidget):
         btn_supprimer = QPushButton("🗑 Supprimer une Réservation")
         btn_lister = QPushButton("📋 Lister les Réservations")
         btn_rechercher = QPushButton("🔍 Rechercher une Réservation")
-        btn_retour = QPushButton("⬅ Retour")
+        btn_retour = QPushButton("⬅️ Retour")
 
         for btn in [btn_ajouter, btn_modifier, btn_supprimer, btn_lister, btn_rechercher, btn_retour]:
             btn.setStyleSheet(BUTTON_STYLE)

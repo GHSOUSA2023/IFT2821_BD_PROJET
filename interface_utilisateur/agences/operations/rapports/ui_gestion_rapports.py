@@ -43,23 +43,35 @@ class GestionRapportsUI(QWidget):
         frame.setStyleSheet(FRAME_STYLE)
         frame_layout = QVBoxLayout()
 
+        # 🌟 Style commun pour centrer et réduire les boutons (largeur augmentée à 400px)
+        BUTTON_COMMON_STYLE = """
+            QPushButton {
+                width: 400px;      /* Largeur augmentée */
+                margin: 5px auto;  /* Centre le bouton horizontalement */
+                padding: 8px;      /* Ajuste la hauteur */
+                font-size: 14px;   /* Taille de la police */
+            }
+        """
+
         # ---------- Section FINANCIER ----------
         label_finance = QLabel("Rapports Financiers")
         label_finance.setStyleSheet("font-weight: bold; font-size: 16px; margin-top: 10px;")
         frame_layout.addWidget(label_finance)
 
         btn_fin1 = QPushButton("Réservations par agence (janvier)")
+        btn_fin1.setStyleSheet(BUTTON_STYLE_FINANCE + BUTTON_COMMON_STYLE)
         btn_fin1.clicked.connect(self.afficher_rapport_reservations_janvier)
 
         btn_fin2 = QPushButton("Contrats en cours par agence (janvier)")
+        btn_fin2.setStyleSheet(BUTTON_STYLE_FINANCE + BUTTON_COMMON_STYLE)
         btn_fin2.clicked.connect(self.afficher_rapport_contrats_janvier)
 
         btn_fin3 = QPushButton("Facturation prévue et réalisée")
+        btn_fin3.setStyleSheet(BUTTON_STYLE_FINANCE + BUTTON_COMMON_STYLE)
         btn_fin3.clicked.connect(self.afficher_rapport_facturation)
 
         for btn in [btn_fin1, btn_fin2, btn_fin3]:
-            btn.setStyleSheet(BUTTON_STYLE_FINANCE)
-            frame_layout.addWidget(btn)
+            frame_layout.addWidget(btn, alignment=Qt.AlignCenter)
 
         # ---------- Section CLIENTS ----------
         label_clients = QLabel("Rapports Clients")
@@ -67,14 +79,15 @@ class GestionRapportsUI(QWidget):
         frame_layout.addWidget(label_clients)
 
         btn_cli1 = QPushButton("Clients avec incidents d'assurance")
+        btn_cli1.setStyleSheet(BUTTON_STYLE_CLIENTS + BUTTON_COMMON_STYLE)
         btn_cli1.clicked.connect(self.afficher_rapport_clients_incidents)
 
         btn_cli2 = QPushButton("Clients avec contrats actifs")
+        btn_cli2.setStyleSheet(BUTTON_STYLE_CLIENTS + BUTTON_COMMON_STYLE)
         btn_cli2.clicked.connect(self.afficher_rapport_vehicules_contrats_actifs)
 
         for btn in [btn_cli1, btn_cli2]:
-            btn.setStyleSheet(BUTTON_STYLE_CLIENTS)
-            frame_layout.addWidget(btn)
+            frame_layout.addWidget(btn, alignment=Qt.AlignCenter)
 
         # ---------- Section OPÉRATIONS ----------
         label_ops = QLabel("Rapports Opérations")
@@ -82,29 +95,33 @@ class GestionRapportsUI(QWidget):
         frame_layout.addWidget(label_ops)
 
         btn_op1 = QPushButton("Flotte complète et contrats actifs")
+        btn_op1.setStyleSheet(BUTTON_STYLE_OPERATIONS + BUTTON_COMMON_STYLE)
         btn_op1.clicked.connect(self.afficher_rapport_flotte)
 
         btn_op2 = QPushButton("Véhicules disponibles par agence")
+        btn_op2.setStyleSheet(BUTTON_STYLE_OPERATIONS + BUTTON_COMMON_STYLE)
         btn_op2.clicked.connect(self.afficher_rapport_vehicules_disponibles)
 
         btn_op3 = QPushButton("Responsables de contrats avec incidents")
+        btn_op3.setStyleSheet(BUTTON_STYLE_OPERATIONS + BUTTON_COMMON_STYLE)
         btn_op3.clicked.connect(self.afficher_rapport_employes_incidents)
 
         btn_op4 = QPushButton("Véhicules avec incidents")
+        btn_op4.setStyleSheet(BUTTON_STYLE_OPERATIONS + BUTTON_COMMON_STYLE)
         btn_op4.clicked.connect(self.afficher_rapport_vehicules_incidents)
 
         btn_op5 = QPushButton("État d'entretien des véhicules")
+        btn_op5.setStyleSheet(BUTTON_STYLE_OPERATIONS + BUTTON_COMMON_STYLE)
         btn_op5.clicked.connect(self.afficher_rapport_entretien)
 
         for btn in [btn_op1, btn_op2, btn_op3, btn_op4, btn_op5]:
-            btn.setStyleSheet(BUTTON_STYLE_OPERATIONS)
-            frame_layout.addWidget(btn)
+            frame_layout.addWidget(btn, alignment=Qt.AlignCenter)
 
-        # ---------- Botão de Retour ----------
+        # ---------- Bouton de Retour ----------
         btn_retour = QPushButton("⬅ Retour")
-        btn_retour.setStyleSheet(BUTTON_STYLE_RETOUR)
+        btn_retour.setStyleSheet(BUTTON_STYLE_RETOUR + BUTTON_COMMON_STYLE)
         btn_retour.clicked.connect(self.retourner)
-        frame_layout.addWidget(btn_retour)
+        frame_layout.addWidget(btn_retour, alignment=Qt.AlignCenter)
 
         frame.setLayout(frame_layout)
         layout.addWidget(label_title)

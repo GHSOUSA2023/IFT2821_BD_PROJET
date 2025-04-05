@@ -108,7 +108,7 @@ Type véhicule: {vehicule_info['TYPE_VEHIC']}
         self.btn_terminer = QPushButton("✅ Terminer la maintenance")
         self.btn_terminer.clicked.connect(self.terminer_maintenance)
 
-        self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.clicked.connect(self.retourner)
 
         # ⬇️ Ajout au layout

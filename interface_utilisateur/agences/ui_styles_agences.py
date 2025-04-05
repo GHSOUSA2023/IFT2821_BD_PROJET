@@ -36,7 +36,7 @@ TITLE_STYLE = """
 # StyleSheet pour les boutons financiers
 BUTTON_STYLE_FINANCE = """
     QPushButton {
-        background-color: #28a745; 
+        background-color: #4169E1; 
         color: white; 
         padding: 12px; 
         border-radius: 6px;
@@ -44,14 +44,14 @@ BUTTON_STYLE_FINANCE = """
         font-weight: bold;
     }
     QPushButton:hover {
-        background-color: #218838;
+        background-color: #40E0D0;
     }
 """
 
 # StyleSheet pour les boutons clients
 BUTTON_STYLE_CLIENTS = """
     QPushButton {
-        background-color: #17a2b8; 
+        background-color: #0F52BA; 
         color: white; 
         padding: 12px; 
         border-radius: 6px;
@@ -59,14 +59,14 @@ BUTTON_STYLE_CLIENTS = """
         font-weight: bold;
     }
     QPushButton:hover {
-        background-color: #117a8b;
+        background-color: #40E0D0;
     }
 """
 
 # StyleSheet pour les boutons opérations
 BUTTON_STYLE_OPERATIONS = """
     QPushButton {
-        background-color: #fd7e14; 
+        background-color: #000080 ; 
         color: white; 
         padding: 12px; 
         border-radius: 6px;
@@ -74,7 +74,7 @@ BUTTON_STYLE_OPERATIONS = """
         font-weight: bold;
     }
     QPushButton:hover {
-        background-color: #e66900;
+        background-color: #40E0D0;
     }
 """
 
@@ -87,6 +87,7 @@ BUTTON_STYLE_RETOUR = """
         border-radius: 6px;
         font-size: 14px;
         font-weight: bold;
+        width: 250px;
     }
     QPushButton:hover {
         background-color: #5a6268;

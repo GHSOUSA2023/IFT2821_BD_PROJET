@@ -32,7 +32,7 @@ class TableauAssurancesUI(QWidget):
 
 
 
-        self.btn_retour = QPushButton("⬅ Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.clicked.connect(self.retourner)
 
         layout.addWidget(QLabel("Recherche Assurance:"))

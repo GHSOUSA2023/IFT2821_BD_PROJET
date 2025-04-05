@@ -42,7 +42,7 @@ def get_agence_par_id(id_agence):
             curseur = connexion.cursor()
             curseur.execute(queries.GET_AGENCE_PAR_ID, (id_agence,))
             agence = curseur.fetchone()
-            return agence  # 🔹 RETOURNE L'AGENCE ICI
+            return agence  # RETOURNE L'AGENCE ICI
         except Exception as erreur:
             print(f"Erreur lors de la récupération de l'agence : {erreur}")
         finally:

@@ -51,7 +51,7 @@ class TableauReservationsUI(QWidget):
 
 
         # Bouton retour
-        self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.clicked.connect(self.tb_op_retourner)
         layout.addWidget(self.btn_retour)
 

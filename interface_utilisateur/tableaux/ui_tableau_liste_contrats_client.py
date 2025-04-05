@@ -61,7 +61,7 @@ class TableauListeContratsClientUI(QWidget):
         layout.addWidget(self.tableau_contrats)
 
         # Bouton retour
-        self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.clicked.connect(self.retourner)
         layout.addWidget(self.btn_retour)
 
