@@ -135,7 +135,7 @@ class FormulaireVehiculeUI(QWidget):
         form_layout.addRow("", maintenance_frame)
 
         # Boutons Sauvegarder / Effacer / Annuler
-        self.btn_sauvegarder = QPushButton("💾 Ajouter la vehicule")
+        self.btn_sauvegarder = QPushButton("💾 Enregistrer") # le nom doit etre generique parce que le formulaire est reutiliser pour modifier aussi
         self.btn_effacer = QPushButton("🧹 Effacer")
         self.btn_annuler = QPushButton("⬅️ Retourner")
 
@@ -209,7 +209,7 @@ class FormulaireVehiculeUI(QWidget):
         id_age = self.agence_input.currentData()
         status = "DISPONIBLE"
 
-        # 🔐 Tentative d'enregistrement
+        #Tentative d'enregistrement
         try:
             if self.mode == "ajouter":
                 ajouter_vehicule(id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
@@ -219,7 +219,7 @@ class FormulaireVehiculeUI(QWidget):
                 modifier_vehicule(id_vehicule, id_marq, id_mod, id_tp_vehic, annee_fab, couleur, immatriculation, status, km, type_carbur, id_age)
                 QMessageBox.information(self, "Succès", "Véhicule modifié avec succès.")
 
-            # ✅ Retour seulement après succès
+            #Retour seulement après succès
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_vehicules)
 
         except Exception as e:
@@ -227,7 +227,7 @@ class FormulaireVehiculeUI(QWidget):
             if "Violation of UNIQUE KEY constraint 'UQ__FLOTTE" in erreur_str:
                 QMessageBox.critical(self, "Immatriculation existante", f"L'immatriculation {immatriculation} est déjà utilisée pour un autre véhicule.")
             else:
-                print(f"❌ Erreur lors de l'ajout ou modification du véhicule : {e}")
+                print(f"Erreur lors de l'ajout ou modification du véhicule : {e}")
                 QMessageBox.critical(self, "Erreur", f"Une erreur est survenue :\n{e}")
 
 

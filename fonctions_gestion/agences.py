@@ -138,18 +138,21 @@ def confirmer_suppression(self, row, column):
     """
     Demande confirmation avant suppression d'une agence.
     """
-    id_agence = self.tableau_agences_supprimer.table_widget.item(row, 0).text()  # ID de l'agence
-    nom_agence = self.tableau_agences_supprimer.table_widget.item(row, 1).text()  # Nom de l'agence
+    id_agence = self.tableau_agences_supprimer.table_widget.item(row, 0).text()
+    nom_agence = self.tableau_agences_supprimer.table_widget.item(row, 1).text()
 
-    # Boîte de confirmation
     reponse = QMessageBox.question(self, "Confirmation", 
                                    f"Voulez-vous vraiment supprimer l'agence '{nom_agence}' ?",
                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
     if reponse == QMessageBox.Yes:
-        supprimer_agence(id_agence)  # Appeler la fonction de suppression
-        QMessageBox.information(self, "Succès", "L'agence a été supprimée avec succès.")
-        self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_agences)  # Retour
+        success, message = supprimer_agence(id_agence)
+
+        if success:
+            QMessageBox.information(self, "Succès", f"L'agence '{nom_agence}' a été supprimée avec succès.")
+            self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_agences)
+        else:
+            QMessageBox.warning(self, "Erreur", message)
 
 
 # Supprimer une agence
@@ -160,29 +163,29 @@ def supprimer_agence(id_agence):
         try:
             curseur = connexion.cursor()
 
-            # Verificar se a agencia existe
+            # Vérifier l'existence de l'agence
             curseur.execute(queries.GET_AGENCE_PAR_ID, (id_agence,))
             agence = curseur.fetchone()
 
             if not agence:
-                print("Aucune agence trouvée avec cet ID.")
-                return
+                return False, "Aucune agence trouvée avec cet ID."
 
-            # Apenas imprime no console como debug:
+            # Debug dans la console
             print("\nDétails de l'agence sélectionnée :")
             print(f"ID : {agence.ID_AGE}")
             print(f"Nom : {agence.NOM_AGE}")
             print(f"Ville : {agence.VILLE}")
 
-            # Remove a chamada de input(...) – usamos a confirmação da UI
-            # if confirmation != "O": ... etc
-
-            # Executa a remoção
+            # Suppression
             curseur.execute(queriesdelete.SUPPRIMER_AGENCE, (id_agence,))
             connexion.commit()
             print("Agence supprimée avec succès !")
+            return True, None
+
         except Exception as erreur:
-            print(f"Erreur lors de la suppression de l'agence : {erreur}")
+            if "REFERENCE constraint" in str(erreur):
+                return False, "Impossible de supprimer cette agence car elle est liée à d'autres données (ex. : employés)."
+            return False, f"Erreur lors de la suppression : {erreur}"
         finally:
             database.fermer_connexion(connexion)
 
