@@ -71,25 +71,35 @@ class FormulaireEmployeUI(QWidget):
         form_layout.addRow("Agence:", self.agence_input)
 
         # ✅ Ajouter les boutons
-        self.btn_sauvegarder = QPushButton("💾 Sauvegarder")
+        self.btn_sauvegarder = QPushButton("💾 Ajouter l'employee")
         self.btn_effacer = QPushButton("🧹 Effacer")
-        self.btn_annuler = QPushButton("❌ Annuler")
+        self.btn_retour = QPushButton("⬅️ Retourner")
+
+        # ✅ Uniformiser la taille des boutons
+        self.btn_sauvegarder.setFixedWidth(150)
+        self.btn_effacer.setFixedWidth(150)
+        self.btn_retour.setFixedWidth(150)
 
         # ✅ Connexions des boutons
         self.btn_sauvegarder.clicked.connect(self.sauvegarder)
         self.btn_effacer.clicked.connect(self.effacer_formulaire)
-        self.btn_annuler.clicked.connect(self.annuler)
+        self.btn_retour.clicked.connect(self.annuler)
 
-        # ✅ Ajout des boutons dans un sous-layout
+        # ✅ Créer un layout vertical pour centrer les boutons
         btn_layout = QVBoxLayout()
-        btn_layout.addWidget(self.btn_sauvegarder)
-        btn_layout.addWidget(self.btn_effacer)
-        btn_layout.addWidget(self.btn_annuler)
+        btn_layout.setAlignment(Qt.AlignHCenter)  # Centrer les boutons horizontalement
 
+        # ✅ Ajouter les boutons au layout avec espacement
+        btn_layout.addWidget(self.btn_sauvegarder, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_effacer, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_retour, alignment=Qt.AlignHCenter)
+
+        # ✅ Ajouter le layout des boutons au layout principal
         layout.addLayout(form_layout)
         layout.addLayout(btn_layout)
         self.setLayout(layout)
-
 
     def sauvegarder(self):
         """

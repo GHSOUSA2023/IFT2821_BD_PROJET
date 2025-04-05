@@ -1,6 +1,6 @@
 import os
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget, QStackedWidget
+    QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget, QStackedWidget, QMessageBox
 )
 from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QFont
@@ -20,7 +20,6 @@ from interface_utilisateur.ui_styles import (
     LABEL_TITLE_FONT
 )
 
-
 class MainWindow(QMainWindow):
     """
     Fenêtre principale utilisant un QStackedWidget pour naviguer
@@ -31,23 +30,18 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("GN Location - Gestion")
         self.resize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
-        self.resize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])  # Define tamanho inicial
+        self.resize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
         self.move(WINDOW_GEOMETRY[0], WINDOW_GEOMETRY[1])
 
-        # Construire le chemin absolu vers l'image de background
+        # Chargement de l'image de fond
         image_path = os.path.join(os.path.dirname(__file__), "background_picture.jpg")
-        image_path = image_path.replace("\\", "/")  # pour Windows
-
-        # Construire une feuille de style combinant ton WINDOW_STYLE et le background image.
-        # Ici, on utilise "border-image" pour étirer l'image sur toute la fenêtre.
+        image_path = image_path.replace("\\", "/")
         combined_style = f"""
             QMainWindow {{
                 border-image: url("{image_path}") 0 0 0 0 stretch stretch;
             }}
         """
-        # Si WINDOW_STYLE contient d'autres styles que tu souhaites conserver, tu peux les ajouter :
         combined_style += "\n" + WINDOW_STYLE
-
         self.setStyleSheet(combined_style)
 
         # QStackedWidget pour la navigation
@@ -81,7 +75,7 @@ class MainWindow(QMainWindow):
         # Connexions
         btn_agences.clicked.connect(lambda: self.afficher_interface(self.ui_agences_mere))
         btn_clients.clicked.connect(lambda: self.afficher_interface(self.ui_clients))
-        btn_quitter.clicked.connect(QApplication.quit)
+        btn_quitter.clicked.connect(self.confirm_quit)  # Modification ici
 
         # Ajout au layout
         layout.addWidget(label_title)
@@ -115,6 +109,20 @@ class MainWindow(QMainWindow):
         # Afficher le menu principal au démarrage
         self.central_widget.setCurrentWidget(self.menu_principal)
 
+    def confirm_quit(self):
+        """Affiche une boîte de dialogue pour confirmer la fermeture."""
+        reply = QMessageBox.question(
+            self,
+            "Confirmation",
+            "Êtes-vous sûr de vouloir quitter ?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            # Afficher un message de remerciement avant de quitter
+            QMessageBox.information(self, "Merci", "Merci pour votre attention !")
+            QApplication.quit()
+
     def show_animation(self):
         """Effet fondu d’apparition."""
         self.animation = QPropertyAnimation(self, b"windowOpacity")
@@ -131,6 +139,22 @@ class MainWindow(QMainWindow):
     def revenir_menu_principal(self):
         """Retour au menu principal."""
         self.central_widget.setCurrentWidget(self.menu_principal)
+
+    def closeEvent(self, event):
+        """Demande une confirmation avant de fermer la fenêtre."""
+        reply = QMessageBox.question(
+            self,
+            "Confirmation",
+            "Êtes-vous sûr de vouloir quitter ?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            # Afficher un message de remerciement avant de fermer
+            QMessageBox.information(self, "Merci", "Merci pour votre attention !")
+            event.accept()  # Accepter la fermeture
+        else:
+            event.ignore()  # Ignorer la fermeture
 
 
 if __name__ == "__main__":

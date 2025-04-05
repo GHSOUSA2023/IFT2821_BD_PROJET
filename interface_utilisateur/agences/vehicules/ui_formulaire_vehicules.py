@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFormLayout, QComboBox, QMessageBox, QFrame
+from PyQt5.QtWidgets import QHBoxLayout, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFormLayout, QComboBox, QMessageBox, QFrame
 from fonctions_gestion.vehicules import ajouter_vehicule, modifier_vehicule
 from fonctions_gestion.flotte import lister_marques, lister_tout_modeles, lister_tout_tp_vehic
 from constantes import constantes
@@ -135,19 +135,30 @@ class FormulaireVehiculeUI(QWidget):
         form_layout.addRow("", maintenance_frame)
 
         # Boutons Sauvegarder / Effacer / Annuler
-        self.btn_sauvegarder = QPushButton("💾 Sauvegarder")
+        self.btn_sauvegarder = QPushButton("💾 Ajouter la vehicule")
         self.btn_effacer = QPushButton("🧹 Effacer")
-        self.btn_annuler = QPushButton("❌ Annuler")
+        self.btn_annuler = QPushButton("⬅️ Retourner")
 
+        # Réduire la taille des boutons pour uniformiser
+        self.btn_sauvegarder.setFixedWidth(150)
+        self.btn_effacer.setFixedWidth(150)
+        self.btn_annuler.setFixedWidth(150)
+
+        # Connexions des boutons
         self.btn_sauvegarder.clicked.connect(self.sauvegarder)
         self.btn_effacer.clicked.connect(self.effacer_formulaire)
         self.btn_annuler.clicked.connect(self.annuler)
 
+        # Layout vertical pour les boutons (un au-dessus de l'autre)
         btn_layout = QVBoxLayout()
+        btn_layout.setAlignment(Qt.AlignHCenter)  # Centrer les boutons horizontalement
         btn_layout.addWidget(self.btn_sauvegarder)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
         btn_layout.addWidget(self.btn_effacer)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
         btn_layout.addWidget(self.btn_annuler)
 
+        # Ajouter le layout de boutons au layout principal
         layout.addLayout(form_layout)
         layout.addLayout(btn_layout)
         self.setLayout(layout)
