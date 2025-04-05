@@ -94,7 +94,7 @@ class TableauReservationsUI(QWidget):
                     self.main_window.central_widget.addWidget(formulaire_gerer)
                     self.main_window.central_widget.setCurrentWidget(formulaire_gerer)    
                 else:
-                    QMessageBox.information(self, "Information", "⚠️ Aucun contrat n’a été généré pour cette réservation.")
+                    QMessageBox.information(self, "Information", "Aucun contrat n’a été généré pour cette réservation.")
                 return  # Termina aqui se for mode contrat
 
             # Comportamento normal (mode oper)
@@ -113,7 +113,7 @@ class TableauReservationsUI(QWidget):
                 else:
                     QMessageBox.warning(self, "Erreur", "Impossible de récupérer les détails du contrat.")
             else:
-                QMessageBox.warning(self, "Information", "⚠️ La réservation n’est accessible que pour les contrats confirmés ou terminés.")
+                QMessageBox.warning(self, "Information", "La réservation n’est accessible que pour les contrats confirmés ou terminés.")
 
         except Exception as e:
             print(f"Erreur lors de l'ouverture du contrat ou du formulaire : {e}")

@@ -142,19 +142,21 @@ class GestionEmployesUI(QWidget):
         )
 
         if reponse == QMessageBox.Yes:
-            # Supprimer l'employé
-            supprimer_employe(id_emp)
-            print("Employé supprimé avec succès!")
+            success, message = supprimer_employe(id_emp)
 
-            # Retourner à la liste des employés
-            self.tableau_employes_supprimer.table_widget.removeRow(row)
+            if success:
+                QMessageBox.information(self, "Succès", f"L'employé '{nom_emp} {prenom_emp}' a été supprimé avec succès.")
+                self.tableau_employes_supprimer.table_widget.removeRow(row)
+            else:
+                QMessageBox.warning(self, "Erreur", message)
+
 
     def afficher_liste_employes(self):
         """
         Récupère tous les employés et les affiche dans le tableau `TableauEmployesUI` avec un filtre de recherche.
         """
-        colonnes = ["ID", "NAS", "Nom", "Prénom", "Salaire", "Poste", "Agence"]  # 🔹 Correction ici
-        employes = lister_employes()  # 🔹 Récupération correcte
+        colonnes = ["ID", "NAS", "Nom", "Prénom", "Salaire", "Poste", "Agence"]  # Correction ici
+        employes = lister_employes()  # Récupération correcte
 
         if employes:
             self.tableau_employes = TableauEmployesUI("Liste des Employés", colonnes, employes, self.main_window)

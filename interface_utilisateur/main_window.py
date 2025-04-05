@@ -13,11 +13,10 @@ from interface_utilisateur.agences.employe.ui_gestion_employes import GestionEmp
 from interface_utilisateur.agences.operations.ui_gestion_operations import GestionOperationsUI
 from interface_utilisateur.agences.operations.rapports.ui_gestion_rapports import GestionRapportsUI
 from interface_utilisateur.tableaux.ui_tableau_liste_contrats_client import TableauListeContratsClientUI
-# Importation des styles depuis ui_styles.py
 from interface_utilisateur.ui_styles import (
     WINDOW_STYLE, WINDOW_GEOMETRY,
     BUTTON_STYLE_AGENCES, BUTTON_STYLE_CLIENTS, BUTTON_STYLE_QUITTER,
-    LABEL_TITLE_FONT
+    LABEL_TITLE_FONT, LABEL_CREDIT_STYLE
 )
 
 class MainWindow(QMainWindow):
@@ -29,7 +28,6 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("GN Location - Gestion")
-        self.resize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
         self.resize(WINDOW_GEOMETRY[2], WINDOW_GEOMETRY[3])
         self.move(WINDOW_GEOMETRY[0], WINDOW_GEOMETRY[1])
 
@@ -51,6 +49,13 @@ class MainWindow(QMainWindow):
         self.initUI()
         self.show_animation()
 
+        # Étiquette de crédit en bas à droite
+        self.label_credit = QLabel("Développé par Geraldo Henrique de Sousa et Nader Hadj Ameur — IFT2821-H25 (Bases de données)", self)
+        self.label_credit.setStyleSheet(LABEL_CREDIT_STYLE)
+        self.label_credit.adjustSize()
+        self.label_credit.move(self.width() - self.label_credit.width() - 15, self.height() - self.label_credit.height() - 10)
+        self.label_credit.raise_()
+
     def initUI(self):
         """Crée et affiche le menu principal."""
         self.menu_principal = QWidget()
@@ -67,17 +72,14 @@ class MainWindow(QMainWindow):
         btn_clients = QPushButton("👤 Clients")
         btn_quitter = QPushButton("🚪 Quitter le système")
 
-        # Application des styles aux boutons
         btn_agences.setStyleSheet(BUTTON_STYLE_AGENCES)
         btn_clients.setStyleSheet(BUTTON_STYLE_CLIENTS)
         btn_quitter.setStyleSheet(BUTTON_STYLE_QUITTER)
 
-        # Connexions
         btn_agences.clicked.connect(lambda: self.afficher_interface(self.ui_agences_mere))
         btn_clients.clicked.connect(lambda: self.afficher_interface(self.ui_clients))
-        btn_quitter.clicked.connect(self.confirm_quit)  # Modification ici
+        btn_quitter.clicked.connect(self.confirm_quit)
 
-        # Ajout au layout
         layout.addWidget(label_title)
         layout.addSpacing(20)
         layout.addWidget(btn_agences)
@@ -109,6 +111,12 @@ class MainWindow(QMainWindow):
         # Afficher le menu principal au démarrage
         self.central_widget.setCurrentWidget(self.menu_principal)
 
+    def resizeEvent(self, event):
+        """Réajuste la position du crédit lors du redimensionnement."""
+        super().resizeEvent(event)
+        if hasattr(self, 'label_credit'):
+            self.label_credit.move(self.width() - self.label_credit.width() - 15, self.height() - self.label_credit.height() - 10)
+
     def confirm_quit(self):
         """Affiche une boîte de dialogue pour confirmer la fermeture."""
         reply = QMessageBox.question(
@@ -119,7 +127,6 @@ class MainWindow(QMainWindow):
             QMessageBox.No
         )
         if reply == QMessageBox.Yes:
-            # Afficher un message de remerciement avant de quitter
             QMessageBox.information(self, "Merci", "Merci pour votre attention !")
             QApplication.quit()
 
@@ -150,11 +157,10 @@ class MainWindow(QMainWindow):
             QMessageBox.No
         )
         if reply == QMessageBox.Yes:
-            # Afficher un message de remerciement avant de fermer
             QMessageBox.information(self, "Merci", "Merci pour votre attention !")
-            event.accept()  # Accepter la fermeture
+            event.accept()
         else:
-            event.ignore()  # Ignorer la fermeture
+            event.ignore()
 
 
 if __name__ == "__main__":

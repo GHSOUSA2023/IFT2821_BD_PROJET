@@ -139,12 +139,14 @@ class GestionClientsUI(QWidget):
         )
 
         if reponse == QMessageBox.Yes:
-            # Supprimer le client
-            supprimer_client(id_client)
-            print("Client supprimé avec succès!")
+            success, message = supprimer_client(id_client)
 
-            # Retirer le client de la liste
-            self.tableau_clients_supprimer.table_widget.removeRow(row)
+            if success:
+                QMessageBox.information(self, "Succès", f"Le client '{nom_client}' a été supprimé avec succès.")
+                self.tableau_clients_supprimer.table_widget.removeRow(row)
+            else:
+                QMessageBox.warning(self, "Erreur", message)
+
 
     def afficher_liste_clients(self):
         """

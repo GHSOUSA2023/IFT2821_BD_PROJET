@@ -41,33 +41,34 @@ class FormulaireClientUI(QWidget):
         form_layout.addRow("Téléphone:", self.telephone_input)
         form_layout.addRow("Carte de crédit:", self.carte_cred_input)
 
-        # ✅ Bouton "Ajouter client"
+
+        #Bouton "Ajouter client"
         self.btn_valider = QPushButton("💾 Ajouter le client")
         self.btn_valider.setFixedWidth(150)
         self.btn_valider.clicked.connect(self.valider)
 
-        # ✅ Bouton "Effacer"
+        #Bouton "Effacer"
         self.btn_effacer = QPushButton("🧹 Effacer")
         self.btn_effacer.setFixedWidth(150)
         self.btn_effacer.clicked.connect(self.effacer_formulaire)
 
-        # ✅ Bouton "Annuler"
+        #Bouton "Annuler"
         self.btn_annuler = QPushButton("⬅️ Retourner")
         self.btn_annuler.setFixedWidth(150)
         self.btn_annuler.clicked.connect(self.retourner_arriere)
 
-        # ✅ Créer un layout vertical pour centrer les boutons
+        #Créer un layout vertical pour centrer les boutons
         btn_layout = QVBoxLayout()
         btn_layout.setAlignment(Qt.AlignHCenter)  # Centrer les boutons horizontalement
 
-        # ✅ Ajouter les boutons au layout avec espacement
+        #Ajouter les boutons au layout avec espacement
         btn_layout.addWidget(self.btn_valider, alignment=Qt.AlignHCenter)
         btn_layout.addSpacing(10)  # Espace entre les boutons
         btn_layout.addWidget(self.btn_effacer, alignment=Qt.AlignHCenter)
         btn_layout.addSpacing(10)  # Espace entre les boutons
         btn_layout.addWidget(self.btn_annuler, alignment=Qt.AlignHCenter)
 
-        # ✅ Ajouter le layout des boutons au layout principal
+        #Ajouter le layout des boutons au layout principal
         layout.addLayout(form_layout)
         layout.addLayout(btn_layout)
         self.setLayout(layout)
@@ -147,7 +148,7 @@ class FormulaireClientUI(QWidget):
             self.parent_form.central_widget.setCurrentWidget(self.parent_form.ui_clients)
         else:
             # En cas de problème inattendu
-            print("⚠ Impossible de retourner à l'écran précédent.")
+            print("Impossible de retourner à l'écran précédent.")
 
 
 

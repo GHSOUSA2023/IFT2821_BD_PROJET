@@ -20,12 +20,12 @@ class TableauVehiculesUI(QWidget):
     def initUI(self):
         layout = QVBoxLayout()
 
-        # ✅ Champ de recherche
+        #Champ de recherche
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("🔍 Rechercher par immatriculation ou modèle...")
         self.search_input.textChanged.connect(self.filtrer_tableau)
 
-        # ✅ Tableau des véhicules
+        #Tableau des véhicules
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(len(self.colonnes))
         self.table_widget.setHorizontalHeaderLabels(self.colonnes)
@@ -33,11 +33,11 @@ class TableauVehiculesUI(QWidget):
             self.table_widget.cellDoubleClicked.connect(self.ouvrir_selec_formulaire_modification)
         self.charger_donnees(self.donnees)
 
-        # ✅ Bouton retour
+        #Bouton retour
         self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.clicked.connect(self.retourner)
 
-        # ✅ Ajout au layout
+        #Ajout au layout
         layout.addWidget(QLabel("Recherche Véhicule:"))
         layout.addWidget(self.search_input)
         layout.addWidget(self.table_widget)

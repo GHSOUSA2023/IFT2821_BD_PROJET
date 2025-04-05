@@ -50,7 +50,7 @@ class FormulaireAgenceUI(QWidget):
         form_layout.addRow("Email:", self.email_input)
 
         # Bouton de validation
-        self.btn_valider = QPushButton("💾 Ajouter l'agence")
+        self.btn_valider = QPushButton("💾 Enregistrer") # le nom doit etre generique parce que le formulaire est reutiliser pour modifier aussi
         self.btn_valider.clicked.connect(self.valider)
         self.btn_valider.setFixedWidth(150)
 

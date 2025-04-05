@@ -113,7 +113,7 @@ class GestionReservationsUI(QWidget):
                     QMessageBox.information(
                         self,
                         "Suppression impossible",
-                        "❌ La réservation ne peut pas être supprimée car un contrat de location est déjà lié à celle-ci."
+                        "La réservation ne peut pas être supprimée car un contrat de location est déjà lié à celle-ci."
                     )
                     return
 
@@ -149,7 +149,7 @@ class GestionReservationsUI(QWidget):
         """
         from PyQt5.QtWidgets import QInputDialog
 
-        terme, ok = QInputDialog.getText(self, " 🔍 Recherche de Réservation", "Entrez un Nom du Client, nº contrat or nº reservation ...")
+        terme, ok = QInputDialog.getText(self, "Recherche de Réservation", "Entrez un Nom du Client, nº contrat or nº reservation ...")
         
         if ok and terme.strip():
             colonnes, reservations = rechercher_reservation(terme.strip())
