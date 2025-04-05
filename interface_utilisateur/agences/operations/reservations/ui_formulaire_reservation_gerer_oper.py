@@ -137,24 +137,42 @@ class FormulaireReservationGerirOperUI(QWidget):
 
         # Boutons de navigation et action
 
+        #Bouton "Annuler la réservation"
         self.btn_annuler = QPushButton("🚫 Annuler la réservation")
+        self.btn_annuler.setFixedWidth(150)
         self.btn_annuler.clicked.connect(self.annuler_reservation)
 
+        #Bouton "Sauvegarder pour plus tard"
         self.btn_sauvegarder = QPushButton("💾 Sauvegarder pour plus tard")
+        self.btn_sauvegarder.setFixedWidth(150)
         self.btn_sauvegarder.clicked.connect(self.sauvegarder_reservation)
 
+        #Bouton "Confirmer la réservation"
         self.btn_confirmer = QPushButton("✅ Confirmer la réservation")
+        self.btn_confirmer.setFixedWidth(150)
         self.btn_confirmer.clicked.connect(self.confirmer_reservation)
 
+        #Bouton "Retour"
         self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour.setFixedWidth(150)
         self.btn_retour.clicked.connect(self.grm_retourner_arriere)
 
+        #Créer un layout vertical pour centrer les boutons
+        btn_layout = QVBoxLayout()
+        btn_layout.setAlignment(Qt.AlignHCenter)  # Centrer les boutons horizontalement
 
+        #Ajouter les boutons au layout avec espacement
+        btn_layout.addWidget(self.btn_annuler, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_sauvegarder, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_confirmer, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_retour, alignment=Qt.AlignHCenter)
+
+        #Ajouter le layout des boutons au layout principal
         layout.addLayout(form_layout)
-        layout.addWidget(self.btn_annuler)
-        layout.addWidget(self.btn_sauvegarder)
-        layout.addWidget(self.btn_confirmer)
-        layout.addWidget(self.btn_retour)
+        layout.addLayout(btn_layout)
         self.setLayout(layout)
 
     def grm_rechercher_client(self):
@@ -403,24 +421,24 @@ class FormulaireReservationGerirOperUI(QWidget):
             self.id_vehic, self.id_tarif, self.id_assurance, self.id_optio
         )
 
-        print(f"➡ Confirmation de la réservation ID: {self.id_reservation}")
+        print(f"Confirmation de la réservation ID: {self.id_reservation}")
         QMessageBox.information(self, "Succès", f"Réservation confirmée (ID: {self.id_reservation}).")
 
-        print("➡ Tentative de récupération du contrat associé...")
+        print("Tentative de récupération du contrat associé...")
         contrat_info = get_contrat_par_reservation(self.id_reservation)
         if not contrat_info:
-            print("⏳ Attente de 2 secondes avant une deuxième tentative...")
+            print("Attente de 2 secondes avant une deuxième tentative...")
             time.sleep(2)
             contrat_info = get_contrat_par_reservation(self.id_reservation)
 
         if contrat_info:
-            print("✅ Contrat récupéré avec succès après attente, ouverture du tableau contrat.")
+            print("Contrat récupéré avec succès après attente, ouverture du tableau contrat.")
             self.reinitialiser_formulaire()
             tableau_contrat = TableauContratUI(contrat_info, self.main_window, self)
             self.main_window.central_widget.addWidget(tableau_contrat)
             self.main_window.central_widget.setCurrentWidget(tableau_contrat)
         else:
-            print("❌ Aucun contrat trouvé même après une deuxième tentative.")
+            print("Aucun contrat trouvé même après une deuxième tentative.")
             QMessageBox.warning(self, "Erreur", "Le contrat n'a pas pu être récupéré.")
 
 

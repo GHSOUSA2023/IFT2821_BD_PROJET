@@ -64,7 +64,7 @@ Type véhicule: {vehicule_info['TYPE_VEHIC']}
         self.date_fin_input.setSpecialValueText("Sélectionner une date")
         self.date_fin_input.setMinimumDate(QDate.currentDate())
 
-        # ⬇️ Charger les dates à partir de la base de données
+        #Charger les dates à partir de la base de données
         if vehicule_info['DATE_MAINTEN']:
             dt = vehicule_info['DATE_MAINTEN']
             self.date_debut_input.setDate(QDate(dt.year, dt.month, dt.day))
@@ -75,7 +75,7 @@ Type véhicule: {vehicule_info['TYPE_VEHIC']}
             dtf = vehicule_info['DATE_MAINTEN_FIN']
             self.date_fin_input.setDate(QDate(dtf.year, dtf.month, dtf.day))
 
-        # ⬇️ Type de maintenance
+        #Type de maintenance
         self.type_maintenance_input = QComboBox()
         self.type_maintenance_input.addItem("Sélectionner un type de maintenance")
         for t in constantes.TYPES_MAINTENANCE:
@@ -85,7 +85,7 @@ Type véhicule: {vehicule_info['TYPE_VEHIC']}
             if index != -1:
                 self.type_maintenance_input.setCurrentIndex(index)
 
-        # ⬇️ Mécanicien
+        #Mécanicien
         self.mecanicien_input = QComboBox()
         self.mecanicien_input.addItem("Sélectionner un mécanicien", None)
         for emp in lister_employes():
@@ -94,14 +94,14 @@ Type véhicule: {vehicule_info['TYPE_VEHIC']}
             if vehicule_info['ID_EMP'] == id_emp:
                 self.mecanicien_input.setCurrentIndex(self.mecanicien_input.count() - 1)
 
-        # ⬇️ Description
+        #Description
         self.desc_maintenance = QTextEdit()
         self.desc_maintenance.setPlaceholderText("Entrez ici la description de la maintenance...")
         self.desc_maintenance.setFixedHeight(120)
         if vehicule_info['DESC_MAINTEN']:
             self.desc_maintenance.setPlainText(vehicule_info['DESC_MAINTEN'])
 
-        # ⬇️ Boutons
+        #Boutons
         #self.btn_enregistrer = QPushButton("💾 Enregistrer maintenance (EN MAINTENANCE)")
         #self.btn_enregistrer.clicked.connect(self.enregistrer_maintenance)
 
@@ -111,10 +111,10 @@ Type véhicule: {vehicule_info['TYPE_VEHIC']}
         self.btn_retour = QPushButton("🔙 Retour")
         self.btn_retour.clicked.connect(self.retourner)
 
-        # ⬇️ Ajout au layout
+        #Ajout au layout
         form_layout.addRow("Informations du véhicule :", self.infos_vehicule_label)
         form_layout.addRow("Date début :", self.date_debut_input)
-        form_layout.addRow("Date fin prévue :", self.date_fin_input)
+        form_layout.addRow("Date fin :", self.date_fin_input)
         form_layout.addRow("Type de maintenance :", self.type_maintenance_input)
         form_layout.addRow("Mécanicien :", self.mecanicien_input)
         form_layout.addRow("Description :", self.desc_maintenance)

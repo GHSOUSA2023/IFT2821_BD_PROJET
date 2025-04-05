@@ -70,26 +70,36 @@ class FormulaireEmployeUI(QWidget):
         form_layout.addRow("Poste:", self.poste_input)
         form_layout.addRow("Agence:", self.agence_input)
 
-        # ✅ Ajouter les boutons
-        self.btn_sauvegarder = QPushButton("💾 Sauvegarder")
+        #Ajouter les boutons
+        self.btn_sauvegarder = QPushButton("💾 Enregistrer") # le nom doit etre generique parce que le formulaire est reutiliser pour modifier aussi
         self.btn_effacer = QPushButton("🧹 Effacer")
-        self.btn_annuler = QPushButton("❌ Annuler")
+        self.btn_retour = QPushButton("⬅️ Retourner")
 
-        # ✅ Connexions des boutons
+        #Uniformiser la taille des boutons
+        self.btn_sauvegarder.setFixedWidth(150)
+        self.btn_effacer.setFixedWidth(150)
+        self.btn_retour.setFixedWidth(150)
+
+        #Connexions des boutons
         self.btn_sauvegarder.clicked.connect(self.sauvegarder)
         self.btn_effacer.clicked.connect(self.effacer_formulaire)
-        self.btn_annuler.clicked.connect(self.annuler)
+        self.btn_retour.clicked.connect(self.annuler)
 
-        # ✅ Ajout des boutons dans un sous-layout
+        #Créer un layout vertical pour centrer les boutons
         btn_layout = QVBoxLayout()
-        btn_layout.addWidget(self.btn_sauvegarder)
-        btn_layout.addWidget(self.btn_effacer)
-        btn_layout.addWidget(self.btn_annuler)
+        btn_layout.setAlignment(Qt.AlignHCenter)  # Centrer les boutons horizontalement
 
+        #Ajouter les boutons au layout avec espacement
+        btn_layout.addWidget(self.btn_sauvegarder, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_effacer, alignment=Qt.AlignHCenter)
+        btn_layout.addSpacing(10)  # Espace entre les boutons
+        btn_layout.addWidget(self.btn_retour, alignment=Qt.AlignHCenter)
+
+        #Ajouter le layout des boutons au layout principal
         layout.addLayout(form_layout)
         layout.addLayout(btn_layout)
         self.setLayout(layout)
-
 
     def sauvegarder(self):
         """
@@ -102,7 +112,7 @@ class FormulaireEmployeUI(QWidget):
         poste = self.poste_input.currentText()
         id_agence = self.agence_input.currentData()
 
-        # 🔍 Validations
+        #Validations
         if not nas:
             QMessageBox.warning(self, "Champ manquant", "Le champ 'NAS' est obligatoire.")
             return
@@ -138,7 +148,7 @@ class FormulaireEmployeUI(QWidget):
             QMessageBox.warning(self, "Champ manquant", "Veuillez sélectionner une agence valide.")
             return
 
-        # 🔐 Tentative d'enregistrement dans la base de données
+        #Tentative d'enregistrement dans la base de données
         try:
             if self.mode == "ajouter":
                 ajouter_employe(nas, nom, prenom, salaire_float, poste, id_agence)
@@ -148,7 +158,7 @@ class FormulaireEmployeUI(QWidget):
                 modifier_employe(id_emp, nas, nom, prenom, salaire_float, poste, id_agence)
                 QMessageBox.information(self, "Succès", "Employé modifié avec succès.")
 
-            # ✅ Retour uniquement après succès
+            #Retour uniquement après succès
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_employes)
 
         except Exception as e:
@@ -156,7 +166,7 @@ class FormulaireEmployeUI(QWidget):
             if "Violation of UNIQUE KEY constraint 'UQ__EMPLOYES" in erreur_str:
                 QMessageBox.critical(self, "NAS existant", f"Le NAS {nas} appartient déjà à un autre employé.")
             else:
-                print(f"❌ Erreur lors de l'ajout ou modification de l'employé : {e}")
+                print(f"Erreur lors de l'ajout ou modification de l'employé : {e}")
                 QMessageBox.critical(self, "Erreur", f"Une erreur est survenue :\n{e}")
 
 

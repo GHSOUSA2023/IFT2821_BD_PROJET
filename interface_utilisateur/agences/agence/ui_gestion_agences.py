@@ -42,8 +42,8 @@ class GestionAgencesUI(QWidget):
 
         # Boutons
         btn_ajouter = QPushButton("➕ Ajouter une Agence")
-        btn_modifier = QPushButton("✏ Modifier une Agence")
-        btn_supprimer = QPushButton("🗑 Supprimer une Agence")
+        btn_modifier = QPushButton("✒️ Modifier une Agence")
+        btn_supprimer = QPushButton("🗑️ Supprimer une Agence")
         btn_lister = QPushButton("📋 Lister les Agences")
         btn_rechercher = QPushButton("🔍 Rechercher une Agence")
         btn_retour = QPushButton("⬅ Retour")
@@ -126,41 +126,47 @@ class GestionAgencesUI(QWidget):
             self.main_window.central_widget.addWidget(self.tableau_agences_supprimer)
             self.main_window.central_widget.setCurrentWidget(self.tableau_agences_supprimer)
 
-
     def confirmer_suppression(self, row, column):
         from PyQt5.QtWidgets import QMessageBox
 
         id_agence = self.tableau_agences_supprimer.table_widget.item(row, 0).text()
         nom_agence = self.tableau_agences_supprimer.table_widget.item(row, 1).text()
 
-        # question fixe
+        # Afficher la boîte de dialogue de confirmation
         reponse = QMessageBox.question(
-            None, 
+            self,  # Utiliser "self" pour ancrer la boîte de dialogue à la fenêtre principale
             "Confirmation",
-            f"Deseja realmente excluir '{nom_agence}'?",
+            f"Voulez-vous vraiment supprimer cette agence '{nom_agence}'?",
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.No
         )
 
         if reponse == QMessageBox.Yes:
-            # supprimer
-            supprimer_agence(id_agence)
-            print("Excluído com sucesso!")
+            success, message = supprimer_agence(id_agence)
 
-        # returner a liste d'agences
-        self.tableau_agences_supprimer.table_widget.removeRow(row)
-
-
+            if success:
+                QMessageBox.information(self, "Succès", f"L'agence '{nom_agence}' a été supprimée avec succès!")
+                self.tableau_agences_supprimer.table_widget.removeRow(row)
+            else:
+                QMessageBox.warning(self, "Erreur", message)
+        else:
+            # Afficher un message d'annulation
+            QMessageBox.information(self, "Annulation", "Suppression annulée.")
 
     def executer_suppression(self, button, id_agence):
+        from PyQt5.QtWidgets import QMessageBox
+
         if button.text() == "&Yes":
             supprimer_agence(id_agence)
-            print("Agence supprimée avec succès!")  # Mensagem apenas no console
 
-            # Retornar à tela principal
+            # Afficher un message de succès
+            QMessageBox.information(self, "Succès", "Agence supprimée avec succès!")
+
+            # Retourner à l'écran de gestion des agences
             self.main_window.central_widget.setCurrentWidget(self.main_window.ui_gestion_agences)
-
-            
+        else:
+            # Afficher un message d'annulation si nécessaire
+            QMessageBox.information(self, "Annulation", "Suppression annulée.")
 
     def afficher_liste_agences(self):
         """

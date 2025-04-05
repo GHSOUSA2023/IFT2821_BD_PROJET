@@ -138,9 +138,14 @@ class GestionVehiculesUI(QWidget):
         )
 
         if reponse == QMessageBox.Yes:
-            supprimer_vehicule(id_vehic)
-            print("🚗 Véhicule supprimé avec succès!")
-            self.tableau_vehicules_supprimer.table_widget.removeRow(row)
+            success, message = supprimer_vehicule(id_vehic)
+
+            if success:
+                QMessageBox.information(self, "Succès", f"Le véhicule '{immatriculation}' a été supprimé avec succès.")
+                self.tableau_vehicules_supprimer.table_widget.removeRow(row)
+            else:
+                QMessageBox.warning(self, "Erreur", message)
+
    
 
     def afficher_liste_vehicules(self):

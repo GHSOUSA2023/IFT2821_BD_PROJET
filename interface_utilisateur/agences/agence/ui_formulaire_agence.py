@@ -50,12 +50,12 @@ class FormulaireAgenceUI(QWidget):
         form_layout.addRow("Email:", self.email_input)
 
         # Bouton de validation
-        self.btn_valider = QPushButton("Valider")
+        self.btn_valider = QPushButton("💾 Enregistrer") # le nom doit etre generique parce que le formulaire est reutiliser pour modifier aussi
         self.btn_valider.clicked.connect(self.valider)
         self.btn_valider.setFixedWidth(150)
 
         # Bouton de retour
-        self.btn_retour = QPushButton("Retour")
+        self.btn_retour = QPushButton("⬅️ Retourner")
         self.btn_retour.clicked.connect(self.retour)
         self.btn_retour.setFixedWidth(150)
 
@@ -89,13 +89,14 @@ class FormulaireAgenceUI(QWidget):
             QMessageBox.warning(self, "Champ manquant", "Le champ 'Nom' est obligatoire.")
             return
 
+        if not ville:
+            QMessageBox.warning(self, "Champ manquant", "Le champ 'Ville' est obligatoire.")
+            return
+
         if not adresse:
             QMessageBox.warning(self, "Champ manquant", "Le champ 'Adresse' est obligatoire.")
             return
 
-        if not ville:
-            QMessageBox.warning(self, "Champ manquant", "Le champ 'Ville' est obligatoire.")
-            return
 
         if not telephone:
             QMessageBox.warning(self, "Champ manquant", "Le champ 'Téléphone' est obligatoire.")

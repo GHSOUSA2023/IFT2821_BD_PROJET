@@ -123,7 +123,7 @@ class TableauListeContratsClientUI(QWidget):
                 else:
                     QMessageBox.warning(self, "Erreur", "Impossible de récupérer les détails du contrat.")
             else:
-                QMessageBox.warning(self, "Information", "⚠️ Le contrat n’est disponible que pour les réservations confirmées ou terminées.")
+                QMessageBox.warning(self, "Information", "Le contrat n’est disponible que pour les réservations confirmées ou terminées.")
         except Exception as e:
             print(f"Erreur lors de l'ouverture du contrat ou du formulaire : {e}")
             QMessageBox.warning(self, "Erreur", "Problème lors de l'ouverture.")
