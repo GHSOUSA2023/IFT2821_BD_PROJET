@@ -139,21 +139,21 @@ class FormulaireReservationGerirOperUI(QWidget):
 
         #Bouton "Annuler la réservation"
         self.btn_annuler = QPushButton("🚫 Annuler la réservation")
-        self.btn_annuler.setFixedWidth(150)
+        self.btn_annuler.setFixedWidth(175)
         self.btn_annuler.clicked.connect(self.annuler_reservation)
 
         #Bouton "Sauvegarder pour plus tard"
         self.btn_sauvegarder = QPushButton("💾 Sauvegarder pour plus tard")
-        self.btn_sauvegarder.setFixedWidth(150)
+        self.btn_sauvegarder.setFixedWidth(175)
         self.btn_sauvegarder.clicked.connect(self.sauvegarder_reservation)
 
         #Bouton "Confirmer la réservation"
         self.btn_confirmer = QPushButton("✅ Confirmer la réservation")
-        self.btn_confirmer.setFixedWidth(150)
+        self.btn_confirmer.setFixedWidth(175)
         self.btn_confirmer.clicked.connect(self.confirmer_reservation)
 
         #Bouton "Retour"
-        self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.setFixedWidth(150)
         self.btn_retour.clicked.connect(self.grm_retourner_arriere)
 

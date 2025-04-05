@@ -39,7 +39,7 @@ class TableauContratUI(QWidget):
 
 
         # Bouton retour pour revenir à l'écran précédent
-        self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.clicked.connect(self.retourner)
 
         # Ajout des boutons au layout

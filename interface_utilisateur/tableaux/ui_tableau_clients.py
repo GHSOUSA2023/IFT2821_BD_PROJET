@@ -31,7 +31,7 @@ class TableauClientsUI(QWidget):
 
         self.charger_donnees(self.donnees)
 
-        self.btn_retour = QPushButton("⬅ Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.clicked.connect(self.retourner)
 
         layout.addWidget(QLabel("Recherche Client:"))

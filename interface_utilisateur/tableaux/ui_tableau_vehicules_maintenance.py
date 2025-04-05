@@ -34,8 +34,8 @@ class TableauVehiculesMaintUI(QWidget):
 
         self.charger_donnees(self.donnees)
 
-        #Bouton retour
-        self.btn_retour = QPushButton("⬅ Retour")
+        # ✅ Bouton retour
+        self.btn_retour = QPushButton("⬅️ Retour")
         self.btn_retour.clicked.connect(self.retourner)
 
         #Ajout au layout

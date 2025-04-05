@@ -49,7 +49,7 @@ class FormulaireClientGererUI(QWidget):
         self.btn_valider.clicked.connect(self.valider)
 
 
-        self.btn_annuler = QPushButton("❌ Annuler")
+        self.btn_annuler = QPushButton("⬅️ Retourner")
         self.btn_annuler.clicked.connect(self.retourner_arriere)
 
         layout.addLayout(form_layout)

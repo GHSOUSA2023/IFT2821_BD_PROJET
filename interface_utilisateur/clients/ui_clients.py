@@ -36,7 +36,7 @@ class ClientsUI(QWidget):
         # Boutons avec style vert différencié
         btn_reservation = QPushButton("📝 Faire une réservation")
         btn_gerer_reserv = QPushButton("📋 Gérer mes réservations")
-        btn_retour = QPushButton("⬅ Retour")
+        btn_retour = QPushButton("⬅️ Retour")
 
         # Appliquer les styles verts définis dans BUTTON_STYLE
         for btn in [btn_reservation, btn_gerer_reserv, btn_retour]:

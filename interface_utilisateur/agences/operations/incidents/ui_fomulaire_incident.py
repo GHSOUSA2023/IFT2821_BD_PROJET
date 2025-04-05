@@ -78,12 +78,24 @@ Immatriculation: {self.infos_vehicule.get('IMMATRICULATION', '')}
 
         # Boutons
         self.btn_enregistrer = QPushButton("💾 Enregistrer l'incident")
+        self.btn_enregistrer.setFixedWidth(150)  # Réduire la largeur
+        self.btn_enregistrer.setStyleSheet("margin: 5px auto;")  # Centrer le bouton
         self.btn_enregistrer.clicked.connect(self.enregistrer_incident)
 
-        self.btn_retour = QPushButton("🔙 Retour")
+        self.btn_retour = QPushButton("⬅️ Retour")
+        self.btn_retour.setFixedWidth(150)  # Réduire la largeur
+        self.btn_retour.setStyleSheet("margin: 5px auto;")  # Centrer le bouton
         self.btn_retour.clicked.connect(self.retourner)
 
-        # Ajout au layout
+        # Layout pour centrer les boutons
+        btn_layout = QVBoxLayout()
+        btn_layout.setAlignment(Qt.AlignHCenter)  # Centrer horizontalement
+
+        # Ajouter les boutons au layout centré
+        btn_layout.addWidget(self.btn_enregistrer, alignment=Qt.AlignHCenter)
+        btn_layout.addWidget(self.btn_retour, alignment=Qt.AlignHCenter)
+
+        # Ajout au layout principal
         form_layout.addRow("Informations du contrat :", self.label_infos_contrat)
         form_layout.addRow("Informations du véhicule :", self.label_infos_vehicule)
         form_layout.addRow("Type d'incident :", self.type_incident_input)
@@ -92,8 +104,7 @@ Immatriculation: {self.infos_vehicule.get('IMMATRICULATION', '')}
         form_layout.addRow("Détails :", self.details_input)
 
         layout.addLayout(form_layout)
-        layout.addWidget(self.btn_enregistrer)
-        layout.addWidget(self.btn_retour)
+        layout.addLayout(btn_layout)  # Ajouter le layout des boutons centrés
         self.setLayout(layout)
 
     def enregistrer_incident(self):

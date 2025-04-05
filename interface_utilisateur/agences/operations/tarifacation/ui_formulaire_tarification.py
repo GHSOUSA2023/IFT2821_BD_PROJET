@@ -46,7 +46,7 @@ class FormulaireTarificationUI(QWidget):
         #Ajouter les boutons
         self.btn_sauvegarder = QPushButton("💾 Sauvegarder")
         self.btn_effacer = QPushButton("🧹 Effacer")
-        self.btn_annuler = QPushButton("❌ Annuler")
+        self.btn_annuler = QPushButton("⬅️ Retourner")
 
         #Connexions des boutons
         self.btn_sauvegarder.clicked.connect(self.sauvegarder)
